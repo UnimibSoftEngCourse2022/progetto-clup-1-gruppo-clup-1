@@ -5,4 +5,10 @@ from src.clup.book_usecase import book
 
 class TestBookUsecase(unittest.TestCase):
     def test_reservation_valid(self):
-        pass
+        market_id = 1
+        queue = ()
+        reservation, queue = book(market_id, queue)
+        reservation_id, _ = reservation
+        is_reservation_valid = verify_reservation(reservation_id, queue)
+        self.assertTrue(is_reservation_valid)
+
