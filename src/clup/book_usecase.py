@@ -20,15 +20,9 @@ class BookUseCase:
         return reservation_id
 
     def consume(self, reservation_id, store_id):
-        found = False
         queue = self.store_provider.get_queue(store_id)
-        updated_queue = []
-        for reservation in queue:
-            if reservation != reservation_id:
-                updated_queue.append(reservation)
-            else:
-                found = True
-
+        found = reservation_id in queue
+        updated_queue = [res for res in queue if res != reservation_id]
         self.store_provider.save_queue(store_id, updated_queue)
 
         return found
