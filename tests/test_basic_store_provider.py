@@ -63,3 +63,19 @@ class TestQueuesOfBasicStoreProvider(unittest.TestCase):
         queue = bsp.get_queue(store_id)
 
         self.assertEqual(new_queue, queue)
+
+    def test_different_queues_for_different_stores(self):
+        bsp = BasicStoreProvider()
+        store1_id = 1
+        store2_id = 3
+        bsp.add_store(store1_id)
+        bsp.add_store(store2_id)
+        new_queue1 = [1]
+        new_queue2 = [2]
+        
+        bsp.set_queue(store1_id, new_queue1)
+        bsp.set_queue(store2_id, new_queue2)
+        queue1 = bsp.get_queue(store1_id)
+        queue2 = bsp.get_queue(store2_id)
+
+        self.assertNotEqual(queue1, queue2)

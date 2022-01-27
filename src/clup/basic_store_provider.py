@@ -1,19 +1,18 @@
 class BasicStoreProvider:
     def __init__(self):
-        self.stores = []
-        self.queue = []
+        self.stores = {}
 
     def get_stores(self):
-        return self.stores
+        return self.stores.keys()
     
     def add_store(self, store_id):
-        if store_id in self.stores:
+        if store_id in self.stores.keys():
             raise ValueError('Store already present')
 
-        self.stores.append(store_id)
+        self.stores[store_id] = []
 
     def get_queue(self, store_id):
-        return self.queue
+        return self.stores[store_id]
 
     def set_queue(self, store_id, queue):
-        self.queue = queue
+        self.stores[store_id] = queue
