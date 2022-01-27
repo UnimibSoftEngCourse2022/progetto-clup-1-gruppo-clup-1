@@ -2,6 +2,7 @@ from app import app
 from flask import render_template
 from src.clup.basic_store_provider import BasicStoreProvider
 
+
 @app.route('/')
 def home():
     bsp = BasicStoreProvider()
