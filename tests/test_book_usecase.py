@@ -1,6 +1,7 @@
 import unittest
 
-from src.clup.book_usecase import book
+from src.clup.book_usecase import book, BookUseCase
+
 
 class TestBookUsecase(unittest.TestCase):
     def test_book_in_that_market(self):
@@ -53,3 +54,58 @@ class TestBookUsecase(unittest.TestCase):
         _, updated_queue = book(None, queue)
 
         self.assertNotEqual(updated_queue, queue)
+
+
+class MockStoreProvider:
+    def __init__(self):
+        self.queue = ()
+
+    def save_queue(self, store_id, queue):
+        self.queue = queue
+
+    def get_queue(self, store_id):
+        return self.queue
+
+
+class TestBookVerify(unittest.TestCase):
+    def test_book_in_a_store(self):
+        store_id = 1
+        mock_store_provider = MockStoreProvider()
+        b = BookUseCase(mock_store_provider)
+
+        reservation_id = b.book(store_id)
+
+        is_id_in_queue = reservation_id in mock_store_provider.get_queue(store_id)
+        self.assertTrue(is_id_in_queue)
+
+    def test_use_valid_reservation(self):
+        store_id = 1
+        mock_store_provider = MockStoreProvider()
+        reservation_id = 12
+        queue = (reservation_id,)
+        mock_store_provider.save_queue(store_id, queue)
+        b = BookUseCase(mock_store_provider)
+
+        success = b.consume(reservation_id, store_id)
+        is_id_in_queue = reservation_id in mock_store_provider.get_queue(store_id)
+
+        self.assertFalse(is_id_in_queue)
+        self.assertTrue(success)
+
+    def test_use_invalid_reservation(self):
+        store_id = 1
+        mock_store_provider = MockStoreProvider()
+        valid_id = 12
+        invalid_id = 13
+
+        queue = (valid_id,)
+        mock_store_provider.save_queue(store_id, queue)
+        b = BookUseCase(mock_store_provider)
+
+        success = b.consume(invalid_id, store_id)
+        is_id_in_queue = valid_id in mock_store_provider.get_queue(store_id)
+
+        self.assertTrue(is_id_in_queue)
+        self.assertFalse(success)
+
+
