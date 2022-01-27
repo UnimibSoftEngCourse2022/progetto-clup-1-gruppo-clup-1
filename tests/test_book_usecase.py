@@ -7,7 +7,7 @@ class MockStoreProvider:
     def __init__(self):
         self.queue = ()
 
-    def save_queue(self, store_id, queue):
+    def set_queue(self, store_id, queue):
         self.queue = queue
 
     def get_queue(self, store_id):
@@ -74,7 +74,7 @@ class TestBookVerify(unittest.TestCase):
         mock_store_provider = MockStoreProvider()
         reservation_id = 12
         queue = (reservation_id,)
-        mock_store_provider.save_queue(store_id, queue)
+        mock_store_provider.set_queue(store_id, queue)
         b = BookUseCase(mock_store_provider)
         reservation = (reservation_id, store_id)
         success = b.consume(reservation)
@@ -90,7 +90,7 @@ class TestBookVerify(unittest.TestCase):
         invalid_id = 13
 
         queue = (valid_id,)
-        mock_store_provider.save_queue(store_id, queue)
+        mock_store_provider.set_queue(store_id, queue)
         b = BookUseCase(mock_store_provider)
         valid_reservation = (valid_id, store_id)
         invalid_reservation = (invalid_id, store_id)
