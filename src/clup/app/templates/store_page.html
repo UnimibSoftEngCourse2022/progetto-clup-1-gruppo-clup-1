@@ -7,13 +7,6 @@
 {%endfor%}
 <button class="btn btn-lg btn-block btn-primary"><a class="nav-link" href="{{ url_for('reservation', store_id=store) }}">Prenota il tuo posto</a></button>
 <br>
-<form method="POST">
-      {{ form.hidden_tag() }}
+<button class="btn btn-lg btn-block btn-primary"><a class="nav-link" href="{{ url_for('consume_page', store_id=store) }}">Usa Prenotazione</a></button>
 
-    {{ form.reservation_id.label() }}
-    {{ form.reservation_id() }}
-
-    {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
-
-</form>
 {%endblock%}

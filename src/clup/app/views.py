@@ -29,18 +29,23 @@ def home():
     return render_template('home.html', bsp=bsp)
 
 
-@app.route('/<string:store_id>', methods=['GET', 'POST'])
+@app.route('/<string:store_id>')
 def store_page(store_id):
     queue = bsp.get_queue(store_id)
+
+    return render_template('store_page.html', store=store_id, queue=queue)
+
+
+@app.route('/<string:store_id>/consume', methods = ['GET', 'POST'])
+def consume_page(store_id):
     form = ConsumeForm()
     if form.validate_on_submit():
         b = ConsumeReservationUseCase(bsp)
-        res = (form.reservation_id.data, store_id)
-        val = b.execute(res)
-        print(val)
-        print(res[0], res[1])
-        return redirect(url_for('store_page', store_id=store_id, queue=queue, form=ConsumeForm()))
-    return render_template('store_page.html', store=store_id, queue=queue, form=form)
+        res = (form.reservation_id.data.strip(), store_id)
+        b.execute(res)
+        queue = bsp.get_queue(store_id)
+        return redirect(url_for('store_page', store_id=store_id, queue=queue, form=form))
+    return render_template('consume.html', form=form, store_id=store_id)
 
 
 @app.route('/reservation/<string:store_id>')
@@ -48,5 +53,5 @@ def reservation(store_id):
     new_res = BookUseCase(bsp)
     new_res.execute(store_id)
     queue = bsp.get_queue(store_id)
-    return redirect(url_for('store_page', store_id=store_id, queue=queue, form=ConsumeForm()))
+    return redirect(url_for('store_page', store_id=store_id, queue=queue))
 

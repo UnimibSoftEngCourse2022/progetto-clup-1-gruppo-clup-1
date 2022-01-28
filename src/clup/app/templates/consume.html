@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Supermercato {{ store_id }}</h1>
+<form method="POST">
+      {{ form.hidden_tag() }}
+
+    {{ form.reservation_id.label() }}
+    {{ form.reservation_id() }}
+
+    {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+
+</form>
+{%endblock%}
