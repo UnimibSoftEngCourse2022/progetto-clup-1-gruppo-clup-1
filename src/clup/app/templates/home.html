@@ -4,10 +4,9 @@
 {% endblock %}
 
 {% block content%}
+<ul>
     {% for store in bsp.get_stores() %}
-        <p>{{ store }}</p>
-        {% for client in bsp.get_queue(store) %}
-            <p>{{ client }}</p>
-        {% endfor %}
+        <li><a class="nav-link" href="{{ url_for('store_page', store_id=store) }}">{{ store }}</a></li>
     {% endfor %}
+</ul>
 {% endblock %}
