@@ -3,8 +3,7 @@ class UserLoginUseCase:
         self.user_provider = user_provider
 
     def execute(self, user_id, password):
-        users = self.user_provider.get_users()
-        password_valid = False
-        if (user_id, password) in users:
-            password_valid = True
-        return password_valid
+        for user in self.user_provider.get_users():
+            if user.id == user_id and user.password == password:
+                return True
+        return False
