@@ -10,8 +10,7 @@ class BookUseCase:
         queue = self.store_provider.get_queue(store_id)
 
         reservation_id = str(uuid.uuid1())
-        updated_queue = queue + (reservation_id,)
-        self.store_provider.set_queue(store_id, updated_queue)
+        self.store_provider.add_to_queue(store_id, reservation_id)
 
         reservation = reservation_id, store_id, user_id
         self.reservation_provider.add_reservation(reservation)

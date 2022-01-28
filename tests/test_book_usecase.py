@@ -1,23 +1,24 @@
 import unittest
+from collections import defaultdict
 
 from src.clup.usecases.book_usecase import BookUseCase
 
 
-class MockStoreProvider:
+class MockQueueProvider:
     def __init__(self, throws_on_set=False, throws_on_get=False):
-        self.queue = ()
+        self.queue = defaultdict(tuple)
         self.throws_on_set = throws_on_set
         self.throws_on_get = throws_on_get
 
-    def set_queue(self, store_id, queue):
+    def add_to_queue(self, store_id, element):
         if(self.throws_on_set):
             raise ValueError()
-        self.queue = queue
+        self.queue[store_id] = self.queue[store_id] + (element, )
 
     def get_queue(self, store_id):
         if(self.throws_on_get):
             raise ValueError()
-        return self.queue
+        return self.queue[store_id]
 
 
 class MockReservationProvider:
@@ -40,9 +41,9 @@ class TestBookUsecase(unittest.TestCase):
         self.store2_id = 2
         self.user1_id = 11
         self.user2_id = 22
-        self.store_provider = MockStoreProvider()
+        self.queue_provider = MockQueueProvider()
         self.reservation_provider = MockReservationProvider()
-        self.usecase = BookUseCase(self.store_provider, self.reservation_provider)
+        self.usecase = BookUseCase(self.queue_provider, self.reservation_provider)
 
     def test_reservation_contains_store_and_user_id(self):
         reservation = self.usecase.execute(self.store1_id, self.user1_id)
@@ -62,7 +63,7 @@ class TestBookUsecase(unittest.TestCase):
 
     def test_reservation_should_be_in_the_queue_of_the_store(self):
         r_id, _, _ = self.usecase.execute(self.store1_id, self.user1_id)
-        is_id_in_queue = r_id in self.store_provider.get_queue(self.store1_id)
+        is_id_in_queue = r_id in self.queue_provider.get_queue(self.store1_id)
 
         self.assertTrue(is_id_in_queue)
 
@@ -79,8 +80,8 @@ class TestBookUsecase(unittest.TestCase):
         reservation2 = self.usecase.execute(self.store2_id, self.user1_id)
         r1_id, _, _ = reservation1
         r2_id, _, _ = reservation2
-        is_id1_in_queue1 = r1_id in self.store_provider.get_queue(self.store1_id)
-        is_id2_in_queue2 = r2_id in self.store_provider.get_queue(self.store2_id)
+        is_id1_in_queue1 = r1_id in self.queue_provider.get_queue(self.store1_id)
+        is_id2_in_queue2 = r2_id in self.queue_provider.get_queue(self.store2_id)
 
         self.assertTrue(is_id1_in_queue1)
         self.assertTrue(is_id2_in_queue2)
@@ -90,30 +91,30 @@ class TestBookUsecase(unittest.TestCase):
         reservation2 = self.usecase.execute(self.store1_id, self.user2_id)
         r1_id, _, _ = reservation1
         r2_id, _, _ = reservation2
-        is_id1_in_queue = r1_id in self.store_provider.get_queue(self.store1_id)
-        is_id2_in_queue = r2_id in self.store_provider.get_queue(self.store1_id)
+        is_id1_in_queue = r1_id in self.queue_provider.get_queue(self.store1_id)
+        is_id2_in_queue = r2_id in self.queue_provider.get_queue(self.store1_id)
 
         self.assertTrue(is_id1_in_queue)
         self.assertTrue(is_id2_in_queue)
         
 
     def test_should_throw_if_get_queue_throws(self):
-        store_provider = MockStoreProvider(throws_on_get=True)
-        u = BookUseCase(store_provider, self.reservation_provider)
+        queue_provider = MockQueueProvider(throws_on_get=True)
+        u = BookUseCase(queue_provider, self.reservation_provider)
 
         with self.assertRaises(ValueError):
             u.execute(None, None)
 
     def test_should_throw_if_set_queue_throws(self):
-        store_provider = MockStoreProvider(throws_on_set=True)
-        u = BookUseCase(store_provider, self.reservation_provider)
+        queue_provider = MockQueueProvider(throws_on_set=True)
+        u = BookUseCase(queue_provider, self.reservation_provider)
 
         with self.assertRaises(ValueError):
             u.execute(None, None)
 
     def test_should_throw_if_add_reservation_throws(self):
         reservation_provider = MockReservationProvider(throws_on_add=True)
-        u = BookUseCase(self.store_provider, reservation_provider)
+        u = BookUseCase(self.queue_provider, reservation_provider)
 
         with self.assertRaises(ValueError):
             u.execute(None, None)
