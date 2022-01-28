@@ -23,7 +23,7 @@ class TestUserLoginUsecase(unittest.TestCase):
         user = User(1, 10)
         mock_user_provider.users = (user,)
         ul = UserLoginUseCase(mock_user_provider)
-        
+
         is_login_ok = ul.execute(user.id, user.password)
 
         self.assertTrue(is_login_ok)
