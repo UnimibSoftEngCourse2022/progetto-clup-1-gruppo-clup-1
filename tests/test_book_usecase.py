@@ -92,7 +92,6 @@ class TestBookVerify(unittest.TestCase):
         queue = (valid_id,)
         mock_store_provider.set_queue(store_id, queue)
         b = BookUseCase(mock_store_provider)
-        valid_reservation = (valid_id, store_id)
         invalid_reservation = (invalid_id, store_id)
 
         success = b.consume(invalid_reservation)
