@@ -1,5 +1,5 @@
 import unittest
-from src.clup.basic_store_provider import BasicStoreProvider
+from src.clup.providers.basic_store_provider import BasicStoreProvider
 
 class TestBasicStoreProvider(unittest.TestCase):
     
