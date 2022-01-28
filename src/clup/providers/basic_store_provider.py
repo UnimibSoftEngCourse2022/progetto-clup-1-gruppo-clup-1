@@ -9,7 +9,7 @@ class BasicStoreProvider:
         if store_id in self.stores.keys():
             raise ValueError('Store already present')
 
-        self.stores[store_id] = []
+        self.stores[store_id] = ()
 
     def get_queue(self, store_id):
         return self.stores[store_id]

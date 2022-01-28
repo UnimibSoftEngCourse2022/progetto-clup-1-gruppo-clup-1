@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Supermercato {{ store }}</h1>
+<a class="nav-link" href="{{ url_for('home') }}">home</a>
 {%for client in queue %}
     <p>{{client}}</p>
 {%endfor%}
 <button class="btn btn-lg btn-block btn-primary"><a class="nav-link" href="{{ url_for('reservation', store_id=store) }}">Prenota il tuo posto</a></button>
+<br>
+<form method="POST">
+      {{ form.hidden_tag() }}
+
+    {{ form.reservation_id.label() }}
+    {{ form.reservation_id() }}
+
+    {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+
+</form>
 {%endblock%}
