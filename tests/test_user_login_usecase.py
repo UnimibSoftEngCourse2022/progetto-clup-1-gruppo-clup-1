@@ -27,3 +27,27 @@ class TestUserLoginUsecase(unittest.TestCase):
         is_login_ok = ul.execute(user.id, user.password)
 
         self.assertTrue(is_login_ok)
+
+    def test_login_raise_exception_if_password_or_username_not_correct(self):
+        mock_user_provider = MockUserProvider()
+        user = User(1, 10)
+        mock_user_provider.users = (user,)
+        ul = UserLoginUseCase(mock_user_provider)
+
+        with self.assertRaises(ValueError):
+            ul.execute(1, 11)
+        with self.assertRaises(ValueError):
+            ul.execute(2, 10)
+
+    def test_login_can_happen_with_multiple_users(self):
+        mock_user_provider = MockUserProvider()
+        user1 = User(1, 10)
+        user2 = User(2, 20)
+        mock_user_provider.users = (user1, user2)
+        ul = UserLoginUseCase(mock_user_provider)
+
+        is_user1_logged = ul.execute(user1.id, user1.password)
+        is_user2_logged = ul.execute(user2.id, user2.password)
+
+        self.assertTrue(is_user1_logged)
+        self.assertTrue(is_user2_logged)
