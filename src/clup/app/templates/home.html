@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Basic Store Provider</title>
-</head>
-<body>
-    <p>{{ bsp.get_stores() }}</p>
-    <br>
-        {% for store in bsp.get_stores() %}
-            <p>
-                {{ bsp.get_queue(store) }}
-            </p>
+{% extends  'base.html' %}
+{% block title %}
+    Basic Store Provider
+{% endblock %}
+
+{% block content%}
+    {% for store in bsp.get_stores() %}
+        <p>{{ store }}</p>
+        {% for client in bsp.get_queue(store) %}
+            <p>{{ client }}</p>
         {% endfor %}
-</body>
-</html>
+    {% endfor %}
+{% endblock %}
