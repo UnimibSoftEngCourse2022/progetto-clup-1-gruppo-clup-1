@@ -1,6 +1,6 @@
 import unittest
 
-from src.clup.store_list_usecase import StoreListUseCase
+from src.clup.usecases.store_list_usecase import StoreListUseCase
 
 
 class MockStoreProvider:
