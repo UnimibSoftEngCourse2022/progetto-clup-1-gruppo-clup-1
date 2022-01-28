@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, url_for, redirect
-from src.clup.basic_store_provider import BasicStoreProvider
-from src.clup.book_usecase import BookUseCase
+from providers.basic_store_provider import BasicStoreProvider
+from usecases.book_usecase import BookUseCase
 
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
