@@ -30,11 +30,14 @@ class TestBasicStoreProvider(unittest.TestCase):
 
         self.assertTrue(len(stores) == 2)
 
-    def test_add_store_twice_throws(self):
-        self.bsp.add_store(self.store1)
+    def test_add_stores_with_same_id_throws(self):
+        store1 = Store(1, 2, 3, 4)
+        store2 = Store(1, 5, 6, 7)
+
+        self.bsp.add_store(store1)
 
         with self.assertRaises(ValueError):
-            self.bsp.add_store(self.store1)
+            self.bsp.add_store(store2)
 
 
 class TestQueuesOfBasicStoreProvider(unittest.TestCase):

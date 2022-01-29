@@ -8,9 +8,9 @@ class BasicStoreProvider:
 
     def get_stores(self):
         return self.stores
- 
+
     def add_store(self, store):
-        if store in self.stores:
+        if store.id in (s.id for s in self.stores):
             raise ValueError('Store already present')
 
         self.stores.append(store)
