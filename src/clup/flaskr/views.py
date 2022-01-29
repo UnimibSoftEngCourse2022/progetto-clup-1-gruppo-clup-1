@@ -1,11 +1,11 @@
-from app import app, csrf
 from flask import render_template, url_for, redirect
-from providers.basic_store_provider import BasicStoreProvider
-from usecases.book_usecase import BookUseCase
-from usecases.consume_reservation_usecase import ConsumeReservationUseCase
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+
+from src.clup.app import app, csrf
+from src.clup.providers.basic_store_provider import BasicStoreProvider
+from src.clup.usecases.book_usecase import BookUseCase
+from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
 
 class ConsumeForm(FlaskForm):

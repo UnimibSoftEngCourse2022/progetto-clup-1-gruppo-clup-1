@@ -1,6 +1,6 @@
 import uuid
 
-from ..entities.reservation import Reservation
+from src.clup.entities.reservation import Reservation
 
 
 class BookUseCase:
