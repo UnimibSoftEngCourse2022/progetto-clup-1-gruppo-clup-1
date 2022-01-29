@@ -1,6 +1,6 @@
 import unittest
 
-from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
+from src.clup.usecases.enable_reservation_usecase import EnableReservationUseCase
 
 
 class MockStoreProvider:
