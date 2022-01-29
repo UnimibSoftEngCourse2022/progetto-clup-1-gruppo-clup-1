@@ -47,10 +47,9 @@ class TestBookUsecase(unittest.TestCase):
 
     def test_reservation_contains_store_and_user_id(self):
         reservation = self.usecase.execute(self.store1_id, self.user1_id)
-        _, r_store_id, r_user_id = reservation
 
-        self.assertEqual(r_store_id, self.store1_id)
-        self.assertEqual(r_user_id, self.user1_id)
+        self.assertEqual(reservation.store_id, self.store1_id)
+        self.assertEqual(reservation.user_id, self.user1_id)
 
     def test_reservations_are_stored_in_reservation_provider(self):
         r1 = self.usecase.execute(self.store1_id, self.user1_id)
@@ -60,39 +59,32 @@ class TestBookUsecase(unittest.TestCase):
         self.assertTrue(r1 in reservations)
         self.assertTrue(r2 in reservations)
         
-
     def test_reservation_should_be_in_the_queue_of_the_store(self):
-        r_id, _, _ = self.usecase.execute(self.store1_id, self.user1_id)
-        is_id_in_queue = r_id in self.queue_provider.get_queue(self.store1_id)
+        r = self.usecase.execute(self.store1_id, self.user1_id)
+        is_id_in_queue = r.id in self.queue_provider.get_queue(self.store1_id)
 
         self.assertTrue(is_id_in_queue)
 
     def test_reservations_should_have_different_ids(self):
         reservation1 = self.usecase.execute(self.store1_id, self.user1_id)
         reservation2 = self.usecase.execute(self.store1_id, self.user1_id)
-        r1_id, _, _ = reservation1
-        r2_id, _, _ = reservation2
 
-        self.assertNotEqual(r1_id, r2_id)
+        self.assertNotEqual(reservation1.id, reservation2.id)
 
     def test_reservations_in_different_stores_should_be_in_their_queue(self):
-        reservation1 = self.usecase.execute(self.store1_id, self.user1_id)
-        reservation2 = self.usecase.execute(self.store2_id, self.user1_id)
-        r1_id, _, _ = reservation1
-        r2_id, _, _ = reservation2
-        is_id1_in_queue1 = r1_id in self.queue_provider.get_queue(self.store1_id)
-        is_id2_in_queue2 = r2_id in self.queue_provider.get_queue(self.store2_id)
+        r1 = self.usecase.execute(self.store1_id, self.user1_id)
+        r2 = self.usecase.execute(self.store2_id, self.user1_id)
+        is_id1_in_queue1 = r1.id in self.queue_provider.get_queue(self.store1_id)
+        is_id2_in_queue2 = r2.id in self.queue_provider.get_queue(self.store2_id)
 
         self.assertTrue(is_id1_in_queue1)
         self.assertTrue(is_id2_in_queue2)
 
     def test_reservations_from_different_users_should_be_in_same_queue(self):
-        reservation1 = self.usecase.execute(self.store1_id, self.user1_id)
-        reservation2 = self.usecase.execute(self.store1_id, self.user2_id)
-        r1_id, _, _ = reservation1
-        r2_id, _, _ = reservation2
-        is_id1_in_queue = r1_id in self.queue_provider.get_queue(self.store1_id)
-        is_id2_in_queue = r2_id in self.queue_provider.get_queue(self.store1_id)
+        r1 = self.usecase.execute(self.store1_id, self.user1_id)
+        r2 = self.usecase.execute(self.store1_id, self.user2_id)
+        is_id1_in_queue = r1.id in self.queue_provider.get_queue(self.store1_id)
+        is_id2_in_queue = r2.id in self.queue_provider.get_queue(self.store1_id)
 
         self.assertTrue(is_id1_in_queue)
         self.assertTrue(is_id2_in_queue)

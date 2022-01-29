@@ -1,5 +1,7 @@
 import uuid
 
+from ..entities.reservation import Reservation
+
 
 class BookUseCase:
     def __init__(self, queue_provider, reservation_provider):
@@ -12,7 +14,7 @@ class BookUseCase:
         reservation_id = str(uuid.uuid1())
         self.queue_provider.add_to_queue(store_id, reservation_id)
 
-        reservation = reservation_id, store_id, user_id
+        reservation = Reservation(reservation_id, store_id, user_id)
         self.reservation_provider.add_reservation(reservation)
 
         return reservation

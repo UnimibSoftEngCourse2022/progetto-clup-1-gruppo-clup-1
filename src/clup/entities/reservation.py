@@ -1,0 +1,9 @@
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class Reservation:
+    id: ...
+    store_id: ...
+    user_id: ...
+

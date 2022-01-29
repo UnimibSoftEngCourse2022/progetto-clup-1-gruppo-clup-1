@@ -1,6 +1,7 @@
 import unittest
 
 from src.clup.entities.store import Store
+from src.clup.entities.reservation import Reservation
 from src.clup.providers.basic_store_provider import BasicStoreProvider
 
 
@@ -43,7 +44,6 @@ class TestQueuesOfBasicStoreProvider(unittest.TestCase):
         self.store2 = Store(2, None, None, None)
 
     def test_queue_of_new_store_is_empty(self):
-        store_id = 1
         self.bsp.add_store(self.store1)
 
         store_queue = self.bsp.get_queue(self.store1.id)
@@ -54,7 +54,7 @@ class TestQueuesOfBasicStoreProvider(unittest.TestCase):
     def test_add_element_to_queue(self):
         self.bsp.add_store(self.store1)
 
-        reservation = (1, 2, 3)
+        reservation = Reservation(1, 2, 3)
         self.bsp.add_to_queue(self.store1.id, reservation)
         queue = self.bsp.get_queue(self.store1.id)
 
@@ -63,8 +63,8 @@ class TestQueuesOfBasicStoreProvider(unittest.TestCase):
     def test_different_queues_for_different_stores(self):
         self.bsp.add_store(self.store1)
         self.bsp.add_store(self.store2)
-        reservation1 = (1, 2, 3)
-        reservation2 = (4, 5, 6)
+        reservation1 = Reservation(1, 2, 3)
+        reservation2 = Reservation(4, 5, 6)
         
         self.bsp.add_to_queue(self.store1.id, reservation1)
         self.bsp.add_to_queue(self.store2.id, reservation2)
