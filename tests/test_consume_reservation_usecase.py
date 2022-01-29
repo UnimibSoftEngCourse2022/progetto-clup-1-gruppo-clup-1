@@ -2,6 +2,7 @@ import unittest
 
 from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
+
 class MockStoreProvider:
     def __init__(self):
         self.queue = ()
@@ -11,6 +12,7 @@ class MockStoreProvider:
 
     def get_queue(self, store_id):
         return self.queue
+
 
 class TestConsumeReservation(unittest.TestCase):
     def test_use_valid_reservation(self):
@@ -43,4 +45,3 @@ class TestConsumeReservation(unittest.TestCase):
 
         self.assertTrue(is_id_in_queue)
         self.assertFalse(success)
-

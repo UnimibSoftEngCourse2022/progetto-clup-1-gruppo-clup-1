@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 
-from src.clup.app import app, csrf
+from src.clup.app import app
 from src.clup.providers.basic_store_provider import BasicStoreProvider
 from src.clup.usecases.book_usecase import BookUseCase
 from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
@@ -21,7 +21,6 @@ b.execute('Esselunga')
 b.execute('Esselunga')
 b.execute('Tigros')
 b.execute('Tigros')
-
 
 
 @app.route('/')
@@ -49,4 +48,3 @@ def reservation(store_id):
     new_res.execute(store_id)
     queue = bsp.get_queue(store_id)
     return redirect(url_for('store_page', store_id=store_id, queue=queue, form=ConsumeForm()))
-

@@ -16,7 +16,7 @@ class TestBasicStoreProvider(unittest.TestCase):
         is_empty = len(stores) == 0
 
         self.assertTrue(is_empty)
-    
+
     def test_element_is_added(self):
         self.bsp.add_store(self.store1)
         stores = self.bsp.get_stores()
@@ -35,7 +35,7 @@ class TestBasicStoreProvider(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.bsp.add_store(self.store1)
-    
+
 
 class TestQueuesOfBasicStoreProvider(unittest.TestCase):
     def setUp(self):
@@ -65,7 +65,7 @@ class TestQueuesOfBasicStoreProvider(unittest.TestCase):
         self.bsp.add_store(self.store2)
         reservation1 = Reservation(1, 2, 3)
         reservation2 = Reservation(4, 5, 6)
-        
+
         self.bsp.add_to_queue(self.store1.id, reservation1)
         self.bsp.add_to_queue(self.store2.id, reservation2)
         queue1 = self.bsp.get_queue(self.store1.id)

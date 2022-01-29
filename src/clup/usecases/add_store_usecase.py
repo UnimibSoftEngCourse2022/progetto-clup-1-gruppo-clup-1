@@ -1,5 +1,7 @@
 import uuid
+
 from src.clup.entities.store import Store
+
 
 class AddStoreUseCase:
     def __init__(self, store_provider):

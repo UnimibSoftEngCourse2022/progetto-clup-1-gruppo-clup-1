@@ -24,7 +24,7 @@ class TestAddStoreUseCase(unittest.TestCase):
 
         store = u.execute(name, address, capacity)
         stores = store_provider.get_stores()
-        
+
         self.assertTrue(store in stores)
 
     def test_adding_same_store_twice_throws_value_error(self):
@@ -35,7 +35,7 @@ class TestAddStoreUseCase(unittest.TestCase):
         capacity = 1
 
         u.execute(name, address, capacity)
-        
+
         with self.assertRaises(ValueError):
             u.execute(name, address, 5)
 

@@ -1,4 +1,5 @@
-import pathlib, sys
+import pathlib
+import sys
 
 from flask import Flask
 
@@ -22,5 +23,3 @@ def create_app(test_config=None):
     app.register_blueprint(stores.bp)
 
     return app
-
-

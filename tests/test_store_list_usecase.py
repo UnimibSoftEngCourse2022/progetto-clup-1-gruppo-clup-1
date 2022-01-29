@@ -10,6 +10,7 @@ class MockStoreProvider:
     def get_stores(self):
         return self.stores
 
+
 class TestStoreListUsecase(unittest.TestCase):
     def test_stores_is_empty_if_store_list_is_empty(self):
         empty_stores = ()

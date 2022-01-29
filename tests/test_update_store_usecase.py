@@ -1,7 +1,8 @@
 import unittest
-from src.clup.entities.store import Store
 
+from src.clup.entities.store import Store
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
+
 
 class MockStoreProvider:
     def __init__(self):
@@ -17,6 +18,7 @@ class MockStoreProvider:
                 store_item.address = store.address
                 store_item.capacity = store.capacity
 
+
 class TestUpdateStoreUseCase(unittest.TestCase):
     def test_store_is_updated_in_stores(self):
         store_provider = MockStoreProvider()
@@ -26,14 +28,13 @@ class TestUpdateStoreUseCase(unittest.TestCase):
 
         u.execute(store)
         stores = store_provider.get_stores()
-        
+
         self.assertTrue(store in stores)
 
     def test_update_on_unexisting_id_throws(self):
         store_provider = MockStoreProvider()
         u = UpdateStoreUseCase(store_provider)
         store = Store(1, 'name', 'address', 1)
-        
+
         with self.assertRaises(ValueError):
             u.execute(store)
-

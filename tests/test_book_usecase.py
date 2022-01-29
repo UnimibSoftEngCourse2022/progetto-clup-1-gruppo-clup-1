@@ -58,7 +58,7 @@ class TestBookUsecase(unittest.TestCase):
 
         self.assertTrue(r1 in reservations)
         self.assertTrue(r2 in reservations)
-        
+
     def test_reservation_should_be_in_the_queue_of_the_store(self):
         r = self.usecase.execute(self.store1_id, self.user1_id)
         is_id_in_queue = r.id in self.queue_provider.get_queue(self.store1_id)
@@ -88,7 +88,6 @@ class TestBookUsecase(unittest.TestCase):
 
         self.assertTrue(is_id1_in_queue)
         self.assertTrue(is_id2_in_queue)
-        
 
     def test_should_throw_if_get_queue_throws(self):
         queue_provider = MockQueueProvider(throws_on_get=True)
@@ -110,4 +109,3 @@ class TestBookUsecase(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             u.execute(None, None)
-
