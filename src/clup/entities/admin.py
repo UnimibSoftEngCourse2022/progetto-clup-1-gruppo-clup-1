@@ -2,8 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class User:
+class Admin:
     id: ...
-    name: ...
     password: ...
     # TODO store
