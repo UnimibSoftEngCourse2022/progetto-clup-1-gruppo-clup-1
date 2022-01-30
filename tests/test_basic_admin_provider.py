@@ -25,3 +25,31 @@ class TestBasicStoreProvider(unittest.TestCase):
         self.assertTrue(is_admin1_added)
         self.assertFalse(is_admin2_added)
 
+    def test_remove_correct_admin(self):
+        bap = BasicAdminProvider()
+        admin1 = Admin(1, 12)
+        admin2 = Admin(2, 30)
+
+        bap.add_admin(admin2)
+        bap.add_admin(admin1)
+        bap.remove_admin(admin1)
+        is_admin1_in_bap = admin1 in bap.get_admin()
+        is_admin2_in_bap = admin2 in bap.get_admin()
+
+        self.assertFalse(is_admin1_in_bap)
+        self.assertTrue(is_admin2_in_bap)
+
+    def test_add_admin_twice_froze(self):
+        bap = BasicAdminProvider()
+        admin1 = Admin(1, 12)
+        admin2 = Admin(1, 15)
+
+        bap.add_admin(admin1)
+
+        with self.assertRaises(ValueError):
+            bap.add_admin(admin2)
+            
+
+
+
+
