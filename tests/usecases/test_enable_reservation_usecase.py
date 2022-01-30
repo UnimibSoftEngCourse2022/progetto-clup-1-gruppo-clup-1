@@ -21,7 +21,7 @@ class TestConsumeReservation(unittest.TestCase):
         reservation_id = 12
         queue = (reservation_id,)
         mock_store_provider.set_queue(store_id, queue)
-        c = ConsumeReservationUseCase(mock_store_provider)
+        c = EnableReservationUseCase(mock_store_provider)
         reservation = (reservation_id, store_id)
         success = c.execute(reservation)
         is_id_in_queue = reservation_id in mock_store_provider.get_queue(store_id)
@@ -37,7 +37,7 @@ class TestConsumeReservation(unittest.TestCase):
 
         queue = (valid_id,)
         mock_store_provider.set_queue(store_id, queue)
-        c = ConsumeReservationUseCase(mock_store_provider)
+        c = EnableReservationUseCase(mock_store_provider)
         invalid_reservation = (invalid_id, store_id)
 
         success = c.execute(invalid_reservation)
