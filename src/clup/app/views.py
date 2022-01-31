@@ -1,5 +1,5 @@
 from app import app, csrf
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, flash
 from providers.basic_store_provider import BasicStoreProvider
 from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
@@ -66,8 +66,14 @@ def user_register_page():
     if form.validate_on_submit():
         new_user = User(id=form.user_id.data, password=form.password1.data)
         ur = UserRegisterUsecase(bup)
-        ur.execute(new_user)
-        return redirect(url_for('show_registered_users'))#TODO
+        try:
+            ur.execute(new_user)
+            return redirect(url_for('user_login_page'))
+        except ValueError:
+            flash('Something went wrong', category='danger')
+            return redirect(url_for('user_register_page'))
+    elif form.is_submitted():
+        flash("check all fields", category='danger')
     return render_template('user_register.html', form=form)
 
 
@@ -83,8 +89,15 @@ def user_login_page():
         ul = UserLoginUseCase(bup)
         username = form.username.data
         password = form.password.data
-        ul.execute(username, password)
-        return redirect(url_for('user_page', user_id=username, password=password))
+        try:
+            ul.execute(username, password)
+            return redirect(url_for('user_page', user_id=username, password=password))
+        except ValueError:
+            flash('Something went wrong', category='danger')
+            return redirect(url_for('user_login_page'))
+    else:
+        if form.is_submitted():
+            flash('form not valid', category='danger')
     return render_template('user_login.html', form=form)
 
 
