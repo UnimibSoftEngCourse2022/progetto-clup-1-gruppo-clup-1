@@ -10,9 +10,10 @@ class BookUseCase:
 
     def execute(self, store_id, user_id):
         reservation_id = str(uuid.uuid1())
-        self.queue_provider.add_to_queue(store_id, reservation_id)
 
         reservation = Reservation(reservation_id, store_id, user_id)
         self.reservation_provider.add_reservation(reservation)
+        waiting_queue = self.queue_provider.get_waiting_queue(store_id)
+        waiting_queue.push(reservation)
 
         return reservation

@@ -1,18 +1,20 @@
 import unittest
 from collections import defaultdict
 
+from src.clup.entities.waiting_queue import WaitingQueue
+from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.book_usecase import BookUseCase
 
 
-class MockQueueProvider:
-    def __init__(self, throws_on_add=False):
-        self.queues = defaultdict(tuple)
-        self.throws_on_add = throws_on_add
+class MockQueueProvider(QueueProvider):
+    def __init__(self):
+        self.queues = defaultdict(WaitingQueue)
 
-    def add_to_queue(self, store_id, element):
-        if(self.throws_on_add):
-            raise ValueError()
-        self.queues[store_id] = self.queues[store_id] + (element, )
+    def get_waiting_queue(self, store_id):
+        return self.queues[store_id]
+
+    def get_active_pool(self, store_id):
+        raise NotImplementedError
 
 
 class MockReservationProvider:
@@ -55,7 +57,8 @@ class TestBookUsecase(unittest.TestCase):
 
     def test_reservation_should_be_in_the_queue_of_the_store(self):
         r = self.u.execute(self.store1_id, self.user1_id)
-        is_id_in_queue = r.id in self.queue_provider.queues[self.store1_id]
+        waiting_queue = self.queue_provider.get_waiting_queue(self.store1_id)
+        is_id_in_queue = r in waiting_queue
 
         self.assertTrue(is_id_in_queue)
 
@@ -68,8 +71,10 @@ class TestBookUsecase(unittest.TestCase):
     def test_reservations_in_different_stores_should_be_in_their_queue(self):
         r1 = self.u.execute(self.store1_id, self.user1_id)
         r2 = self.u.execute(self.store2_id, self.user1_id)
-        is_id1_in_queue1 = r1.id in self.queue_provider.queues[self.store1_id]
-        is_id2_in_queue2 = r2.id in self.queue_provider.queues[self.store2_id]
+        waiting_queue1 = self.queue_provider.get_waiting_queue(self.store1_id)
+        waiting_queue2 = self.queue_provider.get_waiting_queue(self.store2_id)
+        is_id1_in_queue1 = r1 in waiting_queue1
+        is_id2_in_queue2 = r2 in waiting_queue2
 
         self.assertTrue(is_id1_in_queue1)
         self.assertTrue(is_id2_in_queue2)
@@ -77,18 +82,12 @@ class TestBookUsecase(unittest.TestCase):
     def test_reservations_from_different_users_should_be_in_same_queue(self):
         r1 = self.u.execute(self.store1_id, self.user1_id)
         r2 = self.u.execute(self.store1_id, self.user2_id)
-        is_id1_in_queue = r1.id in self.queue_provider.queues[self.store1_id]
-        is_id2_in_queue = r2.id in self.queue_provider.queues[self.store1_id]
+        waiting_queue = self.queue_provider.get_waiting_queue(self.store1_id)
+        is_id1_in_queue = r1 in waiting_queue
+        is_id2_in_queue = r2 in waiting_queue
 
         self.assertTrue(is_id1_in_queue)
         self.assertTrue(is_id2_in_queue)
-
-    def test_should_throw_if_set_queue_throws(self):
-        queue_provider = MockQueueProvider(throws_on_add=True)
-        u = BookUseCase(queue_provider, self.reservation_provider)
-
-        with self.assertRaises(ValueError):
-            u.execute(None, None)
 
     def test_should_throw_if_add_reservation_throws(self):
         reservation_provider = MockReservationProvider(throws_on_add=True)
