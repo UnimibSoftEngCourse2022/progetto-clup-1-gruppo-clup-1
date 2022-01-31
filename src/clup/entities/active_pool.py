@@ -22,7 +22,7 @@ class ActivePool:
 
     def get_capacity(self):
         return self._capacity
-      
+
     def set_capacity(self, value):
         if value < 0:
             raise ValueError('capacity is negative')

@@ -12,7 +12,7 @@ class UpdateStoreUseCase:
 
         if not found:
             raise ValueError('store isnt in the stores list')
-        
+
         if not store.name:
             raise ValueError('store name is empty')
 

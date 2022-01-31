@@ -1,5 +1,3 @@
-from src.clup.entities.store import Store
-
 class DeleteStoreUseCase:
     def __init__(self, store_provider):
         self.store_provider = store_provider
@@ -14,5 +12,5 @@ class DeleteStoreUseCase:
 
         if not found:
             raise ValueError('store isnt in the stores list')
-            
+
         return stores
