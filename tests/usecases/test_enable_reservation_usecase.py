@@ -1,48 +1,50 @@
 import unittest
 
+from src.clup.entities.exceptions import MaxCapacityReachedError
+from src.clup.entities.waiting_queue import WaitingQueue
+from src.clup.entities.active_pool import ActivePool
+from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.enable_reservation_usecase \
     import EnableReservationUseCase
 
 
-class MockStoreProvider:
+class MockQueueProvider(QueueProvider):
     def __init__(self):
-        self.queue = ()
+        self.queue = WaitingQueue()
+        self.pool = ActivePool(capacity=5)
 
-    def set_queue(self, store_id, queue):
-        self.queue = queue
-
-    def get_queue(self, store_id):
+    def get_waiting_queue(self, store_id):
         return self.queue
 
+    def get_active_pool(self, store_id):
+        return self.pool
 
-class TestConsumeReservation(unittest.TestCase):
-    def test_use_valid_reservation(self):
+
+class TestEnableReservationUseCase(unittest.TestCase):
+    def setUp(self):
+        self.queue_provider = MockQueueProvider()
+        self.u = EnableReservationUseCase(self.queue_provider)
+
+    def test_enable_pops_from_queue_and_add_to_pool(self):
         store_id = 1
-        store_provider = MockStoreProvider()
-        reservation_id = 12
-        queue = (reservation_id,)
-        store_provider.set_queue(store_id, queue)
-        c = EnableReservationUseCase(store_provider)
-        reservation = (reservation_id, store_id)
-        success = c.execute(reservation)
-        is_id_in_queue = reservation_id in store_provider.get_queue(store_id)
+        self.queue_provider.get_waiting_queue(store_id).push('a')
 
-        self.assertFalse(is_id_in_queue)
-        self.assertTrue(success)
+        self.u.execute(store_id)
 
-    def test_use_invalid_reservation(self):
+        self.assertTrue('a' in self.queue_provider.get_active_pool(store_id))
+
+    def test_enable_on_empty_queue_throws(self):
         store_id = 1
-        store_provider = MockStoreProvider()
-        valid_id = 12
-        invalid_id = 13
 
-        queue = (valid_id,)
-        store_provider.set_queue(store_id, queue)
-        c = EnableReservationUseCase(store_provider)
-        invalid_reservation = (invalid_id, store_id)
+        with self.assertRaises(IndexError):
+            self.u.execute(store_id)
 
-        success = c.execute(invalid_reservation)
-        is_id_in_queue = valid_id in store_provider.get_queue(store_id)
+    def test_enable_on_full_active_pool_throws(self):
+        store_id = 1
+        self.queue_provider.get_active_pool(store_id).capacity = 1
+        self.queue_provider.get_waiting_queue(store_id).push('a')
+        self.queue_provider.get_waiting_queue(store_id).push('b')
+        self.u.execute(store_id)
 
-        self.assertTrue(is_id_in_queue)
-        self.assertFalse(success)
+        with self.assertRaises(MaxCapacityReachedError):
+            self.u.execute(store_id)

@@ -25,6 +25,14 @@ class TestActivePool(unittest.TestCase):
 
         self.assertEqual(self.ap.capacity, 5)
 
+    def test_active_pool_capacity_is_settable_if_bigger_than_len(self):
+        self.ap.add('a')
+        self.ap.add('b')
+
+        self.ap.capacity = 15
+
+        self.assertEqual(self.ap.capacity, 15)
+
     def test_active_pool_capacity_is_not_set_negative(self):
         with self.assertRaises(ValueError):
             self.ap.capacity = -1
@@ -33,7 +41,7 @@ class TestActivePool(unittest.TestCase):
         ap = ActivePool(capacity=10)
         ap.add('a')
         ap.add('b')
-        
+
         with self.assertRaises(ValueError):
             ap.capacity = 1
 
@@ -45,7 +53,7 @@ class TestActivePool(unittest.TestCase):
     def test_add_element_throws_if_max_capacity_is_reached(self):
         ap = ActivePool(capacity=1)
         ap.add('a')
-        
+
         with self.assertRaises(MaxCapacityReachedError):
             ap.add('b')
 
