@@ -18,8 +18,8 @@ class TestAddStoreUseCase(unittest.TestCase):
     def test_store_is_added_to_stores(self):
         store_provider = MockStoreProvider()
         u = AddStoreUseCase(store_provider)
-        name = "store"
-        address = "address"
+        name = 'store'
+        address = 'address'
         capacity = 1
 
         store = u.execute(name, address, capacity)
@@ -30,8 +30,8 @@ class TestAddStoreUseCase(unittest.TestCase):
     def test_adding_same_store_twice_throws_value_error(self):
         store_provider = MockStoreProvider()
         u = AddStoreUseCase(store_provider)
-        name = "store"
-        address = "address"
+        name = 'store'
+        address = 'address'
         capacity = 1
 
         u.execute(name, address, capacity)
@@ -42,8 +42,8 @@ class TestAddStoreUseCase(unittest.TestCase):
     def test_name_field_of_a_store_is_empty(self):
         store_provider = MockStoreProvider()
         u = AddStoreUseCase(store_provider)
-        name = ""
-        address = "address"
+        name = ''
+        address = 'address'
         capacity = 1
 
         with self.assertRaises(ValueError):
@@ -52,8 +52,8 @@ class TestAddStoreUseCase(unittest.TestCase):
     def test_address_field_of_a_store_is_empty(self):
         store_provider = MockStoreProvider()
         u = AddStoreUseCase(store_provider)
-        name = "store"
-        address = ""
+        name = 'store'
+        address = ''
         capacity = 1
 
         with self.assertRaises(ValueError):
@@ -62,8 +62,8 @@ class TestAddStoreUseCase(unittest.TestCase):
     def test_capacity_not_negative(self):
         store_provider = MockStoreProvider()
         u = AddStoreUseCase(store_provider)
-        name = "store"
-        address = "address"
+        name = 'store'
+        address = 'address'
         capacity = -1
 
         with self.assertRaises(ValueError):

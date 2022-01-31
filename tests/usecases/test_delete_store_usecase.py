@@ -2,9 +2,6 @@ import unittest
 from src.clup.usecases.delete_store_usecase import DeleteStoreUseCase
 from src.clup.entities.store import Store
 
-from src.clup.usecases.add_store_usecase import AddStoreUseCase
-
-
 class MockStoreProvider:
     def __init__(self):
         self.stores = []
@@ -30,7 +27,7 @@ class TestDeleteStoreUseCase(unittest.TestCase):
         
         self.assertEqual(old_stores, updated_stores)
 
-    def test_update_on_unexisting_id_throws(self):
+    def test_delete_on_unexisting_id_throws(self):
         store_provider = MockStoreProvider()
         u = DeleteStoreUseCase(store_provider)
         store = Store(1, 'name', 'address', 1)

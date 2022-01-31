@@ -1,0 +1,2 @@
+class MaxCapacityReachedError(Exception):
+    pass
