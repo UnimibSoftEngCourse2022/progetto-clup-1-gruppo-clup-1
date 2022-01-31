@@ -9,10 +9,11 @@ class AddStoreUseCase:
 
     def execute(self, name, address, capacity):
         store_id = str(uuid.uuid1())
-        store = Store(store_id, name, address, capacity)
+        new_store = Store(store_id, name, address, capacity)
         stores = self.store_provider.get_stores()
-        for store_item in stores:
-            if store_item.name == store.name and store_item.address == store.address:
+        for store in stores:
+            if store.name == new_store.name and \
+               store.address == new_store.address:
                 raise ValueError('store alredy present')
 
         if not name:
@@ -24,5 +25,5 @@ class AddStoreUseCase:
         if capacity < 0:
             raise ValueError('capacity is negative')
 
-        self.store_provider.add_store(store)
-        return store
+        self.store_provider.add_store(new_store)
+        return new_store

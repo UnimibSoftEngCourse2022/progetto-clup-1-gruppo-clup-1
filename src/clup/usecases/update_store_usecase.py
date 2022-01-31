@@ -12,3 +12,12 @@ class UpdateStoreUseCase:
 
         if not found:
             raise ValueError('store isnt in the stores list')
+        
+        if not store.name:
+            raise ValueError('store name is empty')
+
+        if not store.address:
+            raise ValueError('store address is empty')
+
+        if store.capacity < 0:
+            raise ValueError('capacity is negative')

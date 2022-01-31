@@ -38,3 +38,30 @@ class TestUpdateStoreUseCase(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             u.execute(store)
+
+    def test_name_field_of_a_store_is_empty(self):
+        store_provider = MockStoreProvider()
+        u = UpdateStoreUseCase(store_provider)
+        store = Store(1, '', 'address', 1)
+        store_provider.stores.append(store)
+
+        with self.assertRaises(ValueError):
+            u.execute(store)
+
+    def test_address_field_of_a_store_is_empty(self):
+        store_provider = MockStoreProvider()
+        u = UpdateStoreUseCase(store_provider)
+        store = Store(1, 'name', '', 1)
+        store_provider.stores.append(store)
+
+        with self.assertRaises(ValueError):
+            u.execute(store)
+
+    def test_capacity_not_negative(self):
+        store_provider = MockStoreProvider()
+        u = UpdateStoreUseCase(store_provider)
+        store = Store(1, 'name', 'address', -1)
+        store_provider.stores.append(store)
+
+        with self.assertRaises(ValueError):
+            u.execute(store)
