@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>{{user.id}}</p>
-<p>{{user.password}}</p>
-
+{% if current_user.is_authenticated %}
+  Hi {{ current_user.id }}!
+{% endif %}
 {% endblock %}

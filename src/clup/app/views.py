@@ -1,10 +1,11 @@
-from app import app, csrf
+from app import app, csrf, login_manager
 from flask import render_template, url_for, redirect, flash
+from flask_login import login_user, login_required
 from providers.basic_store_provider import BasicStoreProvider
 from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
-
+from .flask_user import FlaskUser
 from .forms.consume_form import ConsumeForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
@@ -27,6 +28,13 @@ ur_def = UserRegisterUsecase(bup)
 ur_def.execute(User(id='davide', password='prova'))
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    users = bup.get_users()
+    if user_id in [user.id for user in users]:
+        return FlaskUser(user_id)
+    else:
+        return None
 
 @app.route('/')
 def home():
@@ -89,9 +97,11 @@ def user_login_page():
         ul = UserLoginUseCase(bup)
         username = form.username.data
         password = form.password.data
+        user = FlaskUser(username)
         try:
             ul.execute(username, password)
-            return redirect(url_for('user_page', user_id=username, password=password))
+            login_user(user)
+            return redirect(url_for('user_page', user_id=username))
         except ValueError:
             flash('Something went wrong', category='danger')
             return redirect(url_for('user_login_page'))
@@ -101,7 +111,12 @@ def user_login_page():
     return render_template('user_login.html', form=form)
 
 
-@app.route('/user/<string:user_id>/<string:password>')
-def user_page(user_id, password):
-    user = User(id=user_id, password=password)
-    return render_template('user.html', user=user)
+@app.route('/user/<string:user_id>')
+@login_required
+def user_page(user_id):
+    return render_template('user.html')
+
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect(url_for('user_login_page'))
