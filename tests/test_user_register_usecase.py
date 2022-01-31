@@ -85,3 +85,16 @@ class TestUserRegisterUsecase(unittest.TestCase):
         ur.execute(user1)
         with self.assertRaises(ValueError):
             ur.execute(user1)
+
+    def test_empty_string_raise_error(self):
+        mock_user_provider = MockUserProvider()
+        ur = UserRegisterUsecase(mock_user_provider)
+        user1 = User("", 10)
+        user2 = User(1, "")
+
+        with self.assertRaises(ValueError):
+            ur.execute(user1)
+        with self.assertRaises(ValueError):
+            ur.execute(user2)
+
+

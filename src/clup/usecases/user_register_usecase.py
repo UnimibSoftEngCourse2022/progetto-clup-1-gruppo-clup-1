@@ -10,7 +10,7 @@ class UserRegisterUsecase:
             raise ValueError("you must be an user")
         if user.id in [usr.id for usr in self.user_provider.get_users()]:
             raise ValueError('user_id already present')
-        if user.id is None or user.password is None:
+        if not user.id or not user.password:
             raise ValueError('Null type not valid')
 
         self.user_provider.add_user(user)

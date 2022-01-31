@@ -17,7 +17,7 @@ class TestBasicStoreProvider(unittest.TestCase):
         bup = BasicUserProvider()
         user1 = User(1, 10)
         user2 = User(2, 20)
-        bup.add_users(user1)
+        bup.add_user(user1)
 
         is_user1_added = user1 in bup.get_users()
         is_user2_added = user2 in bup.get_users()
