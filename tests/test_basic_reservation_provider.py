@@ -1,7 +1,8 @@
 import unittest
 
 from src.clup.entities.reservation import Reservation
-from src.clup.providers.basic_reservation_provider import BasicReservationProvider
+from src.clup.providers.basic_reservation_provider \
+    import BasicReservationProvider
 
 
 class TestBasicReservationProvider(unittest.TestCase):
@@ -10,12 +11,12 @@ class TestBasicReservationProvider(unittest.TestCase):
 
     def test_is_empty_after_initialization(self):
         reservations = self.brp.get_reservations()
-        
+
         self.assertTrue(len(reservations) == 0)
 
     def test_reservation_is_added(self):
         r = Reservation(1, 2, 3)
-        
+
         self.brp.add_reservation(r)
 
         self.assertTrue(r in self.brp.get_reservations())

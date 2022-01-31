@@ -3,4 +3,5 @@ __pycache__/
 env/
 .DS_Store
 .todo.md
+.flake8
 

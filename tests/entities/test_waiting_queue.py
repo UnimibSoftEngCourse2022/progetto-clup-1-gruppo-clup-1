@@ -6,6 +6,7 @@ from src.clup.entities.waiting_queue import WaitingQueue
 class TestWaitingQueue(unittest.TestCase):
     def setUp(self):
         self.q = WaitingQueue()
+
     def test_new_waiting_queue_is_empty(self):
         self.assertTrue(len(self.q) == 0)
 
