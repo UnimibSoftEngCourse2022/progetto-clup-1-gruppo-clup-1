@@ -6,10 +6,12 @@ from usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
 
 from .forms.consume_form import ConsumeForm
+from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
 from src.clup.entities.user import User
 from src.clup.providers.basic_user_provider import BasicUserProvider
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.user_login_usecase import UserLoginUseCase
 
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
@@ -21,6 +23,8 @@ b.execute('Tigros')
 b.execute('Tigros')
 
 bup = BasicUserProvider()
+ur_def = UserRegisterUsecase(bup)
+ur_def.execute(User(id='davide', password='prova'))
 
 
 
@@ -70,3 +74,21 @@ def user_register_page():
 @app.route('/registered_users')
 def show_registered_users():
     return render_template('registered_users.html', users=bup.get_users())
+
+
+@app.route('/user/login', methods=['GET', 'POST'])
+def user_login_page():
+    form = UserLoginForm()
+    if form.validate_on_submit():
+        ul = UserLoginUseCase(bup)
+        username = form.username.data
+        password = form.password.data
+        ul.execute(username, password)
+        return redirect(url_for('user_page', user_id=username, password=password))
+    return render_template('user_login.html', form=form)
+
+
+@app.route('/user/<string:user_id>/<string:password>')
+def user_page(user_id, password):
+    user = User(id=user_id, password=password)
+    return render_template('user.html', user=user)
