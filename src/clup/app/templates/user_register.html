@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+User Register
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <h1>Registrati!!</h1>
+        <br>
+        {{ form.user_id.label() }}
+        {{ form.user_id(placeholder="inserisci il tuo nome") }}
+
+        {{ form.password1.label() }}
+        {{ form.password1() }}
+
+        {{ form.password2.label() }}
+        {{ form.password2() }}
+        <br>
+        {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+    </form>
+</div>
+{% endblock %}

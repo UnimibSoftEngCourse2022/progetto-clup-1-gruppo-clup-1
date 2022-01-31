@@ -5,7 +5,7 @@ class BasicUserProvider:
     def get_users(self):
         return self.users.values()
 
-    def add_users(self, user):
+    def add_user(self, user):
         self.users[user.id] = user
 
     def remove_user(self, user_id):

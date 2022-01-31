@@ -4,14 +4,12 @@ from providers.basic_store_provider import BasicStoreProvider
 from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
 
-
-class ConsumeForm(FlaskForm):
-    reservation_id = StringField(label='reservation')
-    submit = SubmitField(label='usa prenotazione')
-
+from .forms.consume_form import ConsumeForm
+from .forms.user_register_form import UserRegisterForm
+from src.clup.entities.user import User
+from src.clup.providers.basic_user_provider import BasicUserProvider
+from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
@@ -21,6 +19,8 @@ b.execute('Esselunga')
 b.execute('Esselunga')
 b.execute('Tigros')
 b.execute('Tigros')
+
+bup = BasicUserProvider()
 
 
 
@@ -55,3 +55,18 @@ def reservation(store_id):
     queue = bsp.get_queue(store_id)
     return redirect(url_for('store_page', store_id=store_id, queue=queue))
 
+
+@app.route('/user/register', methods=['GET', 'POST'])
+def user_register_page():
+    form = UserRegisterForm()
+    if form.validate_on_submit():
+        new_user = User(id=form.user_id.data, password=form.password1.data)
+        ur = UserRegisterUsecase(bup)
+        ur.execute(new_user)
+        return redirect(url_for('show_registered_users'))#TODO
+    return render_template('user_register.html', form=form)
+
+
+@app.route('/registered_users')
+def show_registered_users():
+    return render_template('registered_users.html', users=bup.get_users())

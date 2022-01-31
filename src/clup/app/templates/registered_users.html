@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for user in users%}
+        <p>{{user.id}} {{ user.password }}</p>
+        <br>
+    {% endfor %}
+{% endblock %}
