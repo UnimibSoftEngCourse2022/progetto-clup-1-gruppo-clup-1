@@ -1,6 +1,6 @@
 from app import app, csrf, login_manager
 from flask import render_template, url_for, redirect, flash
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, logout_user
 from providers.basic_store_provider import BasicStoreProvider
 from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
@@ -119,4 +119,11 @@ def user_page(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
+    flash("you must login first", category='danger')
+    return redirect(url_for('user_login_page'))
+
+
+@app.route('/logout')
+def user_logout():
+    logout_user()
     return redirect(url_for('user_login_page'))

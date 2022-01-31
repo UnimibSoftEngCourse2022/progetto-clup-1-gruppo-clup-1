@@ -2,5 +2,7 @@
 {% block content %}
 {% if current_user.is_authenticated %}
   Hi {{ current_user.id }}!
+<br>
+  <button type="button" class="btn btn-large btn-primary" onclick="location.href = '/logout'">Logout</button>
 {% endif %}
 {% endblock %}
