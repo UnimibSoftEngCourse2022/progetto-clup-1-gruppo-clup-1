@@ -8,4 +8,7 @@ class BasicUserProvider:
     def add_users(self, user):
         self.users[user.id] = user
 
-    # TODO remove_user
+    def remove_user(self, user_id):
+        if user_id not in self.users.keys():
+            raise ValueError("user-id not existing")
+        del self.users[user_id]

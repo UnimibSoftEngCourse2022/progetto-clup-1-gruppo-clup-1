@@ -1,15 +1,17 @@
 class BasicAdminProvider:
     def __init__(self):
-        self.admin = {}
+        self.admins = {}
 
     def get_admin(self):
-        return self.admin.values()
+        return self.admins.values()
 
     def add_admin(self, admin):
-        if admin.id in self.admin.keys():
+        if admin.id in self.admins.keys():
             raise ValueError("Admin already present")
 
-        self.admin[admin.id] = admin
+        self.admins[admin.id] = admin
 
-    def remove_admin(self, admin):
-        del self.admin[admin.id]
+    def remove_admin(self, admin_id):
+        if admin_id not in self.admins.keys():
+            raise ValueError("admin-id not existing")
+        del self.admins[admin_id]

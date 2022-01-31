@@ -32,7 +32,7 @@ class TestBasicStoreProvider(unittest.TestCase):
 
         bap.add_admin(admin2)
         bap.add_admin(admin1)
-        bap.remove_admin(admin1)
+        bap.remove_admin(admin1.id)
         is_admin1_in_bap = admin1 in bap.get_admin()
         is_admin2_in_bap = admin2 in bap.get_admin()
 
@@ -48,6 +48,14 @@ class TestBasicStoreProvider(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             bap.add_admin(admin2)
+
+    def test_remove_admin_not_present_froze(self):
+        bap = BasicAdminProvider()
+        admin = Admin(1, 10)
+        bap.add_admin(admin)
+
+        with self.assertRaises(ValueError):
+            bap.remove_admin(2)
             
 
 
