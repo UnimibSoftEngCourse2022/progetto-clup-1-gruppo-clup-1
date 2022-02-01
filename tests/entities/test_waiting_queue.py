@@ -1,4 +1,5 @@
 import unittest
+from collections.abc import Iterable
 
 from src.clup.entities.waiting_queue import WaitingQueue
 
@@ -63,3 +64,18 @@ class TestWaitingQueue(unittest.TestCase):
 
         self.assertTrue('a' in self.q)
         self.assertFalse('b' in self.q)
+
+    def test_waiting_queue_is_iterable(self):
+        is_iterable = isinstance(self.q, Iterable)
+
+        self.assertTrue(is_iterable)
+
+    def test_waiting_queue_iterator_return_elements(self):
+        elements = set()
+        self.q.push('a')
+        self.q.push('b')
+
+        for e in self.q:
+            elements.add(e)
+
+        self.assertEqual(elements, {'a', 'b'})

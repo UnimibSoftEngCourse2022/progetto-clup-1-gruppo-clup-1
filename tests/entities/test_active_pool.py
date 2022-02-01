@@ -1,4 +1,5 @@
 import unittest
+from collections.abc import Iterable
 
 from src.clup.entities.exceptions import MaxCapacityReachedError
 from src.clup.entities.active_pool import ActivePool
@@ -71,3 +72,18 @@ class TestActivePool(unittest.TestCase):
         self.ap.remove('a')
 
         self.assertTrue('a' not in self.ap)
+
+    def test_active_pool_is_iterable(self):
+        is_iterable = isinstance(self.ap, Iterable)
+
+        self.assertTrue(is_iterable)
+
+    def test_active_pool_iterator_return_elements(self):
+        elements = set()
+        self.ap.add('a')
+        self.ap.add('b')
+
+        for e in self.ap:
+            elements.add(e)
+
+        self.assertEqual(elements, {'a', 'b'})

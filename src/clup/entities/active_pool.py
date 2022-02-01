@@ -20,6 +20,9 @@ class ActivePool:
     def __contains__(self, element):
         return element in self.elements
 
+    def __iter__(self):
+        return iter(self.elements)
+
     def get_capacity(self):
         return self._capacity
 

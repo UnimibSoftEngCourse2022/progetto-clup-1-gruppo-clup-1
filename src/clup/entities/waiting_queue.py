@@ -18,3 +18,6 @@ class WaitingQueue:
 
     def __contains__(self, element):
         return element in self.queue
+
+    def __iter__(self):
+        return iter(self.queue)
