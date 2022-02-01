@@ -1,6 +1,7 @@
 from app import app, csrf, login_manager
 from flask import render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user
+from flask_wtf.csrf import CSRFError
 from providers.basic_store_provider import BasicStoreProvider
 from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
@@ -127,3 +128,8 @@ def unauthorized_callback():
 def user_logout():
     logout_user()
     return redirect(url_for('user_login_page'))
+
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return render_template('csrf_error.html', reason=e.description), 400

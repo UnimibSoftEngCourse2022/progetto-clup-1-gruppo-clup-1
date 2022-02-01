@@ -5,6 +5,7 @@ User Register
 {% block content %}
 <div class="container">
     <form method="POST">
+        {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         <h1>Registrati!!</h1>
         <br>

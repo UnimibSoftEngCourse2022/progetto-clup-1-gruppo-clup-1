@@ -2,6 +2,7 @@
 {% block content %}
     <div class="container">
         <form method="POST">
+            {{ form.csrf_token }}
             {{ form.hidden_tag() }}
             <h1>Login</h1>
             <br>
