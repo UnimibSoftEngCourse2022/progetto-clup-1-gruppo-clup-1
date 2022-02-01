@@ -86,6 +86,3 @@ class TestAddStoreUseCase(unittest.TestCase):
         active_pool = self.queue_provider.get_active_pool(store.id)
 
         self.assertEqual(capacity, active_pool.capacity)
-
-
-

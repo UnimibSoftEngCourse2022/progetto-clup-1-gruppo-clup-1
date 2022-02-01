@@ -18,16 +18,9 @@ class UpdateStoreUseCase:
         for store_item in stores:
             if store_item.id == store.id:
                 self.store_provider.update_store(store)
-                active_pool = self.queue_provider.get_active_pool(store_item.id)
-                active_pool.capacity = capacity
+                pool = self.queue_provider.get_active_pool(store_item.id)
+                pool.capacity = capacity
                 found = True
+
         if not found:
             raise ValueError('store isnt in the stores list')
-
-        if not store.name:
-            raise ValueError('store name is empty')
-
-        if not store.address:
-            raise ValueError('store address is empty')
-
-        

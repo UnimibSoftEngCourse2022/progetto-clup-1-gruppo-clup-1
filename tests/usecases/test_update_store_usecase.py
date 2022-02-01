@@ -18,7 +18,9 @@ class MockStoreProvider:
     def update_store(self, store):
         for store_item in self.stores:
             if store_item.id == store.id:
-                dataclasses.replace(store_item, name=store.name, address=store.address)
+                args = {'name': store.name, 'address': store.address}
+                dataclasses.replace(store_item, **args)
+
 
 class MockQueueProvider(QueueProvider):
     def __init__(self):

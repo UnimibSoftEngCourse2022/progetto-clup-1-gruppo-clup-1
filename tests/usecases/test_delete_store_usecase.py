@@ -19,7 +19,8 @@ class MockStoreProvider:
             if store.id == store_id:
                 to_remove = store
         self.stores.remove(to_remove)
-        
+
+
 class MockQueueProvider(QueueProvider):
     def __init__(self):
         self.pools = defaultdict(ActivePool)

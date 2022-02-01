@@ -48,6 +48,3 @@ class TestBasicQueueProvider(unittest.TestCase):
         self.assertTrue('c' not in self.bqp.get_active_pool(store2_id))
         self.assertTrue('d' not in self.bqp.get_active_pool(store1_id))
         self.assertNotEqual(pool1.capacity, pool2.capacity)
-
-        
-        

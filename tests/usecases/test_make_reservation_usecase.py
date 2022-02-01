@@ -3,7 +3,7 @@ from collections import defaultdict
 
 from src.clup.entities.waiting_queue import WaitingQueue
 from src.clup.providers.queue_provider_abc import QueueProvider
-from src.clup.usecases.book_usecase import BookUseCase
+from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 
 
 class MockQueueProvider(QueueProvider):
@@ -31,7 +31,7 @@ class MockReservationProvider:
         self.reservations.append(reservation)
 
 
-class TestBookUsecase(unittest.TestCase):
+class TestMakeReservationUseCase(unittest.TestCase):
     def setUp(self):
         self.store1_id = 1
         self.store2_id = 2
@@ -39,7 +39,8 @@ class TestBookUsecase(unittest.TestCase):
         self.user2_id = 22
         self.queue_provider = MockQueueProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = BookUseCase(self.queue_provider, self.reservation_provider)
+        self.u = MakeReservationUseCase(
+            self.queue_provider, self.reservation_provider)
 
     def test_reservation_contains_store_and_user_id(self):
         reservation = self.u.execute(self.store1_id, self.user1_id)
@@ -91,7 +92,7 @@ class TestBookUsecase(unittest.TestCase):
 
     def test_should_throw_if_add_reservation_throws(self):
         reservation_provider = MockReservationProvider(throws_on_add=True)
-        u = BookUseCase(self.queue_provider, reservation_provider)
+        u = MakeReservationUseCase(self.queue_provider, reservation_provider)
 
         with self.assertRaises(ValueError):
             u.execute(None, None)

@@ -3,7 +3,7 @@ import uuid
 from src.clup.entities.reservation import Reservation
 
 
-class BookUseCase:
+class MakeReservationUseCase:
     def __init__(self, queue_provider, reservation_provider):
         self.queue_provider = queue_provider
         self.reservation_provider = reservation_provider
