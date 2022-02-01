@@ -8,8 +8,8 @@ from src.clup.providers.basic_store_provider import BasicStoreProvider
 class TestBasicStoreProvider(unittest.TestCase):
     def setUp(self):
         self.bsp = BasicStoreProvider()
-        self.store1 = Store(1, None, None, None)
-        self.store2 = Store(2, None, None, None)
+        self.store1 = Store(1, None, None)
+        self.store2 = Store(2, None, None)
 
     def test_is_empty_after_initialization(self):
         stores = self.bsp.get_stores()
@@ -31,8 +31,8 @@ class TestBasicStoreProvider(unittest.TestCase):
         self.assertTrue(len(stores) == 2)
 
     def test_add_stores_with_same_id_throws(self):
-        store1 = Store(1, 2, 3, 4)
-        store2 = Store(1, 5, 6, 7)
+        store1 = Store(1, 2, 3)
+        store2 = Store(1, 5, 6)
 
         self.bsp.add_store(store1)
 
@@ -43,8 +43,8 @@ class TestBasicStoreProvider(unittest.TestCase):
 class TestQueuesOfBasicStoreProvider(unittest.TestCase):
     def setUp(self):
         self.bsp = BasicStoreProvider()
-        self.store1 = Store(1, None, None, None)
-        self.store2 = Store(2, None, None, None)
+        self.store1 = Store(1, None, None)
+        self.store2 = Store(2, None, None)
 
     def test_queue_of_new_store_is_empty(self):
         self.bsp.add_store(self.store1)
