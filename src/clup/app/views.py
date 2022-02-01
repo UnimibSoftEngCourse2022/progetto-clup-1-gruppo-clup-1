@@ -1,3 +1,4 @@
+import flask_login
 from app import app, csrf, login_manager
 from flask import render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user
@@ -115,7 +116,10 @@ def user_login_page():
 @app.route('/user/<string:user_id>')
 @login_required
 def user_page(user_id):
-    return render_template('user.html')
+    if user_id == flask_login.current_user.get_id():
+        return render_template('user.html')
+    else:
+        return redirect(url_for('user_login_page'))
 
 
 @login_manager.unauthorized_handler
