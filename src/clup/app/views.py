@@ -8,6 +8,7 @@ from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
 from .flask_user import FlaskUser
+from .forms.change_password import ChangePasswordForm
 from .forms.consume_form import ConsumeForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
@@ -15,6 +16,7 @@ from src.clup.entities.user import User
 from src.clup.providers.basic_user_provider import BasicUserProvider
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from src.clup.usecases.user_login_usecase import UserLoginUseCase
+from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
 
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
@@ -137,3 +139,24 @@ def user_logout():
 @app.errorhandler(CSRFError)
 def handle_csrf_error(e):
     return render_template('csrf_error.html', reason=e.description), 400
+
+
+@app.route('/user/<string:user_id>/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password_page(user_id):
+    if user_id == flask_login.current_user.get_id():
+        form = ChangePasswordForm()
+        if form.validate_on_submit():
+            old_password = form.old_password.data
+            new_password = form.new_password.data
+            ucp = UserChangePasswordUseCase(bup)
+            try:
+                ucp.execute(user_id, old_password, new_password)
+                return redirect(url_for('user_logout'))
+            except ValueError:
+                flash('Something went wrong', category='danger')
+                return redirect(url_for('change_password_page', user_id=user_id))
+        else:
+            if form.is_submitted():
+                flash('form not valid', category='danger')
+        return render_template('change_password.html', form=form)
