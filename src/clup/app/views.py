@@ -17,6 +17,8 @@ from src.clup.providers.basic_user_provider import BasicUserProvider
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from src.clup.usecases.user_login_usecase import UserLoginUseCase
 from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
+from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+
 
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
@@ -102,7 +104,7 @@ def user_login_page():
         ul = UserLoginUseCase(bup)
         username = form.username.data
         password = form.password.data
-        user = FlaskUser(username)
+       # user = FlaskUser(username)
         try:
             ul.execute(username, password)
             login_user(user)
@@ -119,7 +121,11 @@ def user_login_page():
 @app.route('/user/<string:username>')
 @login_required
 def user_page(username):
+    #u_id = flask_login.current_user.get_id()
+    #user_data = LoadUserDataUseCase().execute(u_id)
+    #if username == user_data.username:
     if username == flask_login.current_user.get_id():
+
         return render_template('user.html')
     else:
         return redirect(url_for('user_login_page'))
