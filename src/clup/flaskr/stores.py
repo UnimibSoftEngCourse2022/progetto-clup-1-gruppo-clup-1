@@ -7,6 +7,7 @@ from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.providers.basic_queue_provider import BasicQueueProvider
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.providers.basic_store_provider import BasicStoreProvider
+from src.clup.entities.exceptions import MaxCapacityReachedError
 
 
 bp = Blueprint('stores', __name__, url_prefix='/stores')
@@ -23,7 +24,7 @@ asu.execute('Esselunga', 'Campofiorenzo', 1)
 asu.execute('Conad', 'Catania', 10)
 
 mru = MakeReservationUseCase(bqp, brp)
-eru = EnableReservationUseCase(bsp)
+eru = EnableReservationUseCase(bqp)
 
 
 @bp.route('', methods=['GET', 'POST'])
@@ -51,11 +52,25 @@ def show_store(id):
             return render_template('store.html', store=store, active_pool_len=active_pool_len, waiting_queue_len=waiting_queue_len)
 
 
-@bp.route('/<id>/waiting_queue/reservation', methods=['POST'])
+@bp.route('/<id>/waiting_queue', methods=['POST'])
 def make_reservation_into_store(id):
     mru.execute(id, 12)
+    return redirect(url_for('stores.show_store', id=id))
 
 
-@bp.route('/<id>/active_pool/reservation', methods=['POST'])
+@bp.route('/<id>/active_pool', methods=['POST'])
 def enable_reservation_into_store(id):
-    eru.execute(id)
+    try:
+        eru.execute(id)
+        return redirect(url_for('stores.show_store', id=id))
+    except MaxCapacityReachedError:
+        return 'ERROR'
+
+@bp.route('/<id>/waiting_queue/reservation', methods=['DELETE'])
+def reservation_into_store(id):
+    pass
+
+
+@bp.route('/<id>/active_pool/reservation', methods=['DELETE'])
+def enable_into_store(id):
+    pass

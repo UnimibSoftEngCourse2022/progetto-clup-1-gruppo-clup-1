@@ -4,13 +4,17 @@ Stores
 {% endblock %}
 
 {% block content%}
-<h2>{{store.name}}</h2>
+<h2>{{ store.name }}</h2>
 <ul>
     <li>{{ store.address }}</li>
     <li>{{ store.capacity }}</li>
-    <li>{{ store.waiting_queue }}</li>
-    <li>{{ store.active_pool }}</li>
 </ul>
 <p>Waiting List Length: {{ waiting_queue_len }}</p>
 <p>Active Pool Length: {{ active_pool_len }}</p>
+<form action= "{{ url_for('stores.make_reservation_into_store', id=store.id) }}", method = "post">
+    <input type="submit" name=submit_button value="Make Reservation">
+</form>
+<form action= "{{ url_for('stores.enable_reservation_into_store', id=store.id) }}", method = "post">
+    <input type="submit" name=submit_button value="Enable Reservation">
+</form>
 {% endblock %}
