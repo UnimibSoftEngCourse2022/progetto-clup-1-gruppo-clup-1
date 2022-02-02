@@ -1,6 +1,7 @@
 import unittest
 from collections.abc import Iterable
 
+from src.clup.entities.exceptions import EmptyQueueError
 from src.clup.entities.waiting_queue import WaitingQueue
 
 
@@ -32,6 +33,10 @@ class TestWaitingQueue(unittest.TestCase):
 
         self.assertTrue(len(self.q) == 1)
         self.assertEqual(element, 'a')
+
+    def test_pop_on_empty_queue_should_throw(self):
+        with self.assertRaises(EmptyQueueError):
+            self.q.pop()
 
     def test_insert_should_increase_length(self):
         self.q.push('a')
@@ -79,3 +84,22 @@ class TestWaitingQueue(unittest.TestCase):
             elements.add(e)
 
         self.assertEqual(elements, {'a', 'b'})
+
+    def test_remove_arbitrary_element(self):
+        self.q.push('a')
+        self.q.push('b')
+        self.q.push('c')
+
+        self.q.remove('b')
+
+        self.assertTrue('b' not in self.q)
+
+    def test_remove_throws_if_element_not_in_queue(self):
+        self.q.push('a')
+
+        with self.assertRaises(ValueError):
+            self.q.remove('z')
+
+    def test_remove_throws_emptyqueue_if_queue_is_empty(self):
+        with self.assertRaises(EmptyQueueError):
+            self.q.remove('z')

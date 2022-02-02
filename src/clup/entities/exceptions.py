@@ -4,3 +4,7 @@ class MaxCapacityReachedError(Exception):
 
 class EmptyPoolError(Exception):
     pass
+
+
+class EmptyQueueError(Exception):
+    pass
