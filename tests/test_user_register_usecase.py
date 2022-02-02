@@ -16,6 +16,12 @@ class MockUserProvider:
     def get_users(self):
         return self.users
 
+    def get_user(self, user_name):
+        for user in self.users:
+            if user_name == user.username:
+                return user
+        return None
+
 
 class TestUserRegisterUsecase(unittest.TestCase):
     def test_user_in_mock_user_provider(self):
@@ -23,10 +29,9 @@ class TestUserRegisterUsecase(unittest.TestCase):
         ur = UserRegisterUsecase(mock_user_provider)
         user_id = 1
         password = 10
-        user = User(user_id, password)
 
-        ur.execute(user)
-        is_user_present = user in mock_user_provider.get_users()
+        ur.execute(user_id, password)
+        is_user_present = len(mock_user_provider.get_users()) == 1
 
         self.assertTrue(is_user_present)
 
@@ -37,12 +42,10 @@ class TestUserRegisterUsecase(unittest.TestCase):
         password1 = 10
         user_id2 = 2
         password2 = 20
-        user1 = User(user_id1, password1)
-        user2 = User(user_id2, password2)
 
-        ur.execute(user1)
-        is_user1_present = user1 in mock_user_provider.get_users()
-        is_user2_present = user2 in mock_user_provider.get_users()
+        ur.execute(user_id1, password1)
+        is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
+        is_user2_present = mock_user_provider.get_user(user_id2) != None
 
         self.assertTrue(is_user1_present)
         self.assertFalse(is_user2_present)
@@ -54,47 +57,41 @@ class TestUserRegisterUsecase(unittest.TestCase):
         password1 = 10
         user_id2 = 2
         password2 = 20
-        user1 = User(user_id1, password1)
-        user2 = User(user_id2, password2)
 
-        ur.execute(user1)
-        ur.execute(user2)
-        is_user1_present = user1 in mock_user_provider.get_users()
-        is_user2_present = user2 in mock_user_provider.get_users()
+        ur.execute(user_id1, password1)
+        ur.execute(user_id2, password2)
+        is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
+        is_user2_present = mock_user_provider.get_user(user_id2).username == user_id2
 
         self.assertTrue(is_user1_present)
         self.assertTrue(is_user2_present)
 
     def test_null_field_raise_error(self):
-        user1 = User(1, None)
-        user2 = User(None, 1)
+
         mock_user_provider = MockUserProvider()
         ur = UserRegisterUsecase(mock_user_provider)
         with self.assertRaises(ValueError):
-            ur.execute(user1)
+            ur.execute(1, None)
         with self.assertRaises(ValueError):
-            ur.execute(user2)
+            ur.execute(None, 1)
 
     def test_add_same_user_twice_raise_error(self):
         mock_user_provider = MockUserProvider()
         ur = UserRegisterUsecase(mock_user_provider)
         user_id1 = 1
         password1 = 10
-        user1 = User(user_id1, password1)
 
-        ur.execute(user1)
+        ur.execute(user_id1, password1)
         with self.assertRaises(ValueError):
-            ur.execute(user1)
+            ur.execute(user_id1, password1)
 
     def test_empty_string_raise_error(self):
         mock_user_provider = MockUserProvider()
         ur = UserRegisterUsecase(mock_user_provider)
-        user1 = User("", 10)
-        user2 = User(1, "")
 
         with self.assertRaises(ValueError):
-            ur.execute(user1)
+            ur.execute("", 10)
         with self.assertRaises(ValueError):
-            ur.execute(user2)
+            ur.execute(1, "")
 
 

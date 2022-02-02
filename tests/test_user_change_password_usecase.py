@@ -14,51 +14,54 @@ class MockUserProvider:
     def get_users(self):
         return self.users.values()
 
-    def get_user(self, user_id):
-        return self.users[user_id]
+    def get_user(self, user_name):
+        for user in self.get_users():
+            if user.username == user_name:
+                return self.users[user.id]
 
 
 class TestUserChangePasswordUsecase(unittest.TestCase):
     def test_change_password_set_new_password_with_correct_info(self):
         mock_user_provider = MockUserProvider()
-        user = User(1, 10)
+        user = User(0, 1, 10)
         mock_user_provider.add_user(user)
         ucp = UserChangePasswordUseCase(mock_user_provider)
 
-        ucp.execute(user.id, user.password, 20)
+        ucp.execute(user.username, user.password, 20)
         is_password_updated = 20 == user.password
 
         self.assertTrue(is_password_updated)
 
     def test_change_password_raise_exception_with_wrong_password(self):
         mock_user_provider = MockUserProvider()
-        user = User(1, 10)
+        user = User(0, 1, 10)
         mock_user_provider.add_user(user)
         ucp = UserChangePasswordUseCase(mock_user_provider)
 
         with self.assertRaises(ValueError):
-            ucp.execute(user.id, 11, 20)
+            ucp.execute(user.username, 11, 20)
 
     def test_change_password_raise_exception_with_wrong_username(self):
         mock_user_provider = MockUserProvider()
-        user1 = User(1, 10)
-        user2 = User(2, 20)
+        user1 = User(0, 1, 10)
+        user2 = User(3, 2, 20)
         mock_user_provider.add_user(user1)
         mock_user_provider.add_user(user2)
         ucp = UserChangePasswordUseCase(mock_user_provider)
 
         with self.assertRaises(ValueError):
-            ucp.execute(user2.id, user1.password, 30)
+            ucp.execute(user2.username, user1.password, 30)
 
     def test_change_password_raise_value_error_with_empty_password(self):
         mock_user_provider = MockUserProvider()
-        user1 = User(1, 10)
-        user2 = User(2, 20)
+        user1 = User(0, 1, 10)
+        user2 = User(3, 2, 20)
         mock_user_provider.add_user(user1)
         mock_user_provider.add_user(user2)
         ucp = UserChangePasswordUseCase(mock_user_provider)
 
         with self.assertRaises(ValueError):
-            ucp.execute(user1.id, user1.password, None)
+            ucp.execute(user1.username, user1.password, None)
         with self.assertRaises(ValueError):
-            ucp.execute(user2.id, user2.password, "")
+            ucp.execute(user2.username, user2.password, "")
+
