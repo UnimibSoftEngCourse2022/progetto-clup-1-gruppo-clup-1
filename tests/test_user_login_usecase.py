@@ -20,11 +20,11 @@ class MockUserProvider:
 class TestUserLoginUsecase(unittest.TestCase):
     def test_login_returns_true_when_correct_info(self):
         mock_user_provider = MockUserProvider()
-        user = User(1, 1, 10)
+        user = User(0, 1, 10)
         mock_user_provider.users = (user,)
         ul = UserLoginUseCase(mock_user_provider)
 
-        is_login_ok = ul.execute(user.username, user.password)
+        is_login_ok = ul.execute(user.username, user.password) != None
 
         self.assertTrue(is_login_ok)
 
@@ -46,8 +46,8 @@ class TestUserLoginUsecase(unittest.TestCase):
         mock_user_provider.users = (user1, user2)
         ul = UserLoginUseCase(mock_user_provider)
 
-        is_user1_logged = ul.execute(user1.username, user1.password)
-        is_user2_logged = ul.execute(user2.username, user2.password)
+        is_user1_logged = ul.execute(user1.username, user1.password) != None
+        is_user2_logged = ul.execute(user2.username, user2.password) != None
 
         self.assertTrue(is_user1_logged)
         self.assertTrue(is_user2_logged)
