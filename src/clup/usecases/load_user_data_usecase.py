@@ -7,4 +7,6 @@ class LoadUserDataUseCase:
             raise ValueError("user_id non valido")
         if not user_id:
             raise ValueError("user_id non valido")
+        if self.user_provider.get_user(user_id) is None:
+            raise ValueError("None!!")
         return self.user_provider.get_user(user_id)

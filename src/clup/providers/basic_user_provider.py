@@ -5,9 +5,9 @@ class BasicUserProvider:
     def get_users(self):
         return self.users.values()
 
-    def get_user(self, username):
+    def get_user(self, user_id):
         for user in self.users.values():
-            if user.username == username:
+            if user.id == user_id:
                 return self.users[user.id]
 
     def add_user(self, user):

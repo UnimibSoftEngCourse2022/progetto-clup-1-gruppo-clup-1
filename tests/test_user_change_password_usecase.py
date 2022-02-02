@@ -14,9 +14,9 @@ class MockUserProvider:
     def get_users(self):
         return self.users.values()
 
-    def get_user(self, user_name):
+    def get_user(self, user_id):
         for user in self.get_users():
-            if user.username == user_name:
+            if user.id == user_id:
                 return self.users[user.id]
 
 
@@ -24,7 +24,7 @@ class TestUserChangePasswordUsecase(unittest.TestCase):
     def test_change_password_set_new_password_with_correct_info(self):
         mock_user_provider = MockUserProvider()
         user = User(0, 1, 10)
-        mock_user_provider.add_user(user)
+        mock_user_provider.users[user.id] = user
         ucp = UserChangePasswordUseCase(mock_user_provider)
 
         ucp.execute(user.username, user.password, 20)

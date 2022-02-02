@@ -45,9 +45,9 @@ class TestUserLoginUsecase(unittest.TestCase):
         user2 = User(5, 2, 20)
         mock_user_provider.users = (user1, user2)
         ul = UserLoginUseCase(mock_user_provider)
-
-        is_user1_logged = ul.execute(user1.username, user1.password) != None
-        is_user2_logged = ul.execute(user2.username, user2.password) != None
+        
+        is_user1_logged = ul.execute(user1.username, user1.password) == user1.id
+        is_user2_logged = ul.execute(user2.username, user2.password) == user2.id
 
         self.assertTrue(is_user1_logged)
         self.assertTrue(is_user2_logged)

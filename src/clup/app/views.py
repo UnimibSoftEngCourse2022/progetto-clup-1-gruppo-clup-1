@@ -19,7 +19,6 @@ from src.clup.usecases.user_login_usecase import UserLoginUseCase
 from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 
-
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
 bsp.add_store('Tigros')
@@ -35,12 +34,13 @@ ur_def.execute('davide', 'prova')
 
 
 @login_manager.user_loader
-def load_user(username):
+def load_user(u_id):
     users = bup.get_users()
-    if username in [user.username for user in users]:
-        return FlaskUser(username)
+    if u_id in [user.id for user in users]:
+        return FlaskUser(u_id)
     else:
         return None
+
 
 @app.route('/')
 def home():
@@ -54,7 +54,7 @@ def store_page(store_id):
     return render_template('store_page.html', store=store_id, queue=queue)
 
 
-@app.route('/<string:store_id>/consume', methods = ['GET', 'POST'])
+@app.route('/<string:store_id>/consume', methods=['GET', 'POST'])
 def consume_page(store_id):
     form = ConsumeForm()
     if form.validate_on_submit():
@@ -104,11 +104,11 @@ def user_login_page():
         ul = UserLoginUseCase(bup)
         username = form.username.data
         password = form.password.data
-       # user = FlaskUser(username)
         try:
-            ul.execute(username, password)
+            u_id = ul.execute(username, password)
+            user = FlaskUser(u_id)
             login_user(user)
-            return redirect(url_for('user_page', username=username))
+            return redirect(url_for('user_page'))
         except ValueError:
             flash('Something went wrong', category='danger')
             return redirect(url_for('user_login_page'))
@@ -118,17 +118,12 @@ def user_login_page():
     return render_template('user_login.html', form=form)
 
 
-@app.route('/user/<string:username>')
+@app.route('/user/account')
 @login_required
-def user_page(username):
-    #u_id = flask_login.current_user.get_id()
-    #user_data = LoadUserDataUseCase().execute(u_id)
-    #if username == user_data.username:
-    if username == flask_login.current_user.get_id():
-
-        return render_template('user.html')
-    else:
-        return redirect(url_for('user_login_page'))
+def user_page():
+    u_id = flask_login.current_user.get_id()
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    return render_template('user.html', user=user_data)
 
 
 @login_manager.unauthorized_handler
@@ -148,22 +143,22 @@ def handle_csrf_error(e):
     return render_template('csrf_error.html', reason=e.description), 400
 
 
-@app.route('/user/<string:username>/change_password', methods=['GET', 'POST'])
+@app.route('/user/account/change_password', methods=['GET', 'POST'])
 @login_required
-def change_password_page(username):
-    if username == flask_login.current_user.get_id():
-        form = ChangePasswordForm()
-        if form.validate_on_submit():
-            old_password = form.old_password.data
-            new_password = form.new_password.data
-            ucp = UserChangePasswordUseCase(bup)
-            try:
-                ucp.execute(username, old_password, new_password)
-                return redirect(url_for('user_logout'))
-            except ValueError:
-                flash('Something went wrong', category='danger')
-                return redirect(url_for('change_password_page', username=username))
-        else:
-            if form.is_submitted():
-                flash('form not valid', category='danger')
-        return render_template('change_password.html', form=form)
+def change_password_page():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        old_password = form.old_password.data
+        new_password = form.new_password.data
+        ucp = UserChangePasswordUseCase(bup)
+        try:
+            username = LoadUserDataUseCase(bup).execute(flask_login.current_user.get_id()).username
+            ucp.execute(username, old_password, new_password)
+            return redirect(url_for('user_logout'))
+        except ValueError:
+            flash('Something went wrong', category='danger')
+            return redirect(url_for('change_password_page'))
+    else:
+        if form.is_submitted():
+            flash('form not valid', category='danger')
+    return render_template('change_password.html', form=form)

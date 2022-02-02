@@ -12,4 +12,4 @@ class UserChangePasswordUseCase:
                 if user.password != old_password:
                     raise ValueError("password non valida")
                 else:
-                    self.user_provider.get_user(username).password = new_password
+                    self.user_provider.get_user(user.id).password = new_password
