@@ -1,7 +1,7 @@
 import unittest
 from collections.abc import Iterable
 
-from src.clup.entities.exceptions import MaxCapacityReachedError
+from src.clup.entities.exceptions import MaxCapacityReachedError, EmptyPoolError
 from src.clup.entities.active_pool import ActivePool
 
 
@@ -14,6 +14,7 @@ class TestActivePool(unittest.TestCase):
 
         self.assertTrue(len(ap) == 0)
         self.assertEqual(ap.capacity, 0)
+        self.assertEqual(ap.current_quantity, 0)
 
     def test_active_pool_capacity_is_passed_in_init(self):
         ap = ActivePool(capacity=10)
@@ -26,7 +27,7 @@ class TestActivePool(unittest.TestCase):
 
         self.assertEqual(self.ap.capacity, 5)
 
-    def test_active_pool_capacity_is_settable_if_bigger_than_len(self):
+    def test_active_pool_capacity_is_settable_if_no_elements_are_discarded(self):
         self.ap.add('a')
         self.ap.add('b')
 
@@ -51,7 +52,15 @@ class TestActivePool(unittest.TestCase):
 
         self.assertTrue(len(self.ap) == 1)
 
-    def test_add_element_throws_if_max_capacity_is_reached(self):
+    def test_add_throws_if_max_capacity_is_reached(self):
+        ap = ActivePool(capacity=1)
+        ap.add('a')
+        ap.consume('a')
+
+        with self.assertRaises(MaxCapacityReachedError):
+            ap.add('b')
+
+    def test_add_throws_if_active_elements_fill_remaining_capacity(self):
         ap = ActivePool(capacity=1)
         ap.add('a')
 
@@ -66,12 +75,16 @@ class TestActivePool(unittest.TestCase):
         self.assertTrue('b' in self.ap)
         self.assertFalse('c' in self.ap)
 
-    def test_after_remove_element_is_not_in_pool(self):
+    def test_after_invalidate_element_is_not_in_pool(self):
         self.ap.add('a')
 
-        self.ap.remove('a')
+        self.ap.invalidate('a')
 
         self.assertTrue('a' not in self.ap)
+
+    def test_invalidate_throws_if_element_is_not_in_pool(self):
+        with self.assertRaises(ValueError):
+            self.ap.invalidate('z')
 
     def test_active_pool_is_iterable(self):
         is_iterable = isinstance(self.ap, Iterable)
@@ -87,3 +100,35 @@ class TestActivePool(unittest.TestCase):
             elements.add(e)
 
         self.assertEqual(elements, {'a', 'b'})
+
+    def test_consume_increments_current_quantity(self):
+        self.ap.add('a')
+        quantity = self.ap.current_quantity
+
+        self.ap.consume('a')
+
+        self.assertEqual(self.ap.current_quantity, quantity+1)
+
+    def test_consume_removes_element_from_active_pool(self):
+        self.ap.add('a')
+
+        self.ap.consume('a')
+
+        self.assertTrue('a' not in self.ap)
+
+    def test_consume_throws_if_element_not_in_pool(self):
+        with self.assertRaises(ValueError):
+            self.ap.consume('z')
+
+    def test_free_decrements_current_quantity(self):
+        self.ap.add('a')
+        self.ap.consume('a')
+        quantity = self.ap.current_quantity
+
+        self.ap.free()
+
+        self.assertEqual(self.ap.current_quantity, quantity-1)
+
+    def test_free_throws_if_current_quantity_becomes_negative(self):
+        with self.assertRaises(EmptyPoolError):
+            self.ap.free()
