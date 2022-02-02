@@ -29,14 +29,14 @@ b.execute('Tigros')
 
 bup = BasicUserProvider()
 ur_def = UserRegisterUsecase(bup)
-ur_def.execute(User(id='davide', password='prova'))
+ur_def.execute('davide', 'prova')
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(username):
     users = bup.get_users()
-    if user_id in [user.id for user in users]:
-        return FlaskUser(user_id)
+    if username in [user.username for user in users]:
+        return FlaskUser(username)
     else:
         return None
 
@@ -76,10 +76,11 @@ def reservation(store_id):
 def user_register_page():
     form = UserRegisterForm()
     if form.validate_on_submit():
-        new_user = User(id=form.user_id.data, password=form.password1.data)
+        username = form.username.data
+        password = form.password1.data
         ur = UserRegisterUsecase(bup)
         try:
-            ur.execute(new_user)
+            ur.execute(username, password)
             return redirect(url_for('user_login_page'))
         except ValueError:
             flash('Something went wrong', category='danger')
