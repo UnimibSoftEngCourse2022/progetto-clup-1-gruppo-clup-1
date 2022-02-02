@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for
+import flask
 
 from src.clup.usecases.enable_reservation_usecase import EnableReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
@@ -67,10 +68,20 @@ def enable_reservation_into_store(id):
         return 'ERROR'
 
 @bp.route('/<id>/waiting_queue/reservation', methods=['DELETE'])
-def reservation_into_store(id):
-    pass
+def delete_reservation_from_waiting_queue(id):
+    try:
+        # return redirect(url_for('stores.show_store', id=id))
+        pass
+        flask.response(200)
+    except Exception:
+        return 'ERROR1'
 
 
 @bp.route('/<id>/active_pool/reservation', methods=['DELETE'])
-def enable_into_store(id):
-    pass
+def delete_reservation_from_active_pool(id):
+    try:
+        # return redirect(url_for('stores.show_store', id=id))
+        pass
+        flask.response(200)
+    except Exception:
+        return 'ERROR2'
