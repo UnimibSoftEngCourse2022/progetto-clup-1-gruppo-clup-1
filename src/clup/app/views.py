@@ -106,7 +106,7 @@ def user_login_page():
         try:
             ul.execute(username, password)
             login_user(user)
-            return redirect(url_for('user_page', user_id=username))
+            return redirect(url_for('user_page', username=username))
         except ValueError:
             flash('Something went wrong', category='danger')
             return redirect(url_for('user_login_page'))
@@ -116,10 +116,10 @@ def user_login_page():
     return render_template('user_login.html', form=form)
 
 
-@app.route('/user/<string:user_id>')
+@app.route('/user/<string:username>')
 @login_required
-def user_page(user_id):
-    if user_id == flask_login.current_user.get_id():
+def user_page(username):
+    if username == flask_login.current_user.get_id():
         return render_template('user.html')
     else:
         return redirect(url_for('user_login_page'))
@@ -142,21 +142,21 @@ def handle_csrf_error(e):
     return render_template('csrf_error.html', reason=e.description), 400
 
 
-@app.route('/user/<string:user_id>/change_password', methods=['GET', 'POST'])
+@app.route('/user/<string:username>/change_password', methods=['GET', 'POST'])
 @login_required
-def change_password_page(user_id):
-    if user_id == flask_login.current_user.get_id():
+def change_password_page(username):
+    if username == flask_login.current_user.get_id():
         form = ChangePasswordForm()
         if form.validate_on_submit():
             old_password = form.old_password.data
             new_password = form.new_password.data
             ucp = UserChangePasswordUseCase(bup)
             try:
-                ucp.execute(user_id, old_password, new_password)
+                ucp.execute(username, old_password, new_password)
                 return redirect(url_for('user_logout'))
             except ValueError:
                 flash('Something went wrong', category='danger')
-                return redirect(url_for('change_password_page', user_id=user_id))
+                return redirect(url_for('change_password_page', username=username))
         else:
             if form.is_submitted():
                 flash('form not valid', category='danger')

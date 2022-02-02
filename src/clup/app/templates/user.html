@@ -5,7 +5,7 @@
 <br>
   <a href="{{url_for('user_logout')}}">Logout</a>
 <br>
-  <a href="{{url_for('change_password_page', user_id = current_user.id)}}">Change password</a>
+  <a href="{{url_for('change_password_page', username = current_user.id)}}">Change password</a>
 
 {% endif %}
 {% endblock %}
