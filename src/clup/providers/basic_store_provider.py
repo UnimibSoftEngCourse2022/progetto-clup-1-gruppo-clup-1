@@ -1,18 +1,22 @@
+from collections import defaultdict
+
+
 class BasicStoreProvider:
     def __init__(self):
-        self.stores = {}
+        self.stores = []
+        self.queues = defaultdict(tuple)
 
     def get_stores(self):
-        return self.stores.keys()
-    
-    def add_store(self, store_id):
-        if store_id in self.stores.keys():
+        return self.stores
+
+    def add_store(self, store):
+        if store.id in (s.id for s in self.stores):
             raise ValueError('Store already present')
 
-        self.stores[store_id] = ()
+        self.stores.append(store)
 
     def get_queue(self, store_id):
-        return self.stores[store_id]
+        return self.queues[store_id]
 
-    def set_queue(self, store_id, queue):
-        self.stores[store_id] = queue
+    def add_to_queue(self, store_id, element):
+        self.queues[store_id] += (element, )
