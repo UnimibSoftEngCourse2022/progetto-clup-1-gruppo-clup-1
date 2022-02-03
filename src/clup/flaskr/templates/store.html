@@ -24,9 +24,6 @@ Stores
 <form action= "{{ url_for('stores.make_reservation_into_store', id=store.id) }}", method = "post">
     <input type="submit" value="Make Reservation">
 </form>
-<form action= "{{ url_for('stores.enable_reservation_into_store', id=store.id) }}", method = "post">
-    <input type="submit" value="Enable Reservation">
-</form>
 
 <input type="button" id= "delete_reservation_wq" value="Delete Reservation From WQ">
 <input type="button" id= "free_btn" value="Free store space">
