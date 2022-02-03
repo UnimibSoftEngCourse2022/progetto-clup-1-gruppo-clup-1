@@ -1,4 +1,5 @@
-from src.clup.entities.exceptions import MaxCapacityReachedError, EmptyPoolError
+from src.clup.entities.exceptions \
+    import MaxCapacityReachedError, EmptyPoolError
 
 
 class ActivePool:

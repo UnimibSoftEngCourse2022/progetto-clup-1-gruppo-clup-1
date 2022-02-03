@@ -2,6 +2,7 @@ import unittest
 from collections import defaultdict
 
 from src.clup.entities.waiting_queue import WaitingQueue
+from src.clup.entities.active_pool import ActivePool
 from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 
@@ -9,12 +10,13 @@ from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 class MockQueueProvider(QueueProvider):
     def __init__(self):
         self.queues = defaultdict(WaitingQueue)
+        self.pools = defaultdict(ActivePool)
 
     def get_waiting_queue(self, store_id):
         return self.queues[store_id]
 
     def get_active_pool(self, store_id):
-        raise NotImplementedError
+        return self.pools[store_id]
 
 
 class MockReservationProvider:
@@ -56,39 +58,50 @@ class TestMakeReservationUseCase(unittest.TestCase):
         self.assertTrue(r1 in reservations)
         self.assertTrue(r2 in reservations)
 
-    def test_reservation_should_be_in_the_queue_of_the_store(self):
-        r = self.u.execute(self.store1_id, self.user1_id)
-        waiting_queue = self.queue_provider.get_waiting_queue(self.store1_id)
-        is_id_in_queue = r in waiting_queue
-
-        self.assertTrue(is_id_in_queue)
-
     def test_reservations_should_have_different_ids(self):
         reservation1 = self.u.execute(self.store1_id, self.user1_id)
         reservation2 = self.u.execute(self.store1_id, self.user1_id)
 
         self.assertNotEqual(reservation1.id, reservation2.id)
 
-    def test_reservations_in_different_stores_should_be_in_their_queue(self):
-        r1 = self.u.execute(self.store1_id, self.user1_id)
-        r2 = self.u.execute(self.store2_id, self.user1_id)
-        waiting_queue1 = self.queue_provider.get_waiting_queue(self.store1_id)
-        waiting_queue2 = self.queue_provider.get_waiting_queue(self.store2_id)
-        is_id1_in_queue1 = r1 in waiting_queue1
-        is_id2_in_queue2 = r2 in waiting_queue2
+    def test_reservation_should_be_in_pool_if_pool_is_not_full(self):
+        self.queue_provider.get_active_pool(self.store1_id).capacity = 1
 
-        self.assertTrue(is_id1_in_queue1)
-        self.assertTrue(is_id2_in_queue2)
+        r = self.u.execute(self.store1_id, self.user1_id)
+        pool = self.queue_provider.get_active_pool(self.store1_id)
+        queue = self.queue_provider.get_waiting_queue(self.store1_id)
+
+        self.assertTrue(r in pool)
+        self.assertTrue(r not in queue)
+
+    def test_reservation_should_be_in_queue_if_pool_is_full(self):
+        self.queue_provider.get_active_pool(self.store1_id).capacity = 0
+
+        r = self.u.execute(self.store1_id, self.user1_id)
+        pool = self.queue_provider.get_active_pool(self.store1_id)
+        queue = self.queue_provider.get_waiting_queue(self.store1_id)
+
+        self.assertTrue(r in queue)
+        self.assertTrue(r not in pool)
+
+    def test_reservation_should_be_in_queue_after_pool_is_filled(self):
+        self.queue_provider.get_active_pool(self.store1_id).capacity = 1
+
+        r1 = self.u.execute(self.store1_id, self.user1_id)
+        r2 = self.u.execute(self.store1_id, self.user2_id)
+        pool = self.queue_provider.get_active_pool(self.store1_id)
+        queue = self.queue_provider.get_waiting_queue(self.store1_id)
+
+        self.assertTrue(r1 in pool)
+        self.assertTrue(r2 in queue)
 
     def test_reservations_from_different_users_should_be_in_same_queue(self):
         r1 = self.u.execute(self.store1_id, self.user1_id)
         r2 = self.u.execute(self.store1_id, self.user2_id)
-        waiting_queue = self.queue_provider.get_waiting_queue(self.store1_id)
-        is_id1_in_queue = r1 in waiting_queue
-        is_id2_in_queue = r2 in waiting_queue
+        queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
-        self.assertTrue(is_id1_in_queue)
-        self.assertTrue(is_id2_in_queue)
+        self.assertTrue(r1 in queue)
+        self.assertTrue(r2 in queue)
 
     def test_should_throw_if_add_reservation_throws(self):
         reservation_provider = MockReservationProvider(throws_on_add=True)

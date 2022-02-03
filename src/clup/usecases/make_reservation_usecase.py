@@ -1,5 +1,6 @@
 import uuid
 
+from src.clup.entities.exceptions import MaxCapacityReachedError
 from src.clup.entities.reservation import Reservation
 
 
@@ -13,7 +14,12 @@ class MakeReservationUseCase:
 
         reservation = Reservation(reservation_id, store_id, user_id)
         self.reservation_provider.add_reservation(reservation)
-        waiting_queue = self.queue_provider.get_waiting_queue(store_id)
-        waiting_queue.push(reservation)
+
+        active_pool = self.queue_provider.get_active_pool(store_id)
+        try:
+            active_pool.add(reservation)
+        except MaxCapacityReachedError:
+            waiting_queue = self.queue_provider.get_waiting_queue(store_id)
+            waiting_queue.push(reservation)
 
         return reservation

@@ -22,7 +22,7 @@ class WaitingQueue:
     def remove(self, element):
         if len(self) <= 0:
             raise EmptyQueueError()
-        
+
         self.queue.remove(element)
 
     def __len__(self):

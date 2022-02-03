@@ -37,7 +37,7 @@ class TestFreeReservationUseCase(unittest.TestCase):
 
         self.u.execute(store_id)
 
-        self.assertEqual(pool.current_quantity, quantity-1)
+        self.assertEqual(pool.current_quantity, quantity - 1)
 
     def test_emptypoolerror_is_forwarded(self):
         store_id = 1

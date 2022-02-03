@@ -1,7 +1,8 @@
 import unittest
 from collections.abc import Iterable
 
-from src.clup.entities.exceptions import MaxCapacityReachedError, EmptyPoolError
+from src.clup.entities.exceptions \
+    import MaxCapacityReachedError, EmptyPoolError
 from src.clup.entities.active_pool import ActivePool
 
 
@@ -9,25 +10,25 @@ class TestActivePool(unittest.TestCase):
     def setUp(self):
         self.ap = ActivePool(capacity=10)
 
-    def test_active_pool_is_empty_after_init(self):
+    def test_is_empty_after_init(self):
         ap = ActivePool()
 
         self.assertTrue(len(ap) == 0)
         self.assertEqual(ap.capacity, 0)
         self.assertEqual(ap.current_quantity, 0)
 
-    def test_active_pool_capacity_is_passed_in_init(self):
+    def test_capacity_is_passed_in_init(self):
         ap = ActivePool(capacity=10)
 
         self.assertTrue(len(ap) == 0)
         self.assertEqual(ap.capacity, 10)
 
-    def test_active_pool_capacity_is_settable(self):
+    def test_capacity_is_settable(self):
         self.ap.capacity = 5
 
         self.assertEqual(self.ap.capacity, 5)
 
-    def test_active_pool_capacity_is_settable_if_no_elements_are_discarded(self):
+    def test_capacity_is_settable_if_no_elements_are_discarded(self):
         self.ap.add('a')
         self.ap.add('b')
 
@@ -35,11 +36,11 @@ class TestActivePool(unittest.TestCase):
 
         self.assertEqual(self.ap.capacity, 15)
 
-    def test_active_pool_capacity_is_not_set_negative(self):
+    def test_capacity_is_not_set_negative(self):
         with self.assertRaises(ValueError):
             self.ap.capacity = -1
 
-    def test_active_pool_capacity_is_not_set_less_than_total_elements(self):
+    def test_capacity_is_not_set_less_than_total_elements(self):
         ap = ActivePool(capacity=10)
         ap.add('a')
         ap.add('b')
@@ -107,7 +108,7 @@ class TestActivePool(unittest.TestCase):
 
         self.ap.consume('a')
 
-        self.assertEqual(self.ap.current_quantity, quantity+1)
+        self.assertEqual(self.ap.current_quantity, quantity + 1)
 
     def test_consume_removes_element_from_active_pool(self):
         self.ap.add('a')
@@ -127,7 +128,7 @@ class TestActivePool(unittest.TestCase):
 
         self.ap.free()
 
-        self.assertEqual(self.ap.current_quantity, quantity-1)
+        self.assertEqual(self.ap.current_quantity, quantity - 1)
 
     def test_free_throws_if_current_quantity_becomes_negative(self):
         with self.assertRaises(EmptyPoolError):
