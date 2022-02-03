@@ -3,7 +3,7 @@ from app import app, csrf, login_manager
 from flask import render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user
 from flask_wtf.csrf import CSRFError
-from providers.basic_store_provider import BasicStoreProvider
+from src.clup.providers.basic_store_provider import BasicStoreProvider
 from usecases.book_usecase import BookUseCase
 from usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
@@ -18,6 +18,11 @@ from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from src.clup.usecases.user_login_usecase import UserLoginUseCase
 from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+from src.clup.entities.admin import Admin
+from src.clup.providers.basic_admin_provider import BasicAdminProvider
+from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
+from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
+from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 
 bsp = BasicStoreProvider()
 bsp.add_store('Esselunga')
@@ -31,12 +36,18 @@ b.execute('Tigros')
 bup = BasicUserProvider()
 ur_def = UserRegisterUsecase(bup)
 ur_def.execute('davide', 'prova')
+bap = BasicAdminProvider()
+ar_def = AdminRegisterUsecase(bap)
+ar_def.execute(Admin('aid', 'amministratore', 'password'))
 
 
 @login_manager.user_loader
 def load_user(u_id):
     users = bup.get_users()
+    admins = bap.get_admins()
     if u_id in [user.id for user in users]:
+        return FlaskUser(u_id)
+    elif u_id in [admin.id for admin in admins]:
         return FlaskUser(u_id)
     else:
         return None
@@ -97,6 +108,7 @@ def show_registered_users():
     return render_template('registered_users.html', users=bup.get_users())
 
 
+"""
 @app.route('/user/login', methods=['GET', 'POST'])
 def user_login_page():
     form = UserLoginForm()
@@ -116,14 +128,48 @@ def user_login_page():
         if form.is_submitted():
             flash('form not valid', category='danger')
     return render_template('user_login.html', form=form)
+"""
 
 
+@app.route('/user/login', methods=['GET', 'POST'])
+def user_login_page():
+    form = UserLoginForm()
+    if form.validate_on_submit():
+        gl = GenericLoginUsecase(bap, bup)
+        username = form.username.data
+        password = form.password.data
+        try:
+            u_id, logged_type = gl.execute(username, password)
+            user = FlaskUser(u_id)
+            login_user(user)
+            if logged_type == 'user':
+                return redirect(url_for('user_page'))
+            if logged_type == 'admin':
+                return redirect(url_for('admin_page'))
+        except ValueError:
+            flash('Something went wrong', category='danger')
+            return redirect(url_for('user_login_page'))
+    else:
+        if form.is_submitted():
+            flash('form not valid', category='danger')
+    return render_template('user_login.html', form=form)
+
+
+#######################
 @app.route('/user/account')
 @login_required
 def user_page():
     u_id = flask_login.current_user.get_id()
     user_data = LoadUserDataUseCase(bup).execute(u_id)
     return render_template('user.html', user=user_data)
+
+
+@app.route('/admin/account')
+@login_required
+def admin_page():
+    a_id = flask_login.current_user.get_id()
+    admin_data = LoadAdminDataUseCase(bap).execute(a_id)
+    return render_template('admin.html', admin=admin_data)
 
 
 @login_manager.unauthorized_handler
