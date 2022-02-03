@@ -118,8 +118,11 @@ class TestActivePool(unittest.TestCase):
         self.assertTrue('a' not in self.ap)
 
     def test_consume_throws_if_element_not_in_pool(self):
+        qt = self.ap.current_quantity
+
         with self.assertRaises(ValueError):
             self.ap.consume('z')
+        self.assertEqual(self.ap.current_quantity, qt)
 
     def test_free_decrements_current_quantity(self):
         self.ap.add('a')

@@ -17,8 +17,8 @@ class ActivePool:
         self.elements.remove(element)
 
     def consume(self, element):
-        self.current_quantity += 1
         self.elements.remove(element)
+        self.current_quantity += 1
 
     def free(self):
         if self.current_quantity <= 0:

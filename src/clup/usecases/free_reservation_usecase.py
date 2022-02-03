@@ -7,5 +7,6 @@ class FreeReservationUseCase:
         pool.free()
 
         queue = self.queue_provider.get_waiting_queue(store_id)
-        reservation = queue.pop()
-        pool.add(reservation)
+        if len(queue) > 0:
+            reservation = queue.pop()
+            pool.add(reservation)

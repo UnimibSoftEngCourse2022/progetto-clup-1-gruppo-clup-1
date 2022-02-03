@@ -1,14 +1,18 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, abort
 import flask
 
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
-from src.clup.providers.basic_reservation_provider import BasicReservationProvider
+from src.clup.usecases.consume_reservation_usecase \
+    import ConsumeReservationUseCase
+from src.clup.providers.basic_reservation_provider \
+    import BasicReservationProvider
 from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.providers.basic_queue_provider import BasicQueueProvider
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.providers.basic_store_provider import BasicStoreProvider
-from src.clup.entities.exceptions import MaxCapacityReachedError, EmptyQueueError
+# from src.clup.entities.exceptions \
+#     import MaxCapacityReachedError, EmptyQueueError
 
 
 bp = Blueprint('stores', __name__, url_prefix='/stores')
@@ -27,6 +31,8 @@ asu.execute('Conad', 'Catania', 10)
 mru = MakeReservationUseCase(bqp, brp)
 
 fru = FreeReservationUseCase(bqp)
+
+cru = ConsumeReservationUseCase(bqp)
 
 
 @bp.route('', methods=['GET', 'POST'])
@@ -49,7 +55,8 @@ def show_stores():
 def show_store(id):
     for store in slu.execute():
         if store.id == id:
-            active_pool_len = len(bqp.get_active_pool(id))
+            pool = bqp.get_active_pool(id)
+            active_pool_len = len(pool)
             waiting_queue_len = len(bqp.get_waiting_queue(id))
             current_people_quantity = bqp.get_active_pool(id).current_quantity
             args = {
@@ -57,8 +64,10 @@ def show_store(id):
                 'waiting_queue_len': waiting_queue_len,
                 'active_pool_len': active_pool_len,
                 'current_people_quantity': current_people_quantity,
+                'active_pool': pool
             }
             return render_template('store.html', **args)
+    abort(404)
 
 
 @bp.route('/<id>/waiting_queue', methods=['POST'])
@@ -67,29 +76,38 @@ def make_reservation_into_store(id):
     return redirect(url_for('stores.show_store', id=id))
 
 
-@bp.route('/<id>/active_pool', methods=['POST'])
-def enable_reservation_into_store(id):
-    try:
-        eru.execute(id)
-        return redirect(url_for('stores.show_store', id=id))
-    except MaxCapacityReachedError:
-        return 'MAX CAPACITY ERROR'
-    except EmptyQueueError:
-        return 'EMPTY QUEUE ERROR'
+# @bp.route('/<id>/active_pool', methods=['POST'])
+# def enable_reservation_into_store(id):
+#     try:
+#         eru.execute(id)
+#         return redirect(url_for('stores.show_store', id=id))
+#     except MaxCapacityReachedError:
+#         return 'MAX CAPACITY ERROR'
+#     except EmptyQueueError:
+#         return 'EMPTY QUEUE ERROR'
 
-@bp.route('/<id>/waiting_queue/reservation', methods=['DELETE'])
-def delete_reservation_from_waiting_queue(id):
+@bp.route('/<store_id>/active_pool/<reservation_id>', methods=['DELETE'])
+def consume_handler(store_id, reservation_id):
     try:
         # return redirect(url_for('stores.show_store', id=id))
+        cru.execute(store_id, reservation_id)
         flask.response(200)
     except Exception:
         return 'ERROR1'
 
 
-@bp.route('/<store_id>/active_pool', methods=['DELETE'])
-def free_reservation_in_store(store_id):
+@bp.route('/<store_id>/waiting_queue', methods=['DELETE'])
+def delete_reservation_from_waiting_queue(store_id):
     try:
-        fru.execute(store_id)
         flask.response(200)
     except Exception:
         flask.response(500)
+
+
+@bp.route('/<store_id>/active_pool', methods=['DELETE'])
+def free_handler(store_id):
+    try:
+        fru.execute(store_id)
+        return '', 200
+    except Exception as e:
+        return f'Error {e}', 500

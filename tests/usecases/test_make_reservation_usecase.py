@@ -1,22 +1,8 @@
 import unittest
-from collections import defaultdict
 
-from src.clup.entities.waiting_queue import WaitingQueue
-from src.clup.entities.active_pool import ActivePool
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 
-
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.queues = defaultdict(WaitingQueue)
-        self.pools = defaultdict(ActivePool)
-
-    def get_waiting_queue(self, store_id):
-        return self.queues[store_id]
-
-    def get_active_pool(self, store_id):
-        return self.pools[store_id]
+from tests.usecases.mock_queue_provider import MockQueueProvider
 
 
 class MockReservationProvider:
@@ -64,27 +50,27 @@ class TestMakeReservationUseCase(unittest.TestCase):
 
         self.assertNotEqual(reservation1.id, reservation2.id)
 
-    def test_reservation_should_be_in_pool_if_pool_is_not_full(self):
+    def test_reservation_id_should_be_in_pool_if_pool_is_not_full(self):
         self.queue_provider.get_active_pool(self.store1_id).capacity = 1
 
         r = self.u.execute(self.store1_id, self.user1_id)
         pool = self.queue_provider.get_active_pool(self.store1_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
-        self.assertTrue(r in pool)
-        self.assertTrue(r not in queue)
+        self.assertTrue(r.id in pool)
+        self.assertTrue(r.id not in queue)
 
-    def test_reservation_should_be_in_queue_if_pool_is_full(self):
+    def test_reservation_id_should_be_in_queue_if_pool_is_full(self):
         self.queue_provider.get_active_pool(self.store1_id).capacity = 0
 
         r = self.u.execute(self.store1_id, self.user1_id)
         pool = self.queue_provider.get_active_pool(self.store1_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
-        self.assertTrue(r in queue)
-        self.assertTrue(r not in pool)
+        self.assertTrue(r.id in queue)
+        self.assertTrue(r.id not in pool)
 
-    def test_reservation_should_be_in_queue_after_pool_is_filled(self):
+    def test_reservation_id_should_be_in_queue_after_pool_is_filled(self):
         self.queue_provider.get_active_pool(self.store1_id).capacity = 1
 
         r1 = self.u.execute(self.store1_id, self.user1_id)
@@ -92,16 +78,16 @@ class TestMakeReservationUseCase(unittest.TestCase):
         pool = self.queue_provider.get_active_pool(self.store1_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
-        self.assertTrue(r1 in pool)
-        self.assertTrue(r2 in queue)
+        self.assertTrue(r1.id in pool)
+        self.assertTrue(r2.id in queue)
 
-    def test_reservations_from_different_users_should_be_in_same_queue(self):
+    def test_different_users_reservations_should_be_in_same_queue(self):
         r1 = self.u.execute(self.store1_id, self.user1_id)
         r2 = self.u.execute(self.store1_id, self.user2_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
-        self.assertTrue(r1 in queue)
-        self.assertTrue(r2 in queue)
+        self.assertTrue(r1.id in queue)
+        self.assertTrue(r2.id in queue)
 
     def test_should_throw_if_add_reservation_throws(self):
         reservation_provider = MockReservationProvider(throws_on_add=True)

@@ -1,23 +1,9 @@
 import unittest
-from collections import defaultdict
 
 from src.clup.entities.exceptions import EmptyPoolError
-from src.clup.entities.active_pool import ActivePool
-from src.clup.entities.waiting_queue import WaitingQueue
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 
-
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.pools = defaultdict(ActivePool)
-        self.queues = defaultdict(WaitingQueue)
-
-    def get_waiting_queue(self, store_id):
-        return self.queues[store_id]
-
-    def get_active_pool(self, store_id):
-        return self.pools[store_id]
+from tests.usecases.mock_queue_provider import MockQueueProvider
 
 
 class TestFreeReservationUseCase(unittest.TestCase):
@@ -59,3 +45,14 @@ class TestFreeReservationUseCase(unittest.TestCase):
 
         self.assertTrue('a' in pool)
         self.assertTrue('b' in queue)
+
+    def test_pool_is_unchanged_if_queue_is_empty(self):
+        store_id = 1
+        pool = self.queue_provider.get_active_pool(store_id)
+        pool.capacity = 5
+        pool.add('a')
+        pool.consume('a')
+
+        self.u.execute(store_id)
+
+        self.assertEqual(len(pool), 0)
