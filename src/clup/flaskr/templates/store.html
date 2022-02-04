@@ -25,10 +25,37 @@ Stores
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="submit" value="Make Reservation">
 </form>
-
 <input type="button" id= "delete_reservation_wq" value="Delete Reservation From WQ">
 <input type="button" id= "free_btn" value="Free store space">
-<p id= "test"></p>
+<script>
+    function updateStore() {
+        var new_name = $("#name").val();
+        var new_address = $("#address").val();
+        var new_capacity = $("#capacity").val();
+        $.ajax({
+            url: "{{ url_for('stores.show_store', id=store.id) }}",
+            type: "PUT",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                name: new_name,
+                address: new_address,
+                capacity: new_capacity,
+            },
+            success: function(result) {
+                location.reload();
+            },
+        });
+    }
+</script>
+<div>
+    <label for="name">Store name:</label><br>
+    <input type="text" id="name" placeholder="ex. Esselunga"><br>
+    <label for="address">Store address:</label><br>
+    <input type="text" id="address" placeholder="ex. Barzano"><br>
+    <label for="capacity">Store capacity:</label><br>
+    <input type="text" id="capacity" placeholder="ex. 150"><br>
+    <button onclick="updateStore()">Update Store!</button>
+</div>
 <script>
 $("#delete_reservation_wq").click(function () {
     $.ajax({

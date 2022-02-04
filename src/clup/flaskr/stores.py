@@ -44,23 +44,26 @@ def show_stores():
         return render_template('stores.html', stores=stores)
 
 
-@bp.route('/stores/<id>', methods=['GET'])
+@bp.route('/stores/<id>', methods=['GET', 'PUT'])
 def show_store(id):
-    for store in slu.execute():
-        if store.id == id:
-            pool = bqp.get_active_pool(id)
-            active_pool_len = len(pool)
-            waiting_queue_len = len(bqp.get_waiting_queue(id))
-            current_people_quantity = bqp.get_active_pool(id).current_quantity
-            args = {
-                'store': store,
-                'waiting_queue_len': waiting_queue_len,
-                'active_pool_len': active_pool_len,
-                'current_people_quantity': current_people_quantity,
-                'active_pool': pool
-            }
-            return render_template('store.html', **args)
-    abort(404)
+    if request.method == 'PUT':
+        abort(404)
+    else:
+        for store in slu.execute():
+            if store.id == id:
+                pool = bqp.get_active_pool(id)
+                active_pool_len = len(pool)
+                waiting_queue_len = len(bqp.get_waiting_queue(id))
+                current_people_quantity = bqp.get_active_pool(id).current_quantity
+                args = {
+                    'store': store,
+                    'waiting_queue_len': waiting_queue_len,
+                    'active_pool_len': active_pool_len,
+                    'current_people_quantity': current_people_quantity,
+                    'active_pool': pool
+                }
+                return render_template('store.html', **args)
+        abort(404)
 
 
 @bp.route('/stores/<id>/waiting_queue', methods=['POST'])
