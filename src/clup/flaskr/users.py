@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
-from src.clup.entities.admin import Admin
 from src.clup.flaskr.global_setup import bup, bap
 from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
