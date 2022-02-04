@@ -24,7 +24,7 @@ class TestUserLoginUsecase(unittest.TestCase):
         mock_user_provider.users = (user,)
         ul = UserLoginUseCase(mock_user_provider)
 
-        is_login_ok = ul.execute(user.username, user.password) != None
+        is_login_ok = ul.execute(user.username, user.password) is not None
 
         self.assertTrue(is_login_ok)
 

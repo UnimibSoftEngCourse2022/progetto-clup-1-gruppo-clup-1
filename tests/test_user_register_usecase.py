@@ -40,11 +40,10 @@ class TestUserRegisterUsecase(unittest.TestCase):
         user_id1 = 1
         password1 = 10
         user_id2 = 2
-        password2 = 20
 
         ur.execute(user_id1, password1)
         is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
-        is_user2_present = mock_user_provider.get_user(user_id2) != None
+        is_user2_present = mock_user_provider.get_user(user_id2) is not None
 
         self.assertTrue(is_user1_present)
         self.assertFalse(is_user2_present)
