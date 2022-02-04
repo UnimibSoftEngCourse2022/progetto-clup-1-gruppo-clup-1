@@ -1,6 +1,7 @@
 import flask
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
+from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
 from src.clup.flaskr.global_setup import bsp, bqp, brp
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
@@ -28,6 +29,8 @@ fru = FreeReservationUseCase(bqp)
 
 cru = ConsumeReservationUseCase(bqp)
 
+usu = UpdateStoreUseCase(bsp, bqp)
+
 
 @bp.route('/stores', methods=['GET', 'POST'])
 @login_required
@@ -50,7 +53,12 @@ def show_stores():
 @login_required
 def show_store(id):
     if request.method == 'PUT':
-        abort(404)
+        #abort(404)
+        for store in slu.execute():
+            if store.id == id:
+                capacity = int(request.values['capacity'])
+                usu.execute(store, capacity)
+                return redirect(url_for('stores.show_store', id=id))
     else:
         for store in slu.execute():
             if store.id == id:
