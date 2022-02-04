@@ -2,7 +2,6 @@ import unittest
 
 from src.clup.entities.exceptions import EmptyPoolError
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
-
 from tests.usecases.mock_queue_provider import MockQueueProvider
 
 

@@ -1,9 +1,9 @@
 import unittest
 
+from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyQueueError
 from src.clup.entities.waiting_queue import WaitingQueue
-from src.clup.entities.active_pool import ActivePool
 from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.enable_reservation_usecase \
     import EnableReservationUseCase

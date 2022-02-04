@@ -1,6 +1,5 @@
 import unittest
 
-from src.clup.entities.admin import Admin
 from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 
 

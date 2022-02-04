@@ -1,9 +1,9 @@
 import unittest
 from collections.abc import Iterable
 
+from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyPoolError
-from src.clup.entities.active_pool import ActivePool
 
 
 class TestActivePool(unittest.TestCase):

@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-from src.clup.entities.waiting_queue import WaitingQueue
 from src.clup.entities.active_pool import ActivePool
+from src.clup.entities.waiting_queue import WaitingQueue
 from src.clup.providers.queue_provider_abc import QueueProvider
 
 

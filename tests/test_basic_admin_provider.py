@@ -56,8 +56,3 @@ class TestBasicStoreProvider(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             bap.remove_admin(2)
-            
-
-
-
-

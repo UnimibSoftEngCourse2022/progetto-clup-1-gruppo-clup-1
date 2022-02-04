@@ -1,7 +1,7 @@
 import unittest
 
-from src.clup.entities.user import User
 from src.clup.entities.admin import Admin
+from src.clup.entities.user import User
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 
 
@@ -21,7 +21,7 @@ class MockAdminProvider:
         self.admins = {}
 
     def add_admin(self, admin):
-        self.admins[admin.id]=admin
+        self.admins[admin.id] = admin
 
     def get_admins(self):
         return self.admins.values()

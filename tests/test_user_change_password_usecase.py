@@ -64,4 +64,3 @@ class TestUserChangePasswordUsecase(unittest.TestCase):
             ucp.execute(user1.username, user1.password, None)
         with self.assertRaises(ValueError):
             ucp.execute(user2.username, user2.password, "")
-

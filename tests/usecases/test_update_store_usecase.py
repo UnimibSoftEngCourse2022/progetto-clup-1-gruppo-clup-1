@@ -1,10 +1,10 @@
-from collections import defaultdict
 import dataclasses
 import unittest
+from collections import defaultdict
 
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.store import Store
+from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
 

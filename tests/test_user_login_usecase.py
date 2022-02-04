@@ -10,7 +10,7 @@ class MockUserProvider:
 
     def add_user(self, user):
         users = self.users
-        new_users = users + (user, )
+        new_users = users + (user,)
         self.users = new_users
 
     def get_users(self):

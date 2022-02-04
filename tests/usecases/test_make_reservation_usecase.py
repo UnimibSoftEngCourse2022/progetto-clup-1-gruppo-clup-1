@@ -1,7 +1,6 @@
 import unittest
 
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
-
 from tests.usecases.mock_queue_provider import MockQueueProvider
 
 
@@ -14,7 +13,7 @@ class MockReservationProvider:
         return self.reservations
 
     def add_reservation(self, reservation):
-        if(self.throws_on_add):
+        if (self.throws_on_add):
             raise ValueError()
         self.reservations.append(reservation)
 

@@ -9,14 +9,14 @@ current = pathlib.Path(__file__).resolve()
 project_root = current.parent.parent.parent.parent
 sys.path.append(str(project_root))
 
-from src.clup.flaskr.global_setup import bup, bap
-from src.clup.flaskr.flask_user import FlaskUser
-
 login_manager = LoginManager()
 
 
 @login_manager.user_loader
 def load_user(u_id):
+    from src.clup.flaskr.global_setup import bup, bap
+    from src.clup.flaskr.flask_user import FlaskUser
+    
     users = bup.get_users()
     admins = bap.get_admins()
     if u_id in [user.id for user in users]:

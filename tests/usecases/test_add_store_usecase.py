@@ -1,5 +1,5 @@
-from collections import defaultdict
 import unittest
+from collections import defaultdict
 
 from src.clup.entities.active_pool import ActivePool
 from src.clup.providers.queue_provider_abc import QueueProvider

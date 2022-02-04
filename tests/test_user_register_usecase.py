@@ -1,6 +1,5 @@
 import unittest
 
-from src.clup.entities.user import User
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
 
@@ -10,7 +9,7 @@ class MockUserProvider:
 
     def add_user(self, user):
         users = self.users
-        new_users = users + (user, )
+        new_users = users + (user,)
         self.users = new_users
 
     def get_users(self):
@@ -67,7 +66,6 @@ class TestUserRegisterUsecase(unittest.TestCase):
         self.assertTrue(is_user2_present)
 
     def test_null_field_raise_error(self):
-
         mock_user_provider = MockUserProvider()
         ur = UserRegisterUsecase(mock_user_provider)
         with self.assertRaises(ValueError):
@@ -93,5 +91,3 @@ class TestUserRegisterUsecase(unittest.TestCase):
             ur.execute("", 10)
         with self.assertRaises(ValueError):
             ur.execute(1, "")
-
-

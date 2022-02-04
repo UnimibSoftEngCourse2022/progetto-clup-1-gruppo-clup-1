@@ -2,7 +2,6 @@ import unittest
 
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
-
 from tests.usecases.mock_queue_provider import MockQueueProvider
 
 

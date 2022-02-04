@@ -14,6 +14,7 @@ class MockUserProvider:
     def get_user(self, user_id):
         return self.users[user_id]
 
+
 class TestLoadUserDataUsecase(unittest.TestCase):
     def test_load_user_return_user(self):
         mup = MockUserProvider()
