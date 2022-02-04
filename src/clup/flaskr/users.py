@@ -8,13 +8,11 @@ from .forms.consume_form import ConsumeForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
 from src.clup.entities.user import User
-# from src.clup.providers.basic_user_provider import BasicUserProvider
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from src.clup.usecases.user_login_usecase import UserLoginUseCase
 from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.entities.admin import Admin
-# from src.clup.providers.basic_admin_provider import BasicAdminProvider
 from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase

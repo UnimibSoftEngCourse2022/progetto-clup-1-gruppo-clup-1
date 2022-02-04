@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 import flask
+from flask_login import login_required, current_user
 
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
@@ -29,6 +30,7 @@ cru = ConsumeReservationUseCase(bqp)
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
+@login_required
 def show_stores():
     if request.method == 'POST':
         store_name = request.values['name']
@@ -45,6 +47,7 @@ def show_stores():
 
 
 @bp.route('/stores/<id>', methods=['GET', 'PUT'])
+@login_required
 def show_store(id):
     if request.method == 'PUT':
         abort(404)
@@ -67,10 +70,18 @@ def show_store(id):
 
 
 @bp.route('/stores/<id>/waiting_queue', methods=['POST'])
+@login_required
 def make_reservation_into_store(id):
-    mru.execute(id, 12)
+    user_id = current_user.get_id()
+    mru.execute(id, user_id)
     return redirect(url_for('stores.show_store', id=id))
 
+
+@bp.route('/reservations', methods=['GET'])
+@login_required
+def show_reservation():
+    reservations = brp.get_reservations()
+    return render_template('reservations.html', reservations=reservations)
 
 # @bp.route('/<id>/active_pool', methods=['POST'])
 # def enable_reservation_into_store(id):
