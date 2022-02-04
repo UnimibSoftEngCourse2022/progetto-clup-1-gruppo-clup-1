@@ -22,6 +22,7 @@ Stores
 </ul>
 <br>
 <form action= "{{ url_for('stores.make_reservation_into_store', id=store.id) }}", method = "post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="submit" value="Make Reservation">
 </form>
 
@@ -43,6 +44,9 @@ $("#free_btn").click(function () {
     $.ajax({
         url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
         type: 'DELETE',
+        data: {
+            csrf_token: '{{ csrf_token() }}',
+        },
         success: function(result) {
             location.reload();
         },
@@ -54,6 +58,9 @@ $("#consume_btn_{{ reservation_id }}").click(function () {
     $.ajax({
         url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
         type: 'DELETE',
+        data: {
+            csrf_token: '{{ csrf_token() }}',
+        },
         success: function (result) {
             location.reload();
         },

@@ -8,38 +8,26 @@ from .forms.consume_form import ConsumeForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
 from src.clup.entities.user import User
-from src.clup.providers.basic_user_provider import BasicUserProvider
+# from src.clup.providers.basic_user_provider import BasicUserProvider
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from src.clup.usecases.user_login_usecase import UserLoginUseCase
 from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.entities.admin import Admin
-from src.clup.providers.basic_admin_provider import BasicAdminProvider
+# from src.clup.providers.basic_admin_provider import BasicAdminProvider
 from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 
+from src.clup.flaskr.global_setup import bup, bap
 
-bp = Blueprint('users', __name__, url_prefix='/users')
 
-bup = BasicUserProvider()
+bp = Blueprint('users', __name__)
+
 ur_def = UserRegisterUsecase(bup)
 ur_def.execute('davide', 'prova')
-bap = BasicAdminProvider()
 ar_def = AdminRegisterUsecase(bap)
 ar_def.execute(Admin('aid', 'amministratore', 'password'))
-
-
-# @login_manager.user_loader
-# def load_user(u_id):
-#     users = bup.get_users()
-#     admins = bap.get_admins()
-#     if u_id in [user.id for user in users]:
-#         return FlaskUser(u_id)
-#     elif u_id in [admin.id for admin in admins]:
-#         return FlaskUser(u_id)
-#     else:
-#         return None
 
 
 # TO FIX
@@ -73,6 +61,8 @@ def user_register_page():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def user_login_page():
+    print(bup.get_users())
+    print(bap.get_admins())
     form = UserLoginForm()
     if form.validate_on_submit():
         gl = GenericLoginUsecase(bap, bup)
@@ -80,10 +70,8 @@ def user_login_page():
         password = form.password.data
         try:
             u_id, logged_type = gl.execute(username, password)
-            print(f'GenericLogin: {u_id} - {logged_type}', flush=True)
             user = FlaskUser(u_id)
-            login_user(user, remember=True)
-            print(current_user.get_id(), flush=True)
+            login_user(user)
             if logged_type == 'user':
                 return redirect(url_for('users.user_page'))
             if logged_type == 'admin':
@@ -101,9 +89,7 @@ def user_login_page():
 @bp.route('/account')
 @login_required
 def user_page():
-    print('TEST', flush=True)
     u_id = current_user.get_id()
-    print(u_id, flush=True)
     user_data = LoadUserDataUseCase(bup).execute(u_id)
     return render_template('user.html', user=user_data)
 
@@ -114,12 +100,6 @@ def admin_page():
     a_id = current_user.get_id()
     admin_data = LoadAdminDataUseCase(bap).execute(a_id)
     return render_template('admin.html', admin=admin_data)
-
-
-# @login_manager.unauthorized_handler
-# def unauthorized_callback():
-#     flash("you must login first", category='danger')
-#     return redirect(url_for('user_login_page'))
 
 
 @bp.route('/logout')

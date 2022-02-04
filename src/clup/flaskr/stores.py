@@ -5,22 +5,15 @@ from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
-from src.clup.providers.basic_reservation_provider \
-    import BasicReservationProvider
 from src.clup.usecases.store_list_usecase import StoreListUseCase
-from src.clup.providers.basic_queue_provider import BasicQueueProvider
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
-from src.clup.providers.basic_store_provider import BasicStoreProvider
+from src.clup.flaskr.global_setup import bsp, bqp, brp
 # from src.clup.entities.exceptions \
 #     import MaxCapacityReachedError, EmptyQueueError
 
 
-bp = Blueprint('stores', __name__, url_prefix='/stores')
+bp = Blueprint('stores', __name__)
 
-
-bsp = BasicStoreProvider()
-bqp = BasicQueueProvider()
-brp = BasicReservationProvider()
 
 slu = StoreListUseCase(bsp)
 
@@ -35,7 +28,7 @@ fru = FreeReservationUseCase(bqp)
 cru = ConsumeReservationUseCase(bqp)
 
 
-@bp.route('', methods=['GET', 'POST'])
+@bp.route('/stores', methods=['GET', 'POST'])
 def show_stores():
     if request.method == 'POST':
         store_name = request.values['name']
@@ -51,7 +44,7 @@ def show_stores():
         return render_template('stores.html', stores=stores)
 
 
-@bp.route('/<id>', methods=['GET'])
+@bp.route('/stores/<id>', methods=['GET'])
 def show_store(id):
     for store in slu.execute():
         if store.id == id:
@@ -70,7 +63,7 @@ def show_store(id):
     abort(404)
 
 
-@bp.route('/<id>/waiting_queue', methods=['POST'])
+@bp.route('/stores/<id>/waiting_queue', methods=['POST'])
 def make_reservation_into_store(id):
     mru.execute(id, 12)
     return redirect(url_for('stores.show_store', id=id))
@@ -86,7 +79,7 @@ def make_reservation_into_store(id):
 #     except EmptyQueueError:
 #         return 'EMPTY QUEUE ERROR'
 
-@bp.route('/<store_id>/active_pool/<reservation_id>', methods=['DELETE'])
+@bp.route('/stores/<store_id>/active_pool/<reservation_id>', methods=['DELETE'])
 def consume_handler(store_id, reservation_id):
     try:
         # return redirect(url_for('stores.show_store', id=id))
@@ -96,7 +89,7 @@ def consume_handler(store_id, reservation_id):
         return 'ERROR1'
 
 
-@bp.route('/<store_id>/waiting_queue', methods=['DELETE'])
+@bp.route('/stores/<store_id>/waiting_queue', methods=['DELETE'])
 def delete_reservation_from_waiting_queue(store_id):
     try:
         flask.response(200)
@@ -104,7 +97,7 @@ def delete_reservation_from_waiting_queue(store_id):
         flask.response(500)
 
 
-@bp.route('/<store_id>/active_pool', methods=['DELETE'])
+@bp.route('/stores/<store_id>/active_pool', methods=['DELETE'])
 def free_handler(store_id):
     try:
         fru.execute(store_id)

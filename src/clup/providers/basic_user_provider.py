@@ -1,5 +1,6 @@
 class BasicUserProvider:
     def __init__(self):
+        print('INIT USER PROVIDER')
         self.users = {}
 
     def get_users(self):

@@ -7,6 +7,7 @@ Stores
 <h2>Stores</h2>
 
 <form action="/stores", method = "post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <label for="name">Store name:</label><br>
     <input type="text" id="name" name="name" placeholder="ex. Esselunga"><br>
     <label for="address">Store address:</label><br>
