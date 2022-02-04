@@ -3,7 +3,7 @@ class EnableAdminUseCase:
         self.admin_provider = admin_provider
         self.store_provider = store_provider
 
-    def execute(self,admin_id, store_id, secret_key):
+    def execute(self, admin_id, store_id, secret_key):
         if store_id not in [store.id for store in self.store_provider.get_stores()]:
             raise ValueError("store not existing")
         store = [store for store in self.store_provider.get_stores() if store.id == store_id][0]

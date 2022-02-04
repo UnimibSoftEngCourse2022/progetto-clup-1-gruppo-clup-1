@@ -19,4 +19,4 @@ class BasicStoreProvider:
         return self.queues[store_id]
 
     def add_to_queue(self, store_id, element):
-        self.queues[store_id] += (element, )
+        self.queues[store_id] += (element,)

@@ -14,7 +14,7 @@ class AddStoreUseCase:
         stores = self.store_provider.get_stores()
         for store in stores:
             if store.name == new_store.name and \
-               store.address == new_store.address:
+                    store.address == new_store.address:
                 raise ValueError('store alredy present')
 
         if not name:

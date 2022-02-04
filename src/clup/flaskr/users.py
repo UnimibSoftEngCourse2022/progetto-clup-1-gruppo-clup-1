@@ -1,24 +1,18 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
-from flask_wtf.csrf import CSRFError
 
-from .flask_user import FlaskUser
-from .forms.change_password import ChangePasswordForm
-from .forms.consume_form import ConsumeForm
-from .forms.user_login_form import UserLoginForm
-from .forms.user_register_form import UserRegisterForm
-from src.clup.entities.user import User
-from src.clup.usecases.user_register_usecase import UserRegisterUsecase
-from src.clup.usecases.user_login_usecase import UserLoginUseCase
-from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
-from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.entities.admin import Admin
+from src.clup.flaskr.global_setup import bup, bap
 from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
-
-from src.clup.flaskr.global_setup import bup, bap
-
+from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
+from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from .flask_user import FlaskUser
+from .forms.change_password import ChangePasswordForm
+from .forms.user_login_form import UserLoginForm
+from .forms.user_register_form import UserRegisterForm
 
 bp = Blueprint('users', __name__)
 
@@ -81,7 +75,6 @@ def user_login_page():
         if form.is_submitted():
             flash('form not valid', category='danger')
     return render_template('user_login.html', form=form)
-
 
 
 @bp.route('/account')

@@ -1,5 +1,6 @@
-from src.clup.entities.admin import Admin
 import uuid
+
+from src.clup.entities.admin import Admin
 
 
 class AdminRegisterUsecase:

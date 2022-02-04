@@ -5,14 +5,12 @@ from flask import Flask, flash, redirect, url_for
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 
-
 current = pathlib.Path(__file__).resolve()
 project_root = current.parent.parent.parent.parent
 sys.path.append(str(project_root))
 
 from src.clup.flaskr.global_setup import bup, bap
 from src.clup.flaskr.flask_user import FlaskUser
-
 
 login_manager = LoginManager()
 
@@ -48,7 +46,6 @@ def create_app(test_config=None):
     from . import users
     app.register_blueprint(stores.bp)
     app.register_blueprint(users.bp)
-
 
     # SonarCloud CSRF Protection Requirements
     csrf = CSRFProtect()

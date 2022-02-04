@@ -1,5 +1,6 @@
-from src.clup.entities.user import User
 import uuid
+
+from src.clup.entities.user import User
 
 
 class UserRegisterUsecase:
