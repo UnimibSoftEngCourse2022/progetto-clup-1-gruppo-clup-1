@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <section class="vh-100 gradient-custom">
-        <div class="container py-5 h-100">
+
+<div class="container py-1">
+    <div style="background-image: url('wave-haikei.svg')">
+        <section class="vh-100 gradient-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div class="card bg-dark text-white" style="border-radius: 1rem;">
@@ -11,26 +12,30 @@
                             <form method="POST">
                                 {{ form.csrf_token }}
                                 {{ form.hidden_tag() }}
-                                <h1 class="card-title">Login</h1>
+                                <h1 class="fw-bold mb-2 text-uppercase">Login</h1>
                                 <br>
-                                {{ form.username.label() }}
-                                {{ form.username(placeholder="inserisci il tuo nome") }}
+                                <div class="form-outline form-white mb-4">
+                                    {{ form.username(placeholder="username") }}
+                                </div>
 
-                                {{ form.password.label() }}
-                                {{ form.password() }}
-                                <br>
-                                {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+                                <div class="form-outline form-white mb-4">
+                                    {{ form.password(placeholder="password") }}
+
+                                </div>
+                                {{ form.submit(class="btn btn-outline-light btn-lg px-5")}}
+
+
                             </form>
-                            <a href="#" class="card-link">Forgot password ?</a>
-                            <a href="{{ url_for('users.user_register_page') }}" class="card-link">Sign in</a>
+                            <p class="small mb-5 pb-lg-2"><a href="#" class="text-white-50 fw-bold">Forgot password
+                                ?</a><br>
+                                <a href="{{ url_for('users.user_register_page')}}" class="text-white-50 fw-bold">Sign
+                                    in</a>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </div>
-<style>
-
-</style>
 {% endblock %}
