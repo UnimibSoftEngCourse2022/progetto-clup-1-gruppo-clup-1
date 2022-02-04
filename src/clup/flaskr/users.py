@@ -19,7 +19,7 @@ bp = Blueprint('users', __name__)
 ur_def = UserRegisterUsecase(bup)
 ur_def.execute('davide', 'prova')
 ar_def = AdminRegisterUsecase(bap)
-ar_def.execute(Admin('aid', 'amministratore', 'password'))
+ar_def.execute('amministratore', 'password')
 
 
 # TO FIX

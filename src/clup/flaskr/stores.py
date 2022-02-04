@@ -53,7 +53,7 @@ def show_stores():
 @login_required
 def show_store(id):
     if request.method == 'PUT':
-        #abort(404)
+        # abort(404)
         for store in slu.execute():
             if store.id == id:
                 capacity = int(request.values['capacity'])
