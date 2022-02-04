@@ -14,12 +14,14 @@ class MockAdminProvider:
     def get_admins(self):
         return self.admins.values()
 
+
 class TestAdminRegisterUsecase(unittest.TestCase):
     def test_add_admin_updates_admins(self):
         m_a_p = MockAdminProvider()
         ar = AdminRegisterUsecase(m_a_p)
-        admin = Admin(0, 1, 10)
-        ar.execute(admin)
+        admin_username = 1
+        admin_password = 10
+        ar.execute(admin_username, admin_password)
         is_admins_updated = len(m_a_p.get_admins()) != 0
 
         self.assertTrue(is_admins_updated)
@@ -27,12 +29,14 @@ class TestAdminRegisterUsecase(unittest.TestCase):
     def test_admins_contains_only_correct_elements(self):
         m_a_p = MockAdminProvider()
         ar = AdminRegisterUsecase(m_a_p)
-        admin1 = Admin(0, 1, 10)
-        admin2 = Admin(2, 3, 20)
+        admin1_username = 1
+        admin1_password = 10
+        admin2_username = 2
 
-        ar.execute(admin1)
-        is_admin1_registered = admin1 in m_a_p.get_admins()
-        is_admin2_registered = admin2 in m_a_p.get_admins()
+        ar.execute(admin1_username, admin1_password)
+
+        is_admin1_registered = admin1_username in [admin.username for admin in m_a_p.get_admins()]
+        is_admin2_registered = admin2_username in [admin.username for admin in m_a_p.get_admins()]
 
         self.assertTrue(is_admin1_registered)
         self.assertFalse(is_admin2_registered)
@@ -40,28 +44,36 @@ class TestAdminRegisterUsecase(unittest.TestCase):
     def test_null_fields_raise_exception(self):
         m_a_p = MockAdminProvider()
         ar = AdminRegisterUsecase(m_a_p)
-        admin1 = Admin(0, 1, None)
-        admin2 = Admin(2, None, 20)
+        admin1_username = 1
+        admin1_password = None
+        admin2_username = None
+        admin2_password = 20
 
         with self.assertRaises(ValueError):
-            ar.execute(admin1)
+            ar.execute(admin1_username, admin1_password)
         with self.assertRaises(ValueError):
-            ar.execute(admin2)
+            ar.execute(admin2_username, admin2_password)
 
-    def test_admin_register_raise_exception_with_anything_not_Admin(self):
+    def test_admin_registered_store_set_to_default(self):
+        admin1_username = 1
+        admin1_password = 10
         m_a_p = MockAdminProvider()
         ar = AdminRegisterUsecase(m_a_p)
-        not_an_admin = None
 
-        with self.assertRaises(ValueError):
-            ar.execute(not_an_admin)
+        ar.execute(admin1_username, admin1_password)
+        admin = [admin for admin in m_a_p.get_admins()][0]
+        is_store_default = admin.store == 'default'
 
-    def test_admin_id_is_unique(self):
+        self.assertTrue(is_store_default)
+
+    def test_admin_username_is_unique(self):
         m_a_p = MockAdminProvider()
         ar = AdminRegisterUsecase(m_a_p)
-        admin1 = Admin(0, 1, 10)
-        admin2 = Admin(0, 1, 20)
+        admin1_username = 1
+        admin1_password = 10
+        admin2_username = 1
+        admin2_password = 20
 
-        ar.execute(admin1)
+        ar.execute(admin1_username, admin1_password)
         with self.assertRaises(ValueError):
-            ar.execute(admin2)
+            ar.execute(admin2_username, admin2_password)
