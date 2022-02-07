@@ -4,22 +4,39 @@ Stores
 {% endblock %}
 
 {% block content%}
-<h2>Stores</h2>
 
-<form action="/stores", method = "post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <label for="name">Store name:</label><br>
-    <input type="text" id="name" name="name" placeholder="ex. Esselunga"><br>
-    <label for="address">Store address:</label><br>
-    <input type="text" id="address" name="address" placeholder="ex. Via Garibaldi 10"><br>
-    <label for="capacity">Store capacity:</label><br>
-    <input type="int" id="capacity" name="capacity" placeholder="ex. 150"><br>
-    <input type="submit" value="Add">
-</form>
-<ul>
-    {% for store in stores %}
-    <li><a href="{{ url_for('stores.show_store', id=store.id) }}" >{{ store.name }}</a> </li>
-    {% endfor %}
-</ul>
+<div class="container-fluid">
+    <div class="card text-white text-center  mb-3" style="max-width: 36rem;">
+        <div class="card-header color" style="background: #126311">
+            Add Store
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Store Information</h5>
+            <form action="/stores" , method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input class="form-control" type="text" placeholder="Name" name="name" aria-label="store name"><br>
+                <input class="form-control" type="text" placeholder="Address" name="address"
+                    aria-label="store address"><br>
+                <input class="form-control" type="text" placeholder="Capacity" name="capacity"
+                    aria-label="store capacity"><br>
+                <button class="btn btn-outline-primary btn-lg" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container-fluid">
+    <div class="card text-white text-center  mb-3" style="max-width: 36rem;">
+        <div class="card-header color" style="background: #126311;">
+            All Stores
+        </div>
+        <div class="list-group">
+            {% for store in stores %}
+            <a href="{{ url_for('stores.show_store', id=store.id) }}" class="list-group-item list-group-item-action"
+                style="color: white; background-color:black;">{{ store.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 {% endblock %}
