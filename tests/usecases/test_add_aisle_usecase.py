@@ -1,8 +1,8 @@
 import unittest
 
 from src.clup.entities.category import Category
-from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.providers.basic_aisle_provider import BasicAisleProvider
+from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 
 
 class TestAddAisleUseCase(unittest.TestCase):

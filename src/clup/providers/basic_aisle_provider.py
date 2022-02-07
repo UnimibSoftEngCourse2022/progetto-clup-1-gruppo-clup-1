@@ -9,10 +9,10 @@ class BasicAisleProvider:
 
     def add_aisle(self, store_id, aisle):
         if store_id not in self.aisles.keys():
-            self.aisles[store_id] = (aisle, )
+            self.aisles[store_id] = (aisle,)
         else:
             old_aisles = self.aisles[store_id]
             if aisle in old_aisles:
                 raise ValueError('aisle already present')
-            new_aisles = old_aisles + (aisle, )
+            new_aisles = old_aisles + (aisle,)
             self.aisles[store_id] = new_aisles

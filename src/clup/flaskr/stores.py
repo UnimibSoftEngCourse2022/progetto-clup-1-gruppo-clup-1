@@ -1,7 +1,6 @@
 import flask
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
-from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
 from src.clup.flaskr.global_setup import bsp, bqp, brp
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
@@ -10,6 +9,7 @@ from src.clup.usecases.consume_reservation_usecase \
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
+from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
 # from src.clup.entities.exceptions \
 #     import MaxCapacityReachedError, EmptyQueueError

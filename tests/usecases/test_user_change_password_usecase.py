@@ -22,6 +22,7 @@ class MockUserProvider:
     def update_user(self, user):
         self.users[user.id] = user
 
+
 class TestUserChangePasswordUsecase(unittest.TestCase):
     def test_change_password_set_new_password_with_correct_info(self):
         mock_user_provider = MockUserProvider()

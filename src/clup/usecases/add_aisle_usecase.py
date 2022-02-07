@@ -1,4 +1,5 @@
 import uuid
+
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
 
