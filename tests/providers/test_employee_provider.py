@@ -1,4 +1,5 @@
 import unittest
+
 from src.clup.providers.employee_provider import EmployeeProvider
 
 
@@ -87,8 +88,10 @@ class TestEmployeeProvider(unittest.TestCase):
         ep.add_store_admin(diff_store_id, admin3_id)
         ep.add_store_admin(diff_store_id, admin4_id)
 
-        store_from_ep_correct = ep.get_store_id_from_admin_id(admin1_id) == ep.get_store_id_from_admin_id(admin2_id) == store_id
-        diff_store_from_ep_correct = ep.get_store_id_from_admin_id(admin3_id) == ep.get_store_id_from_admin_id(admin4_id) == diff_store_id
+        store_from_ep_correct = ep.get_store_id_from_admin_id(admin1_id) == ep.get_store_id_from_admin_id(
+            admin2_id) == store_id
+        diff_store_from_ep_correct = ep.get_store_id_from_admin_id(admin3_id) == ep.get_store_id_from_admin_id(
+            admin4_id) == diff_store_id
 
         self.assertTrue(store_from_ep_correct)
         self.assertTrue(diff_store_from_ep_correct)
