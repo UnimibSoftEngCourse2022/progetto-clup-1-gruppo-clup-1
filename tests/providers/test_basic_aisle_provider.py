@@ -3,6 +3,7 @@ import unittest
 from src.clup.providers.basic_aisle_provider import BasicAisleProvider
 
 
+@unittest.skip
 class TestBasicAisleProvider(unittest.TestCase):
     def test_basic_aisle_provider_set_empty(self):
         bap = BasicAisleProvider()

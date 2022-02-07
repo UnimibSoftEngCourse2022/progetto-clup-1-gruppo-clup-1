@@ -1,4 +1,7 @@
-class BasicAisleProvider:
+from src.clup.providers.aisle_provider_abc import AisleProvider
+
+
+class BasicAisleProvider(AisleProvider):
     def __init__(self):
         self.aisles = {}
 
