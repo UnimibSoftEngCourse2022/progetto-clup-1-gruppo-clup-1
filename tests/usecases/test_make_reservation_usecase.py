@@ -32,7 +32,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
     def test_reservation_contains_store_and_user_id(self):
         reservation = self.u.execute(self.store1_id, self.user1_id)
 
-        self.assertEqual(reservation.store_id, self.store1_id)
+        self.assertEqual(reservation.aisle_id, self.store1_id)
         self.assertEqual(reservation.user_id, self.user1_id)
 
     def test_reservations_are_stored_in_reservation_provider(self):
