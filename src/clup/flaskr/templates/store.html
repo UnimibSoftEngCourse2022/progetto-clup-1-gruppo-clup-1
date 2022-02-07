@@ -20,10 +20,81 @@ Stores
                 capacity: new_capacity,
             },
             success: function (result) {
+                <div class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Success</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>GG</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-btn-primary" data-bs-dismiss="modal" onclick="location.reload()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            },
+            error: function (result) {
+                <div class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Success</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Something went wrong...</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-btn-primary" data-bs-dismiss="modal" onclick="location.reload()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        });
+    }
+
+    $("#delete_reservation_wq").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",
+            type: 'DELETE',
+            success: function (result) {
+                $("#test").append("Delete Reservation From WQ Success.");
+            }
+        });
+    });
+
+    $("#free_btn").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
+            type: 'DELETE',
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+            },
+            success: function (result) {
                 location.reload();
             },
         });
-    }
+    });
+
+    {% for reservation_id in active_pool %}
+    $("#consume_btn_{{ reservation_id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
+            type: 'DELETE',
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });
+    {% endfor %}
 </script>
 
 <div class="container-fluid">
@@ -96,15 +167,15 @@ Stores
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ store.name }}</h5>
-                    <form action="/stores" , method="post">
+                    <form>
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                        <input class="form-control" type="text" placeholder="Name" name="name"
+                        <input class="form-control" type="text" placeholder="Name" id="name"
                             aria-label="store name"><br>
-                        <input class="form-control" type="text" placeholder="Address" name="address"
+                        <input class="form-control" type="text" placeholder="Address" id="address"
                             aria-label="store address"><br>
-                        <input class="form-control" type="text" placeholder="Capacity" name="capacity"
+                        <input class="form-control" type="text" placeholder="Capacity" id="capacity"
                             aria-label="store capacity"><br>
-                        <button class="btn btn-outline-primary btn-lg" type="submit"
+                        <button class="btn btn-outline-primary btn-lg" type="button"
                             onclick="updateStore()">Update</button>
                     </form>
                 </div>
@@ -137,46 +208,5 @@ Stores
             </div>
         </div>
     </div>
-
 </div>
-
-<script>
-    $("#delete_reservation_wq").click(function () {
-        $.ajax({
-            url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",
-            type: 'DELETE',
-            success: function (result) {
-                $("#test").append("Delete Reservation From WQ Success.");
-            }
-        });
-    });
-
-    $("#free_btn").click(function () {
-        $.ajax({
-            url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
-            type: 'DELETE',
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-            },
-            success: function (result) {
-                location.reload();
-            },
-        });
-    });
-
-    {% for reservation_id in active_pool %}
-    $("#consume_btn_{{ reservation_id }}").click(function () {
-        $.ajax({
-            url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
-            type: 'DELETE',
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-            },
-            success: function (result) {
-                location.reload();
-            },
-        });
-    });
-    {% endfor %}
-</script>
 {% endblock %}
