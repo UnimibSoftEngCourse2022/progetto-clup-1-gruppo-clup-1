@@ -1,6 +1,8 @@
 import unittest
 from collections import defaultdict
 
+from tests.usecases.mock_queue_provider import MockQueueProvider
+
 from src.clup.entities.active_pool import ActivePool
 from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
@@ -15,17 +17,6 @@ class MockStoreProvider:
 
     def add_store(self, store):
         self.stores.append(store)
-
-
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.pools = defaultdict(ActivePool)
-
-    def get_waiting_queue(self, store_id):
-        raise NotImplementedError
-
-    def get_active_pool(self, store_id):
-        return self.pools[store_id]
 
 
 class TestAddStoreUseCase(unittest.TestCase):

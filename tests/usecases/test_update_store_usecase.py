@@ -2,6 +2,8 @@ import dataclasses
 import unittest
 from collections import defaultdict
 
+from tests.usecases.mock_queue_provider import MockQueueProvider
+
 from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.store import Store
 from src.clup.providers.queue_provider_abc import QueueProvider
@@ -20,17 +22,6 @@ class MockStoreProvider:
             if store_item.id == store.id:
                 args = {'name': store.name, 'address': store.address}
                 dataclasses.replace(store_item, **args)
-
-
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.pools = defaultdict(ActivePool)
-
-    def get_waiting_queue(self, store_id):
-        raise NotImplementedError
-
-    def get_active_pool(self, store_id):
-        return self.pools[store_id]
 
 
 class TestUpdateStoreUseCase(unittest.TestCase):

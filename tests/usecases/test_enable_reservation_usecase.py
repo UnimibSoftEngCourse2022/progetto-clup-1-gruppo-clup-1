@@ -1,5 +1,7 @@
 import unittest
 
+from tests.usecases.mock_queue_provider import MockQueueProvider
+
 from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyQueueError
@@ -9,21 +11,11 @@ from src.clup.usecases.enable_reservation_usecase \
     import EnableReservationUseCase
 
 
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.queue = WaitingQueue()
-        self.pool = ActivePool(capacity=5)
-
-    def get_waiting_queue(self, store_id):
-        return self.queue
-
-    def get_active_pool(self, store_id):
-        return self.pool
-
-
 class TestEnableReservationUseCase(unittest.TestCase):
     def setUp(self):
+        store_id = 1
         self.queue_provider = MockQueueProvider()
+        self.queue_provider.get_active_pool(store_id).capacity = 5
         self.u = EnableReservationUseCase(self.queue_provider)
 
     def test_enable_takes_element_from_queue_and_add_to_pool(self):
