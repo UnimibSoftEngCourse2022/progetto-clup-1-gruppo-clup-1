@@ -33,7 +33,7 @@ class EmployeeProvider:
         raise ValueError("manager_id not present")
 
     def get_store_id_from_admin_id(self, admin_id):
-        for store_id, admin_list in self.store_admins.items():
+        for store_id, admin_list in self.store_admins.items(  ):
             if admin_id in admin_list:
                 return store_id
         raise ValueError("admin_id not present")
