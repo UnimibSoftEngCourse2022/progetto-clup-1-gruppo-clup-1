@@ -1,26 +1,12 @@
 from collections import defaultdict
 import unittest
 
-from tests.usecases.mock_reservation_provider import MockReservationProvider
-from tests.usecases.mock_queue_provider import MockQueueProvider
-
-from src.clup.providers.aisle_provider_abc import AisleProvider
 from src.clup.entities.store_active_pool import StoreActivePool
-from src.clup.entities.reservation import Reservation
 
-
-class MockAislesProvider(AisleProvider):
-    def __init__(self):
-        self.aisles = defaultdict(list())
-
-    def get_store_aisles(self, store_id):
-        return self.aisles[store_id]
 
 class TestStoreActivePool(unittest.TestCase):
     def setUp(self):
         self.sap = StoreActivePool()
-        self.queue_provider = MockQueueProvider()
-        self.reservation_provider = MockReservationProvider()
 
     def test_is_empty_after_init(self):
         self.assertEqual(len(self.sap.pool), 0)
@@ -37,7 +23,7 @@ class TestStoreActivePool(unittest.TestCase):
 
         self.assertTrue('a' in self.sap.pool)
         self.assertTrue('b' in self.sap.pool)
-        self.assertFalse('c' in self.sap.pool)
+        self.assertTrue('c' not in self.sap.pool)
 
     def test_consume_moves_element_from_pool_to_to_free(self):
         reservation_id = 1
@@ -48,25 +34,38 @@ class TestStoreActivePool(unittest.TestCase):
         self.assertTrue(reservation_id not in self.sap.pool)
         self.assertTrue(reservation_id in self.sap.to_free)
 
+    def test_consume_throws_on_unexistent_element(self):
+        with self.assertRaises(ValueError):
+            self.sap.consume(-1)
 
-    def test_consume_calls_consume_on_reservation_aisles(self):
-        reservation_id = 1
-        aisle1_id = 10
-        aisle2_id = 20
-        r1 = Reservation(reservation_id, aisle1_id, 3)
-        r2 = Reservation(reservation_id, aisle2_id, 3)
-        self.reservation_provider.add_reservation(r1)
-        self.reservation_provider.add_reservation(r2)
-        pool1 = self.queue_provider.get_active_pool(aisle1_id)
-        pool1.capacity = 5
-        pool1.add(reservation_id1)
-        qt1 = pool1.current_quantity
-        pool2 = self.queue_provider.get_active_pool(aisle2_id)
-        pool2.capacity = 5
-        pool2.add(reservation_id1)
-        qt2 = pool1.current_quantity
+    def test_free_removes_element_from_to_free(self):
+        self.sap.to_free.append('a')
 
-        self.sap.consume(reservation_id)
+        self.sap.free('a')
 
-        self.assertEqual(pool1.current_quantity, qt1 + 1)
-        self.assertEqual(pool2.current_quantity, qt2 + 1)
+        self.assertTrue('a' not in self.sap.to_free)
+
+    def test_free_throws_on_unexistent_element(self):
+        with self.assertRaises(ValueError):
+            self.sap.free(-1)
+
+    def test_get_to_free_containes_same_element_of_to_free_container(self):
+        self.sap.to_free.append('a')
+        self.sap.to_free.append('b')
+
+        to_free = self.sap.get_to_free()
+
+        self.assertTrue('a' in to_free)
+        self.assertTrue('b' in to_free)
+
+    def test_get_to_free_returns_independent_object(self):
+        self.sap.to_free.append('a')
+        self.sap.to_free.append('b')
+
+        to_free = self.sap.get_to_free()
+        self.sap.to_free.append('c')
+
+        self.assertTrue('a' in to_free)
+        self.assertTrue('b' in to_free)
+        self.assertTrue('c' not in to_free)
+        
