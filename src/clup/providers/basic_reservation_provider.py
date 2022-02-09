@@ -10,3 +10,5 @@ class BasicReservationProvider:
             raise ValueError('reservation id already present')
 
         self.reservations.append(reservation)
+
+    # TODO: get_reservations_with_id(reservation_id)
