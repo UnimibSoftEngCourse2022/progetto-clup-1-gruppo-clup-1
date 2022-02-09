@@ -11,5 +11,5 @@ class QueueProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_store_active_pool(self, store_id):
+    def get_store_pool(self, store_id):
         pass

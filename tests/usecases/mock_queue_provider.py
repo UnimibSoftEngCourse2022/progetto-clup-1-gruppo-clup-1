@@ -18,5 +18,5 @@ class MockQueueProvider(QueueProvider):
     def get_aisle_pool(self, aisle_id):
         return self.pools[aisle_id]
 
-    def get_store_active_pool(self, store_id):
+    def get_store_pool(self, store_id):
         return self.store_pools[store_id]
