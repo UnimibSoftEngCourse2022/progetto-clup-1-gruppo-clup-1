@@ -16,7 +16,7 @@ class TestBasicLaneProvider(unittest.TestCase):
 
         self.assertEqual(len(queue), 0)
         self.assertEqual(len(pool), 0)
-        self.assertEqual(len(store_pool.pool), 0)
+        self.assertEqual(len(store_pool.enabled), 0)
         self.assertEqual(len(store_pool.to_free), 0)
 
     def test_modifications_on_store_queues_are_persistent(self):
@@ -34,7 +34,7 @@ class TestBasicLaneProvider(unittest.TestCase):
         self.assertTrue('a' in self.bqp.get_waiting_queue(aisle_id))
         self.assertTrue('b' in self.bqp.get_aisle_pool(aisle_id))
         self.assertEqual(self.bqp.get_aisle_pool(aisle_id).capacity, 10)
-        self.assertTrue('c' in self.bqp.get_store_pool(store_id).pool)
+        self.assertTrue('c' in self.bqp.get_store_pool(store_id).enabled)
 
     def test_modifications_on_different_stores_act_on_different_queues(self):
         aisle1_id = 1
@@ -62,5 +62,5 @@ class TestBasicLaneProvider(unittest.TestCase):
         self.assertTrue('c' not in self.bqp.get_aisle_pool(aisle2_id))
         self.assertTrue('d' not in self.bqp.get_aisle_pool(aisle1_id))
         self.assertNotEqual(pool1.capacity, pool2.capacity)
-        self.assertTrue('e' not in self.bqp.get_store_pool(store2_id).pool)
-        self.assertTrue('f' not in self.bqp.get_store_pool(store1_id).pool)
+        self.assertTrue('e' not in self.bqp.get_store_pool(store2_id).enabled)
+        self.assertTrue('f' not in self.bqp.get_store_pool(store1_id).enabled)

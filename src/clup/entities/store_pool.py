@@ -1,13 +1,13 @@
 class StorePool:
     def __init__(self):
-        self.pool = []
+        self.enabled = []
         self.to_free = []
 
     def add(self, element):
-        self.pool.append(element)
+        self.enabled.append(element)
 
     def consume(self, element):
-        self.pool.remove(element)
+        self.enabled.remove(element)
         self.to_free.append(element)
 
     def free(self, element):

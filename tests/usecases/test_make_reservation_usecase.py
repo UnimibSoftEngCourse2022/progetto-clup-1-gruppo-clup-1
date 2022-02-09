@@ -75,7 +75,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
         queue = self.queue_provider.get_waiting_queue(aisle_id)
 
         self.assertTrue(r_id in aisle_pool)
-        self.assertTrue(r_id in store_pool.pool)
+        self.assertTrue(r_id in store_pool.enabled)
         self.assertTrue(r_id not in queue)
 
     def test_reservation_id_should_be_in_queue_if_pool_is_full(self):
@@ -88,7 +88,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
         queue = self.queue_provider.get_waiting_queue(aisle_id)
 
         self.assertTrue(r_id not in aisle_pool)
-        self.assertTrue(r_id not in store_pool.pool)
+        self.assertTrue(r_id not in store_pool.enabled)
         self.assertTrue(r_id in queue)
 
     def test_reservation_id_should_be_in_queue_after_pool_is_filled(self):
@@ -102,7 +102,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
         queue = self.queue_provider.get_waiting_queue(aisle_id)
 
         self.assertTrue(r1_id in aisle_pool)
-        self.assertTrue(r1_id in store_pool.pool)
+        self.assertTrue(r1_id in store_pool.enabled)
         self.assertTrue(r2_id in queue)
 
     def test_different_users_reservations_should_be_in_same_queue(self):
@@ -149,8 +149,8 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
 
         self.assertTrue(r_id in aisle1_pool)
         self.assertTrue(r_id in aisle2_pool)
-        self.assertEqual(len(store_pool.pool), 1)
-        self.assertTrue(r_id in store_pool.pool)
+        self.assertEqual(len(store_pool.enabled), 1)
+        self.assertTrue(r_id in store_pool.enabled)
         self.assertTrue(r_id not in queue1)
         self.assertTrue(r_id not in queue2)
 
@@ -172,7 +172,7 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
 
         self.assertTrue(r_id not in aisle1_pool)
         self.assertTrue(r_id not in aisle2_pool)
-        self.assertTrue(r_id not in store_pool.pool)
+        self.assertTrue(r_id not in store_pool.enabled)
         self.assertTrue(r_id in queue1)
         self.assertTrue(r_id in queue2)
 
@@ -194,6 +194,6 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
 
         self.assertTrue(r_id in aisle1_pool)
         self.assertTrue(r_id not in aisle2_pool)
-        self.assertTrue(r_id not in store_pool.pool)
+        self.assertTrue(r_id not in store_pool.enabled)
         self.assertTrue(r_id not in queue1)
         self.assertTrue(r_id in queue2)
