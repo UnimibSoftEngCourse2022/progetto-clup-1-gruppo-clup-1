@@ -5,11 +5,11 @@ class ConsumeReservationUseCase:
 
     def execute(self, store_id, reservation_id):
         reservations = self.reservation_provider.get_reservations()
-        reservations_with_id = [r for r in reservations if r.id == reservation_id]
-        if not reservations_with_id:
+        filtered = [r for r in reservations if r.id == reservation_id]
+        if not filtered:
             raise ValueError("reservation_id not existing")
 
-        for r in reservations_with_id:
+        for r in filtered:
             aisle_pool = self.lane_provider.get_aisle_pool(r.aisle_id)
             aisle_pool.consume(reservation_id)
 

@@ -131,7 +131,7 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
         self.u = MakeReservationUseCase(
             self.queue_provider, self.reservation_provider)
 
-    def test_reservation_id_should_be_in_pools_if_aisle_pools_are_not_full(self):
+    def test_reservation_id_in_pools_if_aisle_pools_are_not_full(self):
         user_id = 1
         store_id = 100
         aisle1_id = 10
@@ -176,7 +176,7 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
         self.assertTrue(r_id in queue1)
         self.assertTrue(r_id in queue2)
 
-    def test_reservation_id_in_store_pool_only_if_also_in_interested_aisle_pools(self):
+    def test_reservation_id_in_store_pool_if_in_involved_aisle_pools(self):
         user_id = 1
         store_id = 100
         aisle1_id = 10

@@ -21,7 +21,8 @@ class FreeReservationUseCase:
             aisle_pool = self.lane_provider.get_aisle_pool(aisle_id)
             aisle_pool.add(waiting_reservation_id)
 
-            if self._is_in_all_involved_pools(waiting_reservation_id):
+            if self._is_in_all_involved_pools(waiting_reservation_id) and \
+                    waiting_reservation_id not in store_pool.enabled:
                 store_pool.add(waiting_reservation_id)
 
     def _get_involved_aisle_ids(self, reservation_id):
@@ -37,4 +38,3 @@ class FreeReservationUseCase:
             if reservation_id not in aisle_pool:
                 return False
         return True
-        

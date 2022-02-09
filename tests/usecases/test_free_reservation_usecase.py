@@ -21,11 +21,12 @@ class TestFreeReservationUseCase(unittest.TestCase):
         store_pool.add(reservation_id)
         store_pool.consume(reservation_id)
         return store_pool
-        
+
     def setUp(self):
         self.lane_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = FreeReservationUseCase(self.lane_provider, self.reservation_provider)
+        self.u = FreeReservationUseCase(
+            self.lane_provider, self.reservation_provider)
 
     def test_aisle_pool_current_quantity_is_decremented(self):
         aisle_id = 1
@@ -59,7 +60,6 @@ class TestFreeReservationUseCase(unittest.TestCase):
         r = Reservation(reservation_id, aisle_id, 200)
         self.reservation_provider.add_reservation(r)
         aisle_pool = self.consume_in_aisle(aisle_id, reservation_id)
-        quantity = aisle_pool.current_quantity
         store_pool = self.consume_in_store(store_id, reservation_id)
         queue = self.lane_provider.get_waiting_queue(aisle_id)
         queue.push(200)
@@ -78,7 +78,6 @@ class TestFreeReservationUseCase(unittest.TestCase):
         r = Reservation(reservation_id, aisle_id, 200)
         self.reservation_provider.add_reservation(r)
         aisle_pool = self.consume_in_aisle(aisle_id, reservation_id)
-        quantity = aisle_pool.current_quantity
         store_pool = self.consume_in_store(store_id, reservation_id)
 
         self.u.execute(store_id, reservation_id)
@@ -118,8 +117,6 @@ class TestFreeReservationUseCase(unittest.TestCase):
         self.reservation_provider.add_reservation(r2)
         aisle1_pool = self.consume_in_aisle(aisle1_id, reservation_id)
         aisle2_pool = self.consume_in_aisle(aisle2_id, reservation_id)
-        quantity1 = aisle1_pool.current_quantity
-        quantity2 = aisle2_pool.current_quantity
         store_pool = self.consume_in_store(store_id, reservation_id)
         queue1 = self.lane_provider.get_waiting_queue(aisle1_id)
         queue1.push(200)
@@ -137,7 +134,7 @@ class TestFreeReservationUseCase(unittest.TestCase):
         self.assertTrue(300 not in aisle1_pool)
         self.assertTrue(300 not in aisle2_pool)
 
-    def test_first_element_in_queues_popped_to_pools(self):
+    def test_no_elements_are_popped_if_queues_are_empty(self):
         aisle1_id = 1
         aisle2_id = 2
         store_id = 10
@@ -148,8 +145,6 @@ class TestFreeReservationUseCase(unittest.TestCase):
         self.reservation_provider.add_reservation(r2)
         aisle1_pool = self.consume_in_aisle(aisle1_id, reservation_id)
         aisle2_pool = self.consume_in_aisle(aisle2_id, reservation_id)
-        quantity1 = aisle1_pool.current_quantity
-        quantity2 = aisle2_pool.current_quantity
         store_pool = self.consume_in_store(store_id, reservation_id)
 
         self.u.execute(store_id, reservation_id)
@@ -180,8 +175,6 @@ class TestFreeReservationUseCase(unittest.TestCase):
         self.reservation_provider.add_reservation(r4_2)
         aisle1_pool = self.consume_in_aisle(aisle1_id, reservation1_id)
         aisle2_pool = self.consume_in_aisle(aisle2_id, reservation1_id)
-        quantity1 = aisle1_pool.current_quantity
-        quantity2 = aisle2_pool.current_quantity
         store_pool = self.consume_in_store(store_id, reservation1_id)
         queue1 = self.lane_provider.get_waiting_queue(aisle1_id)
         queue1.push(reservation2_id)
@@ -219,8 +212,6 @@ class TestFreeReservationUseCase(unittest.TestCase):
         self.reservation_provider.add_reservation(r4_2)
         aisle1_pool = self.consume_in_aisle(aisle1_id, reservation1_id)
         aisle2_pool = self.consume_in_aisle(aisle2_id, reservation1_id)
-        quantity1 = aisle1_pool.current_quantity
-        quantity2 = aisle2_pool.current_quantity
         store_pool = self.consume_in_store(store_id, reservation1_id)
         queue1 = self.lane_provider.get_waiting_queue(aisle1_id)
         queue1.push(reservation2_id)

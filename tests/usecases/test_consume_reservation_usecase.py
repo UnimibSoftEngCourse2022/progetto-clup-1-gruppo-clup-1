@@ -11,7 +11,8 @@ class TestConsumeReservationUseCase(unittest.TestCase):
     def setUp(self):
         self.lane_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = ConsumeReservationUseCase(self.lane_provider, self.reservation_provider)
+        self.u = ConsumeReservationUseCase(
+            self.lane_provider, self.reservation_provider)
 
     def test_reservation_removed_from_aisle_pool_and_moved_to_to_free(self):
         store_id = 1
@@ -43,7 +44,7 @@ class TestConsumeReservationUseCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.u.execute(store_id, -1)
 
-    def test_reservation_removed_from_multiple_aisle_pools_and_moved_to_to_free(self):
+    def test_reservation_moved_from_multiple_aisle_pools_to_to_free(self):
         store_id = 1
         aisle1_id = 10
         aisle1_id = 10
