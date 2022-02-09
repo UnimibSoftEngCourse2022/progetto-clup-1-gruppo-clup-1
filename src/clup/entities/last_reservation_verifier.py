@@ -11,7 +11,7 @@ class LastReservationVerifier:
             raise ValueError()
 
         for r in reservation_with_given_id:
-            aisle_pool = self.queue_provider.get_active_pool(r.aisle_id)
+            aisle_pool = self.queue_provider.get_aisle_pool(r.aisle_id)
             id_in_pool = r.id in aisle_pool
             if not id_in_pool:
                 return False

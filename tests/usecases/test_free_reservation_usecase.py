@@ -12,7 +12,7 @@ class TestFreeReservationUseCase(unittest.TestCase):
 
     def test_pool_current_quantity_is_decremented(self):
         store_id = 1
-        pool = self.queue_provider.get_active_pool(store_id)
+        pool = self.queue_provider.get_aisle_pool(store_id)
         pool.capacity = 5
         pool.add('a')
         pool.consume('a')
@@ -32,7 +32,7 @@ class TestFreeReservationUseCase(unittest.TestCase):
 
     def test_first_element_in_queue_is_popped_into_pool(self):
         store_id = 1
-        pool = self.queue_provider.get_active_pool(store_id)
+        pool = self.queue_provider.get_aisle_pool(store_id)
         pool.capacity = 5
         pool.add('a')
         pool.consume('a')
@@ -47,7 +47,7 @@ class TestFreeReservationUseCase(unittest.TestCase):
 
     def test_pool_is_unchanged_if_queue_is_empty(self):
         store_id = 1
-        pool = self.queue_provider.get_active_pool(store_id)
+        pool = self.queue_provider.get_aisle_pool(store_id)
         pool.capacity = 5
         pool.add('a')
         pool.consume('a')

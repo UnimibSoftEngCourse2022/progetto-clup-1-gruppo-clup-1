@@ -62,10 +62,10 @@ def show_store(id):
     else:
         for store in slu.execute():
             if store.id == id:
-                pool = bqp.get_active_pool(id)
+                pool = bqp.get_aisle_pool(id)
                 active_pool_len = len(pool)
                 waiting_queue_len = len(bqp.get_waiting_queue(id))
-                current_people_quantity = bqp.get_active_pool(id).current_quantity
+                current_people_quantity = bqp.get_aisle_pool(id).current_quantity
                 args = {
                     'store': store,
                     'waiting_queue_len': waiting_queue_len,

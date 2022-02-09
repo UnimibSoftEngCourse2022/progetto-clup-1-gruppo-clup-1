@@ -74,6 +74,6 @@ class TestAddStoreUseCase(unittest.TestCase):
         address = 'address'
         capacity = 1
         store = self.u.execute(name, address, capacity)
-        active_pool = self.queue_provider.get_active_pool(store.id)
+        active_pool = self.queue_provider.get_aisle_pool(store.id)
 
         self.assertEqual(capacity, active_pool.capacity)

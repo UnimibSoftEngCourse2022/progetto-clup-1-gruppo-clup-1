@@ -34,7 +34,7 @@ class TestLastReservationVerifier(unittest.TestCase):
         reservation_id = 1
         reservation = Reservation(reservation_id, aisle_id, 3)
         self.reservation_provider.add_reservation(reservation)
-        pool = self.queue_provider.get_active_pool(aisle_id)
+        pool = self.queue_provider.get_aisle_pool(aisle_id)
         pool.capacity = 5
         pool.add(reservation_id)
 
@@ -50,7 +50,7 @@ class TestLastReservationVerifier(unittest.TestCase):
         reservation2 = Reservation(reservation_id, aisle2_id, 3)
         self.reservation_provider.add_reservation(reservation2)
         self.reservation_provider.add_reservation(reservation1)
-        aisle1_pool = self.queue_provider.get_active_pool(aisle1_id)
+        aisle1_pool = self.queue_provider.get_aisle_pool(aisle1_id)
         aisle1_pool.capacity = 5
         aisle1_pool.add(reservation_id)
 
@@ -66,10 +66,10 @@ class TestLastReservationVerifier(unittest.TestCase):
         reservation2 = Reservation(reservation_id, aisle2_id, 3)
         self.reservation_provider.add_reservation(reservation2)
         self.reservation_provider.add_reservation(reservation1)
-        aisle1_pool = self.queue_provider.get_active_pool(aisle1_id)
+        aisle1_pool = self.queue_provider.get_aisle_pool(aisle1_id)
         aisle1_pool.capacity = 5
         aisle1_pool.add(reservation_id)
-        aisle2_pool = self.queue_provider.get_active_pool(aisle2_id)
+        aisle2_pool = self.queue_provider.get_aisle_pool(aisle2_id)
         aisle2_pool.capacity = 5
         aisle2_pool.add(reservation_id)
 

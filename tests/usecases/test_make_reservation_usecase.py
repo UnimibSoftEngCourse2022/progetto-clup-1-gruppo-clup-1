@@ -64,11 +64,11 @@ class TestMakeReservationUseCase(unittest.TestCase):
 
     @unittest.skip('to fix')
     def test_reservation_id_should_be_in_pool_if_pool_is_not_full(self):
-        self.queue_provider.get_active_pool(self.store1_id).capacity = 1
+        self.queue_provider.get_aisle_pool(self.store1_id).capacity = 1
         aisle_id = 10
 
         r_id = self.u.execute(self.user1_id, self.store1_id, [aisle_id])
-        pool = self.queue_provider.get_active_pool(self.store1_id)
+        pool = self.queue_provider.get_aisle_pool(self.store1_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
         self.assertTrue(r.id in pool)
@@ -76,10 +76,10 @@ class TestMakeReservationUseCase(unittest.TestCase):
 
     @unittest.skip('to fix')
     def test_reservation_id_should_be_in_queue_if_pool_is_full(self):
-        self.queue_provider.get_active_pool(self.store1_id).capacity = 0
+        self.queue_provider.get_aisle_pool(self.store1_id).capacity = 0
 
         r = self.u.execute(self.store1_id, self.user1_id)
-        pool = self.queue_provider.get_active_pool(self.store1_id)
+        pool = self.queue_provider.get_aisle_pool(self.store1_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
         self.assertTrue(r.id in queue)
@@ -87,11 +87,11 @@ class TestMakeReservationUseCase(unittest.TestCase):
 
     @unittest.skip('to fix')
     def test_reservation_id_should_be_in_queue_after_pool_is_filled(self):
-        self.queue_provider.get_active_pool(self.store1_id).capacity = 1
+        self.queue_provider.get_aisle_pool(self.store1_id).capacity = 1
 
         r1 = self.u.execute(self.store1_id, self.user1_id)
         r2 = self.u.execute(self.store1_id, self.user2_id)
-        pool = self.queue_provider.get_active_pool(self.store1_id)
+        pool = self.queue_provider.get_aisle_pool(self.store1_id)
         queue = self.queue_provider.get_waiting_queue(self.store1_id)
 
         self.assertTrue(r1.id in pool)

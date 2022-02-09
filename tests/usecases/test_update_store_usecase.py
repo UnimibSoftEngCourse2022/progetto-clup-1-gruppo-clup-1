@@ -71,8 +71,8 @@ class TestUpdateStoreUseCase(unittest.TestCase):
     def test_update_store_forwards_max_capacity_error(self):
         store_id = 1
         store = Store(1, 'name', 'address')
-        self.queue_provider.get_active_pool(store_id).capacity = 1
-        self.queue_provider.get_active_pool(store_id).add('a')
+        self.queue_provider.get_aisle_pool(store_id).capacity = 1
+        self.queue_provider.get_aisle_pool(store_id).add('a')
 
         with self.assertRaises(ValueError):
             self.u.execute(store, 0)

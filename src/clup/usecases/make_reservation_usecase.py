@@ -16,7 +16,7 @@ class MakeReservationUseCase:
             reservation = Reservation(reservation_id, aisle_id, user_id)
             self.reservation_provider.add_reservation(reservation)
 
-        active_pool = self.queue_provider.get_active_pool(store_id)
+        active_pool = self.queue_provider.get_aisle_pool(store_id)
         try:
             active_pool.add(reservation.id)
         except MaxCapacityReachedError:

@@ -13,5 +13,5 @@ class BasicQueueProvider(QueueProvider):
     def get_waiting_queue(self, store_id):
         return self.queues[store_id]
 
-    def get_active_pool(self, store_id):
+    def get_aisle_pool(self, store_id):
         return self.pools[store_id]

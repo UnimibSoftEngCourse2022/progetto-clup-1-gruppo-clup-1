@@ -7,7 +7,7 @@ class QueueProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_active_pool(self, aisle_id):
+    def get_aisle_pool(self, aisle_id):
         pass
 
     @abc.abstractmethod

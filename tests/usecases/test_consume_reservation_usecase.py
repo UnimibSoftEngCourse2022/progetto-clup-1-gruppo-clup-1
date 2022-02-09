@@ -13,7 +13,7 @@ class TestConsumeReservationUseCase(unittest.TestCase):
     def test_reservation_removed_from_active_pool(self):
         store_id = 1
         reservation_id = 2
-        pool = self.queue_provider.get_active_pool(store_id)
+        pool = self.queue_provider.get_aisle_pool(store_id)
         pool.capacity = 5
         pool.add(reservation_id)
         qt = pool.current_quantity
@@ -26,7 +26,7 @@ class TestConsumeReservationUseCase(unittest.TestCase):
     def test_throws_if_reservation_is_not_present(self):
         store_id = 1
         reservation_id = 2
-        pool = self.queue_provider.get_active_pool(store_id)
+        pool = self.queue_provider.get_aisle_pool(store_id)
         pool.capacity = 5
         pool.add(reservation_id)
 
