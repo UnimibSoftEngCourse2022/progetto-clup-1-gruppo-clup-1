@@ -57,44 +57,6 @@ Stores
             }
         });
     }
-
-    $("#delete_reservation_wq").click(function () {
-        $.ajax({
-            url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",
-            type: 'DELETE',
-            success: function (result) {
-                $("#test").append("Delete Reservation From WQ Success.");
-            }
-        });
-    });
-
-    $("#free_btn").click(function () {
-        $.ajax({
-            url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
-            type: 'DELETE',
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-            },
-            success: function (result) {
-                location.reload();
-            },
-        });
-    });
-
-    {% for reservation_id in active_pool %}
-    $("#consume_btn_{{ reservation_id }}").click(function () {
-        $.ajax({
-            url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
-            type: 'DELETE',
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-            },
-            success: function (result) {
-                location.reload();
-            },
-        });
-    });
-    {% endfor %}
 </script>
 
 <div class="container-fluid">
@@ -198,7 +160,7 @@ Stores
                             </div>
                             <div class="col-4">
                                 <button class="btn btn-outline-primary btn-lg" id="consume_btn_{{ reservation_id }}"
-                                    type="submit">Consume</button>
+                                    type="button">Consume</button>
                             </div>
                         </div>
                         <br>
@@ -209,4 +171,45 @@ Stores
         </div>
     </div>
 </div>
+
+<script>
+
+    $("#delete_reservation_wq").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",
+            type: 'DELETE',
+            success: function (result) {
+                $("#test").append("Delete Reservation From WQ Success.");
+            }
+        });
+    });
+
+    $("#free_btn").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
+            type: 'DELETE',
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });
+
+    {% for reservation_id in active_pool %}
+    $("#consume_btn_{{ reservation_id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
+            type: 'DELETE',
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });
+    {% endfor %}
+</script>
 {% endblock %}
