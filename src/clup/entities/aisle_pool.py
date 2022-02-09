@@ -2,7 +2,7 @@ from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyPoolError
 
 
-class ActivePool:
+class AislePool:
     def __init__(self, capacity=0):
         self.elements = []
         self.current_quantity = 0

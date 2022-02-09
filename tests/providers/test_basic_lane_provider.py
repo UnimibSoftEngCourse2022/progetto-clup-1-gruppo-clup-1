@@ -3,7 +3,7 @@ import unittest
 from src.clup.providers.basic_lane_provider import BasicLaneProvider
 
 
-class TestBasicQueueProvider(unittest.TestCase):
+class TestBasicLaneProvider(unittest.TestCase):
     def setUp(self):
         self.bqp = BasicLaneProvider()
 

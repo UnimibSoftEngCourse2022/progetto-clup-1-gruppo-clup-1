@@ -94,10 +94,10 @@ class TestBasicAisleProvider(unittest.TestCase):
         is_aisles_id_correct = True
         for aisle in aisles1:
             if aisle.id not in aisles1_id:
-                is_aisles1_id_correct = False
+                is_aisles_id_correct = False
         for aisle in aisles2:
             if aisle.id not in aisles2_id:
-                is_aisles1_id_correct = False
+                is_aisles_id_correct = False
 
         self.assertTrue(is_aisles_id_correct)
 

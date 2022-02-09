@@ -1,11 +1,11 @@
 import unittest
 
-from src.clup.entities.store_active_pool import StoreActivePool
+from src.clup.entities.store_pool import StorePool
 
 
-class TestStoreActivePool(unittest.TestCase):
+class TestStorePool(unittest.TestCase):
     def setUp(self):
-        self.sap = StoreActivePool()
+        self.sap = StorePool()
 
     def test_is_empty_after_init(self):
         self.assertEqual(len(self.sap.pool), 0)

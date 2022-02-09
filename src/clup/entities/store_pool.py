@@ -1,4 +1,4 @@
-class StoreActivePool:
+class StorePool:
     def __init__(self):
         self.pool = []
         self.to_free = []
