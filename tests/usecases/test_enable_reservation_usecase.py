@@ -1,20 +1,16 @@
 import unittest
 
-from tests.usecases.mock_queue_provider import MockQueueProvider
-
-from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyQueueError
-from src.clup.entities.waiting_queue import WaitingQueue
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.enable_reservation_usecase \
     import EnableReservationUseCase
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class TestEnableReservationUseCase(unittest.TestCase):
     def setUp(self):
         store_id = 1
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.queue_provider.get_aisle_pool(store_id).capacity = 5
         self.u = EnableReservationUseCase(self.queue_provider)
 

@@ -3,7 +3,7 @@ from collections import defaultdict
 
 from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.store import Store
-from src.clup.providers.queue_provider_abc import QueueProvider
+from src.clup.providers.lane_provider_abc import LaneProvider
 from src.clup.usecases.delete_store_usecase import DeleteStoreUseCase
 
 
@@ -21,7 +21,7 @@ class MockStoreProvider:
         self.stores.remove(to_remove)
 
 
-class MockQueueProvider(QueueProvider):
+class MockQueueProvider(LaneProvider):
     def __init__(self):
         self.pools = defaultdict(ActivePool)
 

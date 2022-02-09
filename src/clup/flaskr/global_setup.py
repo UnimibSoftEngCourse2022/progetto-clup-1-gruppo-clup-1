@@ -1,5 +1,5 @@
 from src.clup.providers.basic_admin_provider import BasicAdminProvider
-from src.clup.providers.basic_queue_provider import BasicQueueProvider
+from src.clup.providers.basic_lane_provider import BasicLaneProvider
 from src.clup.providers.basic_reservation_provider \
     import BasicReservationProvider
 from src.clup.providers.basic_store_provider import BasicStoreProvider
@@ -9,5 +9,5 @@ bup = BasicUserProvider()
 bap = BasicAdminProvider()
 
 bsp = BasicStoreProvider()
-bqp = BasicQueueProvider()
+bqp = BasicLaneProvider()
 brp = BasicReservationProvider()

@@ -26,7 +26,7 @@ class MakeReservationUseCase:
                 all_in_pools = False
                 waiting_queue = self.queue_provider.get_waiting_queue(aisle_id)
                 waiting_queue.push(reservation.id)
-        
+
         if all_in_pools:
             store_pool.add(reservation_id)
 

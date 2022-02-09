@@ -1,11 +1,11 @@
 import unittest
 
-from src.clup.providers.basic_queue_provider import BasicQueueProvider
+from src.clup.providers.basic_lane_provider import BasicLaneProvider
 
 
 class TestBasicQueueProvider(unittest.TestCase):
     def setUp(self):
-        self.bqp = BasicQueueProvider()
+        self.bqp = BasicLaneProvider()
 
     def test_by_default_gets_empty_queue_and_pools(self):
         store_id = 1

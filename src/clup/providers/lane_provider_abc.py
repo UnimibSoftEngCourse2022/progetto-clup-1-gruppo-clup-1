@@ -1,7 +1,7 @@
 import abc
 
 
-class QueueProvider(abc.ABC):
+class LaneProvider(abc.ABC):
     @abc.abstractmethod
     def get_waiting_queue(self, aisle_id):
         pass

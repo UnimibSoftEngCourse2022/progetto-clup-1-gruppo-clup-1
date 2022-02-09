@@ -5,7 +5,6 @@ from src.clup.providers.basic_aisle_provider import BasicAisleProvider
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 
 
-
 class TestAddAisleUseCase(unittest.TestCase):
     def test_correct_aisle_is_added(self):
         bap = BasicAisleProvider()

@@ -1,18 +1,17 @@
 import unittest
 
-from tests.usecases.mock_queue_provider import MockQueueProvider
-from tests.usecases.mock_reservation_provider import MockReservationProvider
-
-from src.clup.entities.reservation import Reservation
 from src.clup.entities.last_reservation_verifier import LastReservationVerifier
+from src.clup.entities.reservation import Reservation
+from tests.usecases.mock_lane_provider import MockLaneProvider
+from tests.usecases.mock_reservation_provider import MockReservationProvider
 
 
 class TestLastReservationVerifier(unittest.TestCase):
     def setUp(self):
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
         self.verifier = LastReservationVerifier(self.queue_provider, self.reservation_provider)
-        
+
     def test_unexistent_reservation_throws(self):
         invalid_reservation_id = -1
 
@@ -28,7 +27,7 @@ class TestLastReservationVerifier(unittest.TestCase):
         is_last = self.verifier.is_last(reservation_id)
 
         self.assertFalse(is_last)
-        
+
     def test_existent_reservation_in_active_pool_gives_true(self):
         aisle_id = 2
         reservation_id = 1

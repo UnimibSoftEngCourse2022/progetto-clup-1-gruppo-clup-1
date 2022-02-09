@@ -2,12 +2,12 @@ import unittest
 
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
-from tests.usecases.mock_queue_provider import MockQueueProvider
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class TestConsumeReservationUseCase(unittest.TestCase):
     def setUp(self):
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.u = ConsumeReservationUseCase(self.queue_provider)
 
     def test_reservation_removed_from_active_pool(self):

@@ -1,11 +1,7 @@
 import unittest
-from collections import defaultdict
 
-from tests.usecases.mock_queue_provider import MockQueueProvider
-
-from src.clup.entities.active_pool import ActivePool
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class MockStoreProvider:
@@ -21,7 +17,7 @@ class MockStoreProvider:
 
 class TestAddStoreUseCase(unittest.TestCase):
     def setUp(self):
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.store_provider = MockStoreProvider()
         self.u = AddStoreUseCase(self.store_provider, self.queue_provider)
 

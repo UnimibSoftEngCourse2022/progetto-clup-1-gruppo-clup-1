@@ -2,12 +2,12 @@ import unittest
 
 from src.clup.entities.exceptions import EmptyPoolError
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
-from tests.usecases.mock_queue_provider import MockQueueProvider
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class TestFreeReservationUseCase(unittest.TestCase):
     def setUp(self):
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.u = FreeReservationUseCase(self.queue_provider)
 
     def test_pool_current_quantity_is_decremented(self):

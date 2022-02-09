@@ -7,7 +7,7 @@ class LastReservationVerifier:
         reservations = self.reservation_provider.get_reservations()
         reservation_with_given_id = [r for r in reservations if r.id == reservation_id]
 
-        if not reservation_with_given_id :
+        if not reservation_with_given_id:
             raise ValueError()
 
         for r in reservation_with_given_id:

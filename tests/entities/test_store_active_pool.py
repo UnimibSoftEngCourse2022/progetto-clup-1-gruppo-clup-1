@@ -1,4 +1,3 @@
-from collections import defaultdict
 import unittest
 
 from src.clup.entities.store_active_pool import StoreActivePool
@@ -68,4 +67,3 @@ class TestStoreActivePool(unittest.TestCase):
         self.assertTrue('a' in to_free)
         self.assertTrue('b' in to_free)
         self.assertTrue('c' not in to_free)
-        

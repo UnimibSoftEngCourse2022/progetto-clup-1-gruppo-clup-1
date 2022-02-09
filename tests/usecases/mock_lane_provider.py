@@ -3,10 +3,10 @@ from collections import defaultdict
 from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.store_active_pool import StoreActivePool
 from src.clup.entities.waiting_queue import WaitingQueue
-from src.clup.providers.queue_provider_abc import QueueProvider
+from src.clup.providers.lane_provider_abc import LaneProvider
 
 
-class MockQueueProvider(QueueProvider):
+class MockLaneProvider(LaneProvider):
     def __init__(self):
         self.queues = defaultdict(WaitingQueue)
         self.pools = defaultdict(ActivePool)

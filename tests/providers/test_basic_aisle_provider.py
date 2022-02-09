@@ -1,9 +1,10 @@
 import unittest
 
-from src.clup.providers.basic_aisle_provider import BasicAisleProvider
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
+from src.clup.providers.basic_aisle_provider import BasicAisleProvider
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
+
 
 class TestBasicAisleProvider(unittest.TestCase):
     def test_basic_aisle_provider_set_empty(self):

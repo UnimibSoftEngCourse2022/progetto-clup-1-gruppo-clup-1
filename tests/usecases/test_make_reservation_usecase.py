@@ -1,9 +1,8 @@
 import unittest
 
-from tests.usecases.mock_queue_provider import MockQueueProvider
-
 from src.clup.entities.reservation import Reservation
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class MockReservationProvider:
@@ -26,7 +25,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
         self.store2_id = 2
         self.user1_id = 11
         self.user2_id = 22
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
         self.u = MakeReservationUseCase(
             self.queue_provider, self.reservation_provider)
@@ -127,7 +126,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
 
 class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
     def setUp(self):
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
         self.u = MakeReservationUseCase(
             self.queue_provider, self.reservation_provider)
@@ -154,7 +153,7 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
         self.assertTrue(r_id in store_pool.pool)
         self.assertTrue(r_id not in queue1)
         self.assertTrue(r_id not in queue2)
-        
+
     def test_reservation_id_should_be_in_queues_if_aisle_pools_are_full(self):
         user_id = 1
         store_id = 100
@@ -176,7 +175,7 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
         self.assertTrue(r_id not in store_pool.pool)
         self.assertTrue(r_id in queue1)
         self.assertTrue(r_id in queue2)
-    
+
     def test_reservation_id_in_store_pool_only_if_also_in_interested_aisle_pools(self):
         user_id = 1
         store_id = 100
