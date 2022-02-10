@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from src.clup.database import User, Reservation, engine
-from src.clup.entities import user, reservation
+from src.clup.entities import reservation
 
 
 class SqliteReservationProvider:

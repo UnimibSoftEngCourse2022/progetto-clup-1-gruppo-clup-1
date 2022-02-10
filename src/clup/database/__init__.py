@@ -20,8 +20,16 @@ class User(Base):
 class Reservation(Base):
     __tablename__ = 'reservation'
     id = Column(Integer, primary_key=True)
-    aisle_id = Column(Integer)
-    user_id = Column(Integer, ForeignKey('user.uuid'))
+    aisle_id = Column(String, ForeignKey('aisle.uuid'))
+    user_id = Column(String, ForeignKey('user.uuid'))
+
+
+class Aisle(Base):
+    __tablename__ = 'aisle'
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String, unique=True)
+    name = Column(String)
+    categories = Column(String)
 
 
 path = os.path.dirname(os.path.abspath(__file__)) + "/clup.sqlite"
@@ -50,4 +58,14 @@ if len(reservations) == 0:
     reservation2 = Reservation(aisle_id=20, user_id=2)
     add_session.add(reservation1)
     add_session.add(reservation2)
+    add_session.commit()
+
+query = add_session.query(Aisle.id)
+aisles = query.all()
+
+if len(aisles) == 0:
+    aisle1 = Aisle(uuid=10, name='aisle1', categories='1,2')
+    aisle2 = Aisle(uuid=20, name='aisle2', categories='3,4')
+    add_session.add(aisle1)
+    add_session.add(aisle2)
     add_session.commit()
