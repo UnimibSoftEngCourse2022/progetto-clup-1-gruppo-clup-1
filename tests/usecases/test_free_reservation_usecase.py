@@ -1,11 +1,10 @@
 import unittest
 
+from src.clup.entities.exceptions import EmptyPoolError
+from src.clup.entities.reservation import Reservation
+from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from tests.usecases.mock_lane_provider import MockLaneProvider
 from tests.usecases.mock_reservation_provider import MockReservationProvider
-
-from src.clup.entities.reservation import Reservation
-from src.clup.entities.exceptions import EmptyPoolError
-from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 
 
 class TestFreeReservationUseCase(unittest.TestCase):
