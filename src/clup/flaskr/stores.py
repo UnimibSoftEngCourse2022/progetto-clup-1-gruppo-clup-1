@@ -25,9 +25,9 @@ asu.execute('Conad', 'Catania', 10)
 
 mru = MakeReservationUseCase(bqp, brp)
 
-fru = FreeReservationUseCase(bqp)
+fru = FreeReservationUseCase(bqp, brp)
 
-cru = ConsumeReservationUseCase(bqp)
+cru = ConsumeReservationUseCase(bqp, brp)
 
 usu = UpdateStoreUseCase(bsp, bqp)
 
