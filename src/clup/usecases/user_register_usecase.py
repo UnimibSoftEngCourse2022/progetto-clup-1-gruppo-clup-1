@@ -8,7 +8,7 @@ class UserRegisterUsecase:
         self.user_provider = user_provider
 
     def execute(self, username, password):
-        user_id = uuid.uuid1()
+        user_id = str(uuid.uuid1())
         if not username or not password:
             raise ValueError('Null type not valid')
         if username in [usr.username for usr in self.user_provider.get_users()]:
