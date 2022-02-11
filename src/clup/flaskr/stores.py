@@ -105,50 +105,25 @@ def store_reservations(store_id):
         mru.execute(user_id, store_id, aisle_ids_json)
         return '', 200
     else:
-        store_pool_enabled = setup.lane_provider.get_store_pool(store_id).enabled
+        enabled = setup.lane_provider.get_store_pool(store_id).enabled
+        to_free = setup.lane_provider.get_store_pool(store_id).to_free
         return render_template('store_reservations.html', \
-            store_id=store_id, reservation_ids=store_pool_enabled)
+            store_id=store_id, enabled_ids=enabled, to_free_ids=to_free)
 
 
-@bp.route('/reservations', methods=['GET'])
-@login_required
-def show_reservation():
-    reservations = setup.reservation_provider.get_reservations()
-    return render_template('reservations.html', reservations=reservations)
-
-
-# @bp.route('/<id>/active_pool', methods=['POST'])
-# def enable_reservation_into_store(id):
-#     try:
-#         eru.execute(id)
-#         return redirect(url_for('stores.show_store', id=id))
-#     except MaxCapacityReachedError:
-#         return 'MAX CAPACITY ERROR'
-#     except EmptyQueueError:
-#         return 'EMPTY QUEUE ERROR'
-
-@bp.route('/stores/<store_id>/consumed', methods=['POST'])
-def consume_handler(store_id):
-    try:
-        reservation_id = request.values['reservation_id']
-        cru.execute(store_id, reservation_id)
-        return '', 200
-    except Exception:
-        abort(400)
-
-
-@bp.route('/stores/<store_id>/waiting_queue', methods=['DELETE'])
-def delete_reservation_from_waiting_queue(store_id):
-    try:
-        flask.response(200)
-    except Exception:
-        flask.response(500)
-
-
-@bp.route('/stores/<store_id>/active_pool', methods=['DELETE'])
-def free_handler(store_id):
-    try:
-        fru.execute(store_id)
-        return '', 200
-    except Exception as e:
-        return f'Error {e}', 500
+@bp.route('/stores/<store_id>/consumed', methods=['POST', 'DELETE'])
+def store_pool_handler(store_id):
+    if request.method == 'POST':
+        try:
+            reservation_id = request.values['reservation_id']
+            cru.execute(store_id, reservation_id)
+            return '', 200
+        except Exception:
+            abort(400)
+    else:
+        try:
+            reservation_id = request.values['reservation_id']
+            fru.execute(store_id, reservation_id)
+            return '', 200
+        except Exception:
+            abort(400)

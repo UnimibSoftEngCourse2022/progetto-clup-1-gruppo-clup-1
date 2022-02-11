@@ -31,8 +31,6 @@ Stores
 </ul>
 <br>
 <input type="button" id="make_reservation_btn"  value="Make Reservation">
-<input type="button" id= "delete_reservation_wq" value="Delete Reservation From WQ">
-<input type="button" id= "free_btn" value="Free store space">
 <script>
     function updateStore() {
         var new_name = $("#name").val();
@@ -76,29 +74,6 @@ $("#make_reservation_btn").click(function() {
         },
     });
 }); 
-
-$("#delete_reservation_wq").click(function () {
-    $.ajax({
-        url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",
-        type: 'DELETE',
-        success: function(result) {
-            $( "#test" ).append( "Delete Reservation From WQ Success." );
-        }
-    });
-});
-
-$("#free_btn").click(function () {
-    $.ajax({
-        url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
-        type: 'DELETE',
-        data: {
-            csrf_token: '{{ csrf_token() }}',
-        },
-        success: function(result) {
-            location.reload();
-        },
-    });
-});
 
 {% for reservation_id in active_pool %}
 $("#consume_btn_{{ reservation_id }}").click(function () {
