@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.clup.database import Aisle, engine, StoreAisle
 from src.clup.entities import aisle
 from src.clup.entities.category import Category
-from aisle_provider_abc import AisleProvider
+
 
 class SqliteAisleProvider:
     def get_aisles(self):
