@@ -18,6 +18,7 @@ Stores
     {% endfor %}
     </ul>
 </div>
+<a href="{{ url_for('stores.store_reservations', store_id=store.id) }}">Reservations!</a>
 <p>Active Pool Length: {{ active_pool_len }}</p>
 <br>
 <ul>
@@ -67,7 +68,7 @@ $("#make_reservation_btn").click(function() {
         return $(this).attr("id");
         }).get();
     $.ajax({
-        url: "{{ url_for('stores.make_reservation', store_id=store.id) }}",
+        url: "{{ url_for('stores.store_reservations', store_id=store.id) }}",
         type: "POST",
         data: {
             csrf_token: "{{ csrf_token() }}",

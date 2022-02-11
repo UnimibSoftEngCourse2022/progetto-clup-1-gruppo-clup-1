@@ -34,6 +34,13 @@ aau.execute(esselunga.id, 'pesce', [Category.FISH])
 aau.execute(conad.id, 'salumi', [Category.FRUIT])
 aau.execute(conad.id, 'frutta', [Category.MEAT])
 
+esselunga_aisle_ids = setup.aisle_provider.get_store_aisles_id(esselunga.id)
+for aisle_id in esselunga_aisle_ids:
+    setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
+conad_aisle_ids = setup.aisle_provider.get_store_aisles_id(conad.id)
+for aisle_id in conad_aisle_ids:
+    setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
+
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 cru = ConsumeReservationUseCase(setup.lane_provider, setup.reservation_provider)
@@ -84,18 +91,27 @@ def show_store(store_id):
         abort(404)
 
 
-@bp.route('/stores/<store_id>/reservations', methods=['POST'])
+@bp.route('/stores/<store_id>/reservations', methods=['GET', 'POST'])
 @login_required
-def make_reservation(store_id):
-    user_id = current_user.get_id()
-    aisle_ids = request.values['aisle_ids']
-    try:
-        aisle_ids_json = json.loads(aisle_ids)
-        print(aisle_ids_json)
-    except JSONDecodeError:
-        abort(400)
-    mru.execute(user_id, store_id, aisle_ids_json)
-    return '', 200
+def store_reservations(store_id):
+    if request.method == 'POST':
+        user_id = current_user.get_id()
+        aisle_ids = request.values['aisle_ids']
+        try:
+            aisle_ids_json = json.loads(aisle_ids)
+            print(aisle_ids_json)
+        except JSONDecodeError:
+            abort(400)
+        mru.execute(user_id, store_id, aisle_ids_json)
+        store_pool_enabled = setup.lane_provider.get_store_pool(store_id).enabled
+        aisle_pool = setup.lane_provider.get_aisle_pool(aisle_ids_json[0])
+        print(aisle_pool.elements)
+        return '', 200
+    else:
+        store_pool_enabled = setup.lane_provider.get_store_pool(store_id).enabled
+        print(store_pool_enabled)
+        return render_template('store_reservations.html', \
+            store_id=store_id, reservation_ids=store_pool_enabled)
 
 
 @bp.route('/reservations', methods=['GET'])

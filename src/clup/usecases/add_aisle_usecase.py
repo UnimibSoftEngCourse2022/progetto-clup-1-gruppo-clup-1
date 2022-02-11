@@ -9,7 +9,7 @@ class AddAisleUseCase:
         self.aisle_provider = aisle_provider
 
     def execute(self, store_id, aisle_name, categories):
-        a_id = uuid.uuid1()
+        a_id = str(uuid.uuid1())
         if not store_id or not aisle_name or not categories:
             raise ValueError("fields are missing")
         for category in categories:
