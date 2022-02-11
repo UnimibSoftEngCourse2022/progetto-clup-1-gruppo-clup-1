@@ -41,7 +41,7 @@ def show_stores():
         store_capacity = int(request.values['capacity'])
         try:
             store = asu.execute(store_name, store_address, store_capacity)
-            return redirect(url_for('stores.show_store', id=store.id))
+            return redirect(url_for('stores.show_store', store_id=store.id))
         except ValueError:
             return 'ERROR'
     else:
@@ -49,29 +49,25 @@ def show_stores():
         return render_template('stores.html', stores=stores)
 
 
-@bp.route('/stores/<id>', methods=['GET', 'PUT'])
+@bp.route('/stores/<store_id>', methods=['GET', 'PUT'])
 @login_required
-def show_store(id):
+def show_store(store_id):
     if request.method == 'PUT':
         # abort(404)
         for store in slu.execute():
-            if store.id == id:
+            if store.id == store_id:
                 capacity = int(request.values['capacity'])
                 usu.execute(store, capacity)
-                return redirect(url_for('stores.show_store', id=id))
+                return redirect(url_for('stores.show_store', store_id=store.id))
     else:
         for store in slu.execute():
-            if store.id == id:
-                pool = setup.lane_provider.get_aisle_pool(id)
-                active_pool_len = len(pool)
-                waiting_queue_len = len(setup.lane_provider.get_waiting_queue(id))
-                current_people_quantity = setup.lane_provider.get_aisle_pool(id).current_quantity
+            if store.id == store_id:
+                pool = setup.lane_provider.get_store_pool(store_id)
+                active_pool_len = len(pool.enabled)
                 args = {
                     'store': store,
-                    'waiting_queue_len': waiting_queue_len,
                     'active_pool_len': active_pool_len,
-                    'current_people_quantity': current_people_quantity,
-                    'active_pool': pool
+                    'store_pool_enabled': pool.enabled
                 }
                 return render_template('store.html', **args)
         abort(404)
