@@ -8,13 +8,13 @@ from src.clup.entities.category import Category
 class SqliteAisleProvider:
     def get_aisles(self):
         db_session = Session(engine)
-        query = db_session.query(Aisle.uuid, Aisle.name, Aisle.categories)
+        query = db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity)
         aisles = query.all()
         aisles_list = []
         for a in aisles:
             cat_str = a.categories
             cat_enum = [Category(int(c)) for c in cat_str.split(',')]
-            aisle_entity = aisle.Aisle(id=a.uuid, name=a.name, categories=cat_enum)
+            aisle_entity = aisle.Aisle(id=a.uuid, name=a.name, categories=cat_enum, capacity=a.capacity)
             aisles_list.append(aisle_entity)
         return aisles_list
 
@@ -24,10 +24,13 @@ class SqliteAisleProvider:
         aisles_id = [el[0] for el in aisles_id]
         aisles = []
         for a_id in aisles_id:
-            aisle_db = db_session.query(Aisle.uuid, Aisle.name, Aisle.categories).filter(Aisle.uuid == a_id).all()[0]
+            aisle_db = \
+            db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(Aisle.uuid == a_id).all()[
+                0]
             aisle_categories_db = aisle_db.categories
             aisle_categories_enum = [Category(int(c)) for c in aisle_categories_db.split(',')]
-            aisle_ent = aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_categories_enum)
+            aisle_ent = aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_categories_enum,
+                                    capacity=aisle_db.capacity)
             aisles.append(aisle_ent)
         return aisles
 
@@ -37,15 +40,18 @@ class SqliteAisleProvider:
 
     def get_aisle(self, aisle_id):
         db_session = Session(engine)
-        aisle_db = db_session.query(Aisle.uuid, Aisle.name, Aisle.categories).filter(Aisle.uuid == aisle_id).all()[0]
+        aisle_db = \
+        db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(Aisle.uuid == aisle_id).all()[
+            0]
         aisle_db_categories = aisle_db.categories
         aisle_cat_enum = [Category(int(c)) for c in aisle_db_categories.split(',')]
-        return aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_cat_enum)
+        return aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_cat_enum, capacity=aisle_db.capacity)
 
     def add_aisle(self, store_id, aisle_ent):
         db_session = Session(engine)
         categories_str = ','.join([f'{e.value}' for e in aisle_ent.categories])
-        new_aisle = Aisle(uuid=aisle_ent.id, name=aisle_ent.name, categories=categories_str)
+        new_aisle = Aisle(uuid=aisle_ent.id, name=aisle_ent.name, categories=categories_str,
+                          capacity=aisle_ent.capacity)
         db_session.add(new_aisle)
         new_aisle_store = StoreAisle(store_uuid=store_id, aisle_uuid=aisle_ent.id)
         db_session.add(new_aisle_store)
@@ -60,7 +66,9 @@ class SqliteAisleProvider:
     def update_aisle(self, aisle_ent):
         db_session = Session(engine)
         db_session.query(Aisle).filter(Aisle.uuid == aisle_ent.id).update(
-            {Aisle.name: aisle_ent.name, Aisle.categories: Aisle.categories}
+            {Aisle.name: aisle_ent.name,
+             Aisle.categories: ','.join([f'{e.value}' for e in aisle_ent.categories]),
+             Aisle.capacity: aisle_ent.capacity}
         )
         db_session.commit()
 

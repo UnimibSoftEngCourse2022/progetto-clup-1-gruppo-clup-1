@@ -31,6 +31,7 @@ class Aisle(Base):
     uuid = Column(String, unique=True)
     name = Column(String)
     categories = Column(String)
+    capacity = Column(Integer)
 
 
 class Store(Base):
@@ -96,8 +97,8 @@ query = add_session.query(Aisle.id)
 aisles = query.all()
 
 if len(aisles) == 0:
-    aisle1 = Aisle(uuid=10, name='aisle1', categories='1,2')
-    aisle2 = Aisle(uuid=20, name='aisle2', categories='3,4')
+    aisle1 = Aisle(uuid=10, name='aisle1', categories='1,2', capacity=10)
+    aisle2 = Aisle(uuid=20, name='aisle2', categories='3,4', capacity=5)
     add_session.add(aisle1)
     add_session.add(aisle2)
     add_session.commit()
