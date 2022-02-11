@@ -18,15 +18,21 @@
 </head>
 
 <body>
+    <script>
+        function performLogin() {
+            window.location.href = "{{ url_for('users.user_login_page') }}";
+        }
+    </script>
     <section id="section01" class="demo">
         <h1>CLup</h1>
-        <a href="{{ url_for('users.user_login_page') }}" class="myButton">Get Started</a>
-        <a href="#section02"><span></span>Scroll</a></section>
+        <button onclick="performLogin()" class="myButton">Get Started</button>
+        <a href="#section02"><span></span>Scroll</a>
+    </section>
     <section id="section02">
         <div>
             <h2>Thanks!</h2>
             <p><a href="https://github.com/UnimibSoftEngCourse2022/progetto-clup-1-gruppo-clup-1" target="_parent">&lt;
-        See Our Project!!</a></p>
+                    See Our Project!!</a></p>
         </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

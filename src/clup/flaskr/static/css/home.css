@@ -28,7 +28,7 @@ section::after {
 section h1 {
     position: absolute;
     top: 50%;
-    left: 52%;
+    left: 50%;
     z-index: 2;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
@@ -36,24 +36,6 @@ section h1 {
     font: normal 300 64px/1 'Josefin Sans', sans-serif;
     text-align: center;
     white-space: nowrap;
-}
-
-.myButton {
-    position: absolute;
-    top: 70%;
-    left: 25%;
-    z-index: 2;
-    background-color: #64a19d;
-    transform: translate(-50%, -50%);
-    font: normal 300 32px/1 'Josefin Sans', sans-serif;
-    text-align: center;
-    white-space: nowrap;
-    padding: 10px;
-}
-
-.myButton:hover {
-    background-color: #50817e;
-    ;
 }
 
 #section02 {
@@ -132,4 +114,26 @@ section h1 {
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     box-sizing: border-box;
+}
+
+.myButton {
+    position: absolute;
+    color: white;
+    top: 70%;
+    left: 50%;
+    z-index: 2;
+    font: normal 300 25px/1 'Josefin Sans', sans-serif;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    padding: 2%;
+    background-color: #64a19d;
+    border: none;
+    border-radius: 8px;
+}
+
+.myButton:hover {
+    background-color: #50817e;
+    opacity: .5;
+    ;
 }
