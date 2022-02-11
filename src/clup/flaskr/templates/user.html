@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 {% if current_user.is_authenticated %}
-  Hi {{ user.username }}!
+Hi {{ user.username }}!
 <br>
-  <a href="{{url_for('users.user_logout')}}">Logout</a>
+<a href="{{url_for('users.user_logout')}}">Logout</a>
 <br>
-  <a href="{{url_for('users.change_password_page')}}">Change password</a>
+<a href="{{url_for('users.change_password_page')}}">Change password</a>
 
 {% endif %}
 {% endblock %}

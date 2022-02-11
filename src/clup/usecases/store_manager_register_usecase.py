@@ -15,6 +15,6 @@ class StoreManagerRegisterUseCase:
             raise ValueError("wrong secret key")
         if username in [mg.username for mg in self.store_manager_provider.get_managers()]:
             raise ValueError("username already used")
-        manager_id = uuid.uuid1()
+        manager_id = str(uuid.uuid1())
         manager = StoreManager(manager_id, username, password)
         self.store_manager_provider.add_manager(manager)

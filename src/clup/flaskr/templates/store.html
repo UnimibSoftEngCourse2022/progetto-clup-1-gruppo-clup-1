@@ -25,9 +25,9 @@ Stores
 {% for reservation_id in store_pool_enabled %}
     <li>
         Consume: {{ reservation_id }}
-        <input type="button" id="consume_btn_{{ reservation_id }}" value="CONSUME!">
+        <input id="consume_btn_{{ reservation_id }}" type="button" value="CONSUME!">
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
 <br>
 <input type="button" id="make_reservation_btn"  value="Make Reservation">
@@ -45,7 +45,7 @@ Stores
                 address: new_address,
                 capacity: new_capacity,
             },
-            success: function(result) {
+            success: function (result) {
                 location.reload();
             },
         });
@@ -53,11 +53,11 @@ Stores
 </script>
 <div>
     <label for="name">Store name:</label><br>
-    <input type="text" id="name" placeholder="ex. Esselunga"><br>
+    <input id="name" placeholder="ex. Esselunga" type="text"><br>
     <label for="address">Store address:</label><br>
-    <input type="text" id="address" placeholder="ex. Barzano"><br>
+    <input id="address" placeholder="ex. Barzano" type="text"><br>
     <label for="capacity">Store capacity:</label><br>
-    <input type="text" id="capacity" placeholder="ex. 150"><br>
+    <input id="capacity" placeholder="ex. 150" type="text"><br>
     <button onclick="updateStore()">Update Store!</button>
 </div>
 <script>
@@ -74,20 +74,5 @@ $("#make_reservation_btn").click(function() {
         },
     });
 }); 
-
-{% for reservation_id in active_pool %}
-$("#consume_btn_{{ reservation_id }}").click(function () {
-    $.ajax({
-        url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
-        type: 'DELETE',
-        data: {
-            csrf_token: '{{ csrf_token() }}',
-        },
-        success: function (result) {
-            location.reload();
-        },
-    });
-});
-{% endfor %}
 </script>
 {% endblock %}

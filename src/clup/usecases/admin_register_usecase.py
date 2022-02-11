@@ -8,7 +8,7 @@ class AdminRegisterUsecase:
         self.admin_provider = admin_provider
 
     def execute(self, username, password):
-        admin_id = uuid.uuid1()
+        admin_id = str(uuid.uuid1())
         if not username or not password:
             raise ValueError('missing fields')
         if username in [adm.username for adm in self.admin_provider.get_admins()]:
