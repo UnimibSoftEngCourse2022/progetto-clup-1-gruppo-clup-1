@@ -51,12 +51,17 @@ class SqliteAisleProvider:
         db_session.add(new_aisle_store)
         db_session.commit()
 
-    # TODO update_aisle()
-
     def remove_aisle(self, aisle_id):
         db_session = Session(engine)
         db_session.query(Aisle).filter(Aisle.uuid == aisle_id).delete()
         db_session.query(StoreAisle).filter(StoreAisle.aisle_uuid == aisle_id).delete()
+        db_session.commit()
+
+    def update_aisle(self, aisle_ent):
+        db_session = Session(engine)
+        db_session.query(Aisle).filter(Aisle.uuid == aisle_ent.id).update(
+            {Aisle.name: aisle_ent.name, Aisle.categories: Aisle.categories}
+        )
         db_session.commit()
 
 
@@ -69,4 +74,6 @@ print(ap.get_aisle(10))
 ap.add_aisle(100, aisle.Aisle(id=40, name='aisle4', categories=[Category.FISH, Category.FRUIT]))
 print(ap.get_store_aisles(100))
 ap.remove_aisle(40)
+print(ap.get_aisles())
+ap.update_aisle(aisle.Aisle(10, 'updated_aisle', categories=[Category.FISH, Category.FRUIT]))
 print(ap.get_aisles())
