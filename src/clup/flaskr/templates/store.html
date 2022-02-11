@@ -21,10 +21,7 @@ Stores
 {% endfor %}
 </ul>
 <br>
-<form action= "{{ url_for('stores.make_reservation_into_store', id=store.id) }}", method = "post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <input type="submit" value="Make Reservation">
-</form>
+<input type="button" id="make_reservation_btn"  value="Make Reservation">
 <input type="button" id= "delete_reservation_wq" value="Delete Reservation From WQ">
 <input type="button" id= "free_btn" value="Free store space">
 <script>
@@ -57,6 +54,18 @@ Stores
     <button onclick="updateStore()">Update Store!</button>
 </div>
 <script>
+$("#make_reservation_btn").click(function() {
+    var aisle_ids_list = ["aisle_id_1", "aisle_id_2", "aisle_id_3"];
+    $.ajax({
+        url: "{{ url_for('stores.make_reservation', store_id=store.id) }}",
+        type: "POST",
+        data: {
+            csrf_token: "{{ csrf_token() }}",
+            aisle_ids: JSON.stringify(aisle_ids_list),
+        },
+    });
+}); 
+
 $("#delete_reservation_wq").click(function () {
     $.ajax({
         url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",

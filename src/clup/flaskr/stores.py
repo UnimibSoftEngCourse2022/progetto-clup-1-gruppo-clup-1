@@ -1,8 +1,10 @@
+import json
+
 import flask
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
 
-from src.clup.flaskr.global_setup import bsp, bqp, brp
+import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -17,19 +19,17 @@ from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
 bp = Blueprint('stores', __name__)
 
-slu = StoreListUseCase(bsp)
+slu = StoreListUseCase(setup.store_provider)
 
-asu = AddStoreUseCase(bsp, bqp)
+asu = AddStoreUseCase(setup.store_provider, setup.lane_provider)
 asu.execute('Esselunga', 'Campofiorenzo', 1)
 asu.execute('Conad', 'Catania', 10)
 
-mru = MakeReservationUseCase(bqp, brp)
+mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
+fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
+cru = ConsumeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 
-fru = FreeReservationUseCase(bqp, brp)
-
-cru = ConsumeReservationUseCase(bqp, brp)
-
-usu = UpdateStoreUseCase(bsp, bqp)
+usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
@@ -62,10 +62,10 @@ def show_store(id):
     else:
         for store in slu.execute():
             if store.id == id:
-                pool = bqp.get_aisle_pool(id)
+                pool = setup.lane_provider.get_aisle_pool(id)
                 active_pool_len = len(pool)
-                waiting_queue_len = len(bqp.get_waiting_queue(id))
-                current_people_quantity = bqp.get_aisle_pool(id).current_quantity
+                waiting_queue_len = len(setup.lane_provider.get_waiting_queue(id))
+                current_people_quantity = setup.lane_provider.get_aisle_pool(id).current_quantity
                 args = {
                     'store': store,
                     'waiting_queue_len': waiting_queue_len,
@@ -77,18 +77,23 @@ def show_store(id):
         abort(404)
 
 
-@bp.route('/stores/<id>/waiting_queue', methods=['POST'])
+@bp.route('/stores/<store_id>/reservations', methods=['POST'])
 @login_required
-def make_reservation_into_store(id):
+def make_reservation(store_id):
     user_id = current_user.get_id()
-    mru.execute(id, user_id)
-    return redirect(url_for('stores.show_store', id=id))
+    aisle_ids = request.values['aisle_ids']
+    try:
+        aisle_ids_json = json.loads(aisle_ids)
+    except JSONDecodeError:
+        abort(400)
+    mru.execute(user_id, store_id, aisle_ids_json)
+    return '', 200
 
 
 @bp.route('/reservations', methods=['GET'])
 @login_required
 def show_reservation():
-    reservations = brp.get_reservations()
+    reservations = setup.reservation_provider.get_reservations()
     return render_template('reservations.html', reservations=reservations)
 
 

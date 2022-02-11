@@ -5,8 +5,8 @@ from src.clup.entities.reservation import Reservation
 
 
 class MakeReservationUseCase:
-    def __init__(self, queue_provider, reservation_provider):
-        self.queue_provider = queue_provider
+    def __init__(self, lane_provider, reservation_provider):
+        self.lane_provider = lane_provider
         self.reservation_provider = reservation_provider
 
     def execute(self, user_id, store_id, aisle_ids):
@@ -18,13 +18,13 @@ class MakeReservationUseCase:
 
         all_in_pools = True
         for aisle_id in aisle_ids:
-            aisle_pool = self.queue_provider.get_aisle_pool(aisle_id)
-            store_pool = self.queue_provider.get_store_pool(store_id)
+            aisle_pool = self.lane_provider.get_aisle_pool(aisle_id)
+            store_pool = self.lane_provider.get_store_pool(store_id)
             try:
                 aisle_pool.add(reservation_id)
             except MaxCapacityReachedError:
                 all_in_pools = False
-                waiting_queue = self.queue_provider.get_waiting_queue(aisle_id)
+                waiting_queue = self.lane_provider.get_waiting_queue(aisle_id)
                 waiting_queue.push(reservation.id)
 
         if all_in_pools:
