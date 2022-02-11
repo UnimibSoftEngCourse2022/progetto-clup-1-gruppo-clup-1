@@ -8,6 +8,16 @@ Stores
 <ul>
     <li>{{ store.address }}</li>
 </ul>
+<div id="aisle_checkboxes">
+    <ul>
+    {% for aisle_id in aisle_ids %}
+        <li>
+            <input type="checkbox" id="{{ aisle_id }}">
+            <label for="{{ aisle_id }}">{{ aisle_id }}</label>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
 <p>Active Pool Length: {{ active_pool_len }}</p>
 <br>
 <ul>
@@ -53,13 +63,15 @@ Stores
 </div>
 <script>
 $("#make_reservation_btn").click(function() {
-    var aisle_ids_list = ["aisle_id_1", "aisle_id_2", "aisle_id_3"];
+    $aisle_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
+        return $(this).attr("id");
+        }).get();
     $.ajax({
         url: "{{ url_for('stores.make_reservation', store_id=store.id) }}",
         type: "POST",
         data: {
             csrf_token: "{{ csrf_token() }}",
-            aisle_ids: JSON.stringify(aisle_ids_list),
+            aisle_ids: JSON.stringify($aisle_ids_list),
         },
     });
 }); 

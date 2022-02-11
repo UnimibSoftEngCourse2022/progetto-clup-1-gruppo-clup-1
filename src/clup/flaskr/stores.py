@@ -5,6 +5,8 @@ from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
+
+from src.clup.entities.category import Category
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -12,6 +14,7 @@ from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
+from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 
 # from src.clup.entities.exceptions \
 #     import MaxCapacityReachedError, EmptyQueueError
@@ -22,8 +25,14 @@ bp = Blueprint('stores', __name__)
 slu = StoreListUseCase(setup.store_provider)
 
 asu = AddStoreUseCase(setup.store_provider, setup.lane_provider)
-asu.execute('Esselunga', 'Campofiorenzo', 1)
-asu.execute('Conad', 'Catania', 10)
+esselunga = asu.execute('Esselunga', 'Campofiorenzo', 1)
+conad = asu.execute('Conad', 'Catania', 10)
+
+aau = AddAisleUseCase(setup.aisle_provider)
+aau.execute(esselunga.id, 'pane', [Category.MEAT])
+aau.execute(esselunga.id, 'pesce', [Category.FISH])
+aau.execute(conad.id, 'salumi', [Category.FRUIT])
+aau.execute(conad.id, 'frutta', [Category.MEAT])
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
@@ -64,10 +73,12 @@ def show_store(store_id):
             if store.id == store_id:
                 pool = setup.lane_provider.get_store_pool(store_id)
                 active_pool_len = len(pool.enabled)
+                aisle_ids = setup.aisle_provider.get_store_aisles_id(store_id)
                 args = {
                     'store': store,
                     'active_pool_len': active_pool_len,
-                    'store_pool_enabled': pool.enabled
+                    'store_pool_enabled': pool.enabled,
+                    'aisle_ids': aisle_ids,
                 }
                 return render_template('store.html', **args)
         abort(404)
@@ -80,6 +91,7 @@ def make_reservation(store_id):
     aisle_ids = request.values['aisle_ids']
     try:
         aisle_ids_json = json.loads(aisle_ids)
+        print(aisle_ids_json)
     except JSONDecodeError:
         abort(400)
     mru.execute(user_id, store_id, aisle_ids_json)
