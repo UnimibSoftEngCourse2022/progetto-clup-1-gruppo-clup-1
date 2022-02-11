@@ -48,6 +48,12 @@ def show_stores():
         stores = slu.execute()
         return render_template('stores.html', stores=stores)
 
+@bp.route('/stores/add', methods=['GET'])
+@login_required
+def add_store():
+        stores = slu.execute()
+        return render_template('add_store.html', stores=stores)
+
 
 @bp.route('/stores/<id>', methods=['GET', 'PUT'])
 @login_required

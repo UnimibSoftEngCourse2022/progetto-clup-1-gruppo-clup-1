@@ -1,40 +1,20 @@
-{% extends 'base.html' %}
-{% block title %}
-Stores
-{% endblock %}
-
-{% block content%}
-
+{% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
+<script>
+    function performAddStore() {
+        window.location.href = "{{ url_for('stores.add_store') }}";
+    }
+</script>
 <div class="container-fluid">
     <div class="card text-white text-center  mb-3" style="max-width: 36rem;">
-        <div class="card-header color" style="background: #126311">
-            Add Store
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Store Information</h5>
-            <form action="/stores" , method="post">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <input class="form-control" type="text" placeholder="Name" name="name" aria-label="store name"><br>
-                <input class="form-control" type="text" placeholder="Address" name="address"
-                    aria-label="store address"><br>
-                <input class="form-control" type="text" placeholder="Capacity" name="capacity"
-                    aria-label="store capacity"><br>
-                <button class="btn btn-outline-primary btn-lg" type="submit">Add</button>
-            </form>
-        </div>
-    </div>
-</div>
-<br>
-<div class="container-fluid">
-    <div class="card text-white text-center  mb-3" style="max-width: 36rem;">
-        <div class="card-header color" style="background: #126311;">
+        <div class="card-header color" style="background: #50817e;">
             All Stores
         </div>
-        <div class="list-group">
-            {% for store in stores %}
-            <a href="{{ url_for('stores.show_store', id=store.id) }}" class="list-group-item list-group-item-action"
-                style="color: white; background-color:black;">{{ store.name }}</a>
-            {% endfor %}
+        <div class="card-body">
+            <div class="list-group">
+                {% for store in stores %}
+                <a href="{{ url_for('stores.show_store', id=store.id) }}" class="list-group-item list-group-item-action" style="color: white; background-color:black;">{{ store.name }}</a> {% endfor %}
+            </div>
+            <button type="submit" onclick="performAddStore()">Add a Store</button>
         </div>
     </div>
 </div>

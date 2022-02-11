@@ -67,7 +67,7 @@ def user_login_page():
             if logged_type == 'user':
                 return redirect(url_for('users.user_page'))
             if logged_type == 'admin':
-                return redirect(url_for('users.admin_page'))
+                return redirect(url_for('stores.show_stores'))
         except ValueError:
             flash('Something went wrong', category='danger')
             return redirect(url_for('users.user_login_page'))
