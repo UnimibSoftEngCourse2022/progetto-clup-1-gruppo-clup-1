@@ -25,8 +25,9 @@ class SqliteAisleProvider:
         aisles = []
         for a_id in aisles_id:
             aisle_db = \
-            db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(Aisle.uuid == a_id).all()[
-                0]
+                db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(
+                    Aisle.uuid == a_id).all()[
+                    0]
             aisle_categories_db = aisle_db.categories
             aisle_categories_enum = [Category(int(c)) for c in aisle_categories_db.split(',')]
             aisle_ent = aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_categories_enum,
@@ -41,8 +42,9 @@ class SqliteAisleProvider:
     def get_aisle(self, aisle_id):
         db_session = Session(engine)
         aisle_db = \
-        db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(Aisle.uuid == aisle_id).all()[
-            0]
+            db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(
+                Aisle.uuid == aisle_id).all()[
+                0]
         aisle_db_categories = aisle_db.categories
         aisle_cat_enum = [Category(int(c)) for c in aisle_db_categories.split(',')]
         return aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_cat_enum, capacity=aisle_db.capacity)
