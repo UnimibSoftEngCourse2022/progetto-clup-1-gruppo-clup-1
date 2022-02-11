@@ -32,6 +32,22 @@ class Aisle(Base):
     categories = Column(String)
 
 
+class Store(Base):
+    __tablename__ = 'store'
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String, unique=True)
+    name = Column(String)
+    address = Column(String)
+    secret_key = Column(String, unique=True)
+
+
+class StoreAisle(Base):
+    __tablename__ = 'store_aisle'
+    id = Column(Integer, primary_key=True)
+    store_uuid = Column(String, ForeignKey('store.uuid'))
+    aisle_uuid = Column(String, ForeignKey('aisle.uuid'), unique=True)
+
+
 path = os.path.dirname(os.path.abspath(__file__)) + "/clup.sqlite"
 engine = create_engine(f'sqlite:///{path}')
 
@@ -68,4 +84,22 @@ if len(aisles) == 0:
     aisle2 = Aisle(uuid=20, name='aisle2', categories='3,4')
     add_session.add(aisle1)
     add_session.add(aisle2)
+    add_session.commit()
+
+query = add_session.query(Store.id)
+stores = query.all()
+
+if len(stores) == 0:
+    store1 = Store(uuid=100, name='Esselunga', address='Milano', secret_key=0)
+    add_session.add(store1)
+    add_session.commit()
+
+query = add_session.query(StoreAisle.id)
+store_aisles = query.all()
+
+if len(store_aisles) == 0:
+    store_aisles1 = StoreAisle(store_uuid=100, aisle_uuid=10)
+    store_aisles2 = StoreAisle(store_uuid=100, aisle_uuid=20)
+    add_session.add(store_aisles1)
+    add_session.add(store_aisles2)
     add_session.commit()
