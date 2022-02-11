@@ -103,13 +103,9 @@ def store_reservations(store_id):
         except JSONDecodeError:
             abort(400)
         mru.execute(user_id, store_id, aisle_ids_json)
-        store_pool_enabled = setup.lane_provider.get_store_pool(store_id).enabled
-        aisle_pool = setup.lane_provider.get_aisle_pool(aisle_ids_json[0])
-        print(aisle_pool.elements)
         return '', 200
     else:
         store_pool_enabled = setup.lane_provider.get_store_pool(store_id).enabled
-        print(store_pool_enabled)
         return render_template('store_reservations.html', \
             store_id=store_id, reservation_ids=store_pool_enabled)
 
@@ -131,14 +127,14 @@ def show_reservation():
 #     except EmptyQueueError:
 #         return 'EMPTY QUEUE ERROR'
 
-@bp.route('/stores/<store_id>/active_pool/<reservation_id>', methods=['DELETE'])
-def consume_handler(store_id, reservation_id):
+@bp.route('/stores/<store_id>/consumed', methods=['POST'])
+def consume_handler(store_id):
     try:
-        # return redirect(url_for('stores.show_store', id=id))
+        reservation_id = request.values['reservation_id']
         cru.execute(store_id, reservation_id)
-        flask.response(200)
+        return '', 200
     except Exception:
-        return 'ERROR1'
+        abort(400)
 
 
 @bp.route('/stores/<store_id>/waiting_queue', methods=['DELETE'])

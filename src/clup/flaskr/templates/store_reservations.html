@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+Store Reservation
+{% endblock %}
+{% block content %}
+<h3>Store: {{ store_id }}</h3>
+<br>
+<ul>
+{% for id in reservation_ids %}
+    <li>
+        <input type="button" id="consume_btn_{{ id }}" value="Consume {{ id }} !">
+    </li>
+{% endfor %}
+</ul>
+<script>
+{% for id in reservation_ids %}
+$("#consume_btn_{{ id }}").click(function () {
+    $.ajax({
+        url: "{{ url_for('stores.consume_handler', store_id=store_id) }}",
+        type: "POST",
+        data: {
+            csrf_token: '{{ csrf_token() }}',
+            reservation_id: '{{ id }}',
+        },
+        success: function (result) {
+            location.reload();
+        },
+    });
+});
+{% endfor %}
+</script>
+{% endblock %}
