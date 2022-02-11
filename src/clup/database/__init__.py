@@ -20,6 +20,7 @@ class User(Base):
 class Reservation(Base):
     __tablename__ = 'reservation'
     id = Column(Integer, primary_key=True)
+    uuid = Column(String)
     aisle_id = Column(String, ForeignKey('aisle.uuid'))
     user_id = Column(String, ForeignKey('user.uuid'))
 
@@ -38,7 +39,7 @@ class Store(Base):
     uuid = Column(String, unique=True)
     name = Column(String)
     address = Column(String)
-    secret_key = Column(String, unique=True)
+    secret_key = Column(String)  # TODO unique=True
 
 
 class StoreAisle(Base):
@@ -70,8 +71,8 @@ query = add_session.query(Reservation.id)
 reservations = query.all()
 
 if len(reservations) == 0:
-    reservation1 = Reservation(aisle_id=10, user_id=1)
-    reservation2 = Reservation(aisle_id=20, user_id=2)
+    reservation1 = Reservation(uuid=1000, aisle_id=10, user_id=1)
+    reservation2 = Reservation(uuid=2000, aisle_id=20, user_id=2)
     add_session.add(reservation1)
     add_session.add(reservation2)
     add_session.commit()
