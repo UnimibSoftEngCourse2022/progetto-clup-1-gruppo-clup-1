@@ -1,11 +1,16 @@
-{% extends 'base.html' %}
-{% block content %}
-{% if current_user.is_authenticated %}
-  Hi {{ user.username }}!
-<br>
-  <a href="{{url_for('users.user_logout')}}">Logout</a>
-<br>
-  <a href="{{url_for('users.change_password_page')}}">Change password</a>
+{% extends 'base_user.html' %}
 
-{% endif %}
+{% block content %}
+<div class="container vh-100">
+    <div class="row height d-flex justify-content-center align-items-center">
+        <div class="col-md-8 col-xl-6">
+            <div class="search"><i class="fa fa-search"></i> <input type="text" class="form-control"
+                                                                    placeholder="Have a question? Ask Now">
+                <button class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}

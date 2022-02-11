@@ -1,3 +1,7 @@
-{% extends 'base.html' %} {% block content %} {% if current_user.is_authenticated %} Hi {{ admin.username }} ADMIN!
-<br>
-<a href="{{url_for('users.user_logout')}}">Logout</a> {% endif %} {% endblock %}
+{% extends 'base_admin.html' %}
+{% block content %}
+
+
+
+
+{% endblock %}

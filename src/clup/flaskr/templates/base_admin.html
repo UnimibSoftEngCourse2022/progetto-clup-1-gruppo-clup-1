@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block icon %}
+<div style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+    <div style="display:flex; justify-content:flex-end; width:100%; padding:0;">
+        <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
+                 class="bi bi-person-circle"
+                 viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd"
+                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>
+        </button>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Admin: {{ admin.username }}</h5>
+                    <div class="text-right">
+                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"
+                                style="background-color: transparent; color: black ">&times;
+                        </button>
+                    </div>
+
+                </div>
+                <div class="modal-body">
+                    e-mail: <!-- inserire email-->
+                    <br>
+                    indirizzo: <!-- inserire indirizzo-->
+                </div>
+                <div class="modal-footer">
+                    <a href="{{url_for('users.change_password_page')}}" class="button">Change
+                        password
+                    </a>
+
+                    <a href="{{url_for('users.user_logout')}}" class="button">Logout </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}
+{% block content %}
+{% if current_user.is_authenticated %}
+
+
+{% endif %}
+{% endblock %}
