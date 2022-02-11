@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from src.clup.database import Store, engine
+from src.clup.database import Store, engine, StoreAdmin
 from src.clup.entities import store
 
 
@@ -26,9 +26,9 @@ class SqliteStoreProvider:
         db_session.query(Store).filter(Store.uuid == store_id).delete()
         db_session.commit()
 
-    # TODO def get_queue(self, store_id):
-
-    # TODO def add_to_queue(self, store_id, element):
+    def get_admins_id(self, store_id):
+        db_session = Session(engine)
+        return db_session.query(StoreAdmin.admin_uuid).filter(StoreAdmin.store_uuid == store_id)[0]
 
 
 sp = SqliteStoreProvider()

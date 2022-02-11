@@ -49,6 +49,21 @@ class StoreAisle(Base):
     aisle_uuid = Column(String, ForeignKey('aisle.uuid'), unique=True)
 
 
+class Admin(Base):
+    __tablename__ = 'admin'
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String, unique=True)
+    username = Column(String)
+    password = Column(String)
+
+
+class StoreAdmin(Base):
+    __tablename__ = 'store_admin'
+    id = Column(Integer, primary_key=True)
+    admin_uuid = Column(String, ForeignKey('admin.id'), unique=True)
+    store_uuid = Column(String, ForeignKey('store.id'))
+
+
 path = os.path.dirname(os.path.abspath(__file__)) + "/clup.sqlite"
 engine = create_engine(f'sqlite:///{path}')
 
