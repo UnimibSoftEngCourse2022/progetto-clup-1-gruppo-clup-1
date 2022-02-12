@@ -1,39 +1,43 @@
 from sqlalchemy.orm import Session
 
-from src.clup.database import Store, engine, StoreAdmin
-from src.clup.entities import store
+import src.clup.database.models as models
+from src.clup.entities.store import Store
 
 
 class SqliteStoreProvider:
-    def get_stores(self):
-        db_session = Session(engine)
-        stores_db = db_session.query(Store).all()
-        stores_ent = []
-        for st in stores_db:
-            store_ent = store.Store(id=st.uuid, name=st.name, address=st.address, secret_key=st.secret_key)
-            stores_ent.append(store_ent)
-        return stores_ent
+    def __init__(self, engine):
+        self.engine = engine
 
-    def add_store(self, store_ent):
-        db_session = Session(engine)
-        new_store = Store(uuid=store_ent.id, name=store_ent.name, address=store_ent.address,
-                          secret_key=store_ent.secret_key)
-        db_session.add(new_store)
-        db_session.commit()
+    def get_stores(self):
+        with Session(self.engine) as session, session.begin():
+            model_stores = session.query(models.Store).all()
+            stores = [Store(ms.uuid, ms.name, ms.address, ms.secret)
+                      for ms in model_stores]
+            return stores
+
+    def add_store(self, store):
+        with Session(self.engine) as session, session.begin():
+            model_store = models.Store(
+                uuid=store.id,
+                name=store.name,
+                address=store.address,
+                secret=store.secret,
+            )
+            session.add(model_store)
 
     def remove_store(self, store_id):
-        db_session = Session(engine)
-        db_session.query(Store).filter(Store.uuid == store_id).delete()
-        db_session.commit()
+        with Session(self.engine) as session, session.begin():
+            session.query(models.Store).\
+                filter(models.Store.uuid == store_id).delete()
+            query = session.query(models.StoreAisle).\
+                filter(models.StoreAisle.store_uuid == store_id)
+            store_aisle_ids = [msa.aisle_uuid for msa in query.all()]
+            query.delete()
+            session.query(models.Aisle).\
+                filter(models.Aisle.uuid.in_(store_aisle_ids)).delete()
 
-    def get_admins_id(self, store_id):
-        db_session = Session(engine)
-        return db_session.query(StoreAdmin.admin_uuid).filter(StoreAdmin.store_uuid == store_id)[0]
-
-
-sp = SqliteStoreProvider()
-print(sp.get_stores())
-sp.add_store(store.Store(id=200, name='Tigros', address='Sesto', secret_key=0))
-print(sp.get_stores())
-sp.remove_store(200)
-print(sp.get_stores())
+    def get_admin_ids(self, store_id):
+        with Session(self.engine) as session, session.begin():
+            model_store_admins = session.query(models.StoreAdmin).\
+                filter(models.StoreAdmin.store_uuid == store_id).all()
+            return [msa.admin_uuid for msa in model_store_admins]

@@ -37,7 +37,7 @@ class Store(Base):
     uuid = Column(String, unique=True)
     name = Column(String)
     address = Column(String)
-    secret_key = Column(String)  # TODO unique=True
+    secret = Column(String)  # TODO unique=True
 
 
 class StoreAisle(Base):
@@ -75,7 +75,7 @@ def create_initial_data(engine):
     a1 = Aisle(uuid=10, name='aisle1', categories='1,2', capacity=10)
     a2 = Aisle(uuid=20, name='aisle2', categories='3,4', capacity=5)
 
-    s1 = Store(uuid=100, name='Esselunga', address='Milano', secret_key=0)
+    s1 = Store(uuid=100, name='Esselunga', address='Milano', secret='0')
 
     s1_a1 = StoreAisle(store_uuid=100, aisle_uuid=10)
     s1_a2 = StoreAisle(store_uuid=100, aisle_uuid=20)

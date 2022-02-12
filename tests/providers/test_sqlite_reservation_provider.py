@@ -97,7 +97,7 @@ class TestSqliteReservationProvider(unittest.TestCase):
             self.assertEqual(reservation.aisle_id, '100')
             self.assertEqual(reservation.user_id, '1000')
 
-    def test_reservation_is_removed_form_db(self):
+    def test_reservation_is_removed_from_db(self):
         mr1 = models.Reservation(uuid='10', aisle_id='100', user_id='1000')
         with Session(self.engine) as session, session.begin():
             session.add(mr1)

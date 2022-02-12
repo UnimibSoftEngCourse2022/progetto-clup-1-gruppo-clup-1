@@ -37,7 +37,7 @@ class TestEnableAdminUsecase(unittest.TestCase):
         m_a_p.admins[admin.id] = admin
         msp.stores[store.id] = store
 
-        ea.execute(admin.id, store.id, store.secret_key)
+        ea.execute(admin.id, store.id, store.secret)
         is_admin_activate = admin.store == store.id
 
         self.assertTrue(is_admin_activate)
@@ -64,7 +64,7 @@ class TestEnableAdminUsecase(unittest.TestCase):
         msp.stores[store.id] = store
 
         with self.assertRaises(ValueError):
-            ea.execute('wrong user_id', store.id, store.secret_key)
+            ea.execute('wrong user_id', store.id, store.secret)
 
         with self.assertRaises(ValueError):
-            ea.execute(admin.id, 'wrong store_id', store.secret_key)
+            ea.execute(admin.id, 'wrong store_id', store.secret)
