@@ -1,89 +1,80 @@
 from sqlalchemy.orm import Session
 
-from src.clup.database import Aisle, engine, StoreAisle
-from src.clup.entities import aisle
+import src.clup.database.models as models
+from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
 
 
 class SqliteAisleProvider:
+    def __init__(self, engine):
+        self.engine = engine
+
+    def _get_categories(self, categories_str):
+        category_ints = [int(c) for c in categories_str.split(',')]
+        categories = [Category(i) for i in sorted(category_ints)]
+        return tuple(categories)
+
     def get_aisles(self):
-        db_session = Session(engine)
-        query = db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity)
-        aisles = query.all()
-        aisles_list = []
-        for a in aisles:
-            cat_str = a.categories
-            cat_enum = [Category(int(c)) for c in cat_str.split(',')]
-            aisle_entity = aisle.Aisle(id=a.uuid, name=a.name, categories=cat_enum, capacity=a.capacity)
-            aisles_list.append(aisle_entity)
-        return aisles_list
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.Aisle)
+            model_aisles = query.all()
+            aisles = [Aisle(ma.uuid, ma.name,
+                            self._get_categories(ma.categories),
+                            ma.capacity)
+                      for ma in model_aisles]
+            return aisles
 
     def get_store_aisles(self, store_id):
-        db_session = Session(engine)
-        aisles_id = db_session.query(StoreAisle.aisle_uuid).filter(StoreAisle.store_uuid == store_id).all()
-        aisles_id = [el[0] for el in aisles_id]
-        aisles = []
-        for a_id in aisles_id:
-            aisle_db = \
-                db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(
-                    Aisle.uuid == a_id).all()[
-                    0]
-            aisle_categories_db = aisle_db.categories
-            aisle_categories_enum = [Category(int(c)) for c in aisle_categories_db.split(',')]
-            aisle_ent = aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_categories_enum,
-                                    capacity=aisle_db.capacity)
-            aisles.append(aisle_ent)
-        return aisles
+        aisle_ids = self.get_store_aisle_ids(store_id)
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.Aisle).\
+                filter(models.Aisle.uuid.in_(aisle_ids))
+            model_aisles = query.all()
+            aisles = [Aisle(ma.uuid, ma.name,
+                            self._get_categories(ma.categories),
+                            ma.capacity)
+                      for ma in model_aisles]
+            return aisles
 
-    def get_store_aisles_id(self, store_id):
-        aisles = self.get_store_aisles(store_id)
-        return [a.id for a in aisles]
+    def get_store_aisle_ids(self, store_id):
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.StoreAisle).\
+                filter(models.StoreAisle.store_uuid == store_id)
+            store_aisles = query.all()
+            return [sa.aisle_uuid for sa in store_aisles]
 
-    def get_aisle(self, aisle_id):
-        db_session = Session(engine)
-        aisle_db = \
-            db_session.query(Aisle.uuid, Aisle.name, Aisle.categories, Aisle.capacity).filter(
-                Aisle.uuid == aisle_id).all()[
-                0]
-        aisle_db_categories = aisle_db.categories
-        aisle_cat_enum = [Category(int(c)) for c in aisle_db_categories.split(',')]
-        return aisle.Aisle(id=aisle_db.uuid, name=aisle_db.name, categories=aisle_cat_enum, capacity=aisle_db.capacity)
-
-    def add_aisle(self, store_id, aisle_ent):
-        db_session = Session(engine)
-        categories_str = ','.join([f'{e.value}' for e in aisle_ent.categories])
-        new_aisle = Aisle(uuid=aisle_ent.id, name=aisle_ent.name, categories=categories_str,
-                          capacity=aisle_ent.capacity)
-        db_session.add(new_aisle)
-        new_aisle_store = StoreAisle(store_uuid=store_id, aisle_uuid=aisle_ent.id)
-        db_session.add(new_aisle_store)
-        db_session.commit()
+    def add_aisle(self, store_id, aisle):
+        with Session(self.engine) as session, session.begin():
+            sorted_values = sorted(str(c.value) for c in aisle.categories)
+            categories_str = ','.join(sorted_values)
+            model_aisle = models.Aisle(
+                uuid=aisle.id,
+                name=aisle.name,
+                categories=categories_str,
+                capacity=aisle.capacity,
+            )
+            model_store_aisle = models.StoreAisle(
+                store_uuid=store_id, 
+                aisle_uuid=aisle.id,
+            )
+            session.add(model_aisle)
+            session.add(model_store_aisle)
 
     def remove_aisle(self, aisle_id):
-        db_session = Session(engine)
-        db_session.query(Aisle).filter(Aisle.uuid == aisle_id).delete()
-        db_session.query(StoreAisle).filter(StoreAisle.aisle_uuid == aisle_id).delete()
-        db_session.commit()
+        with Session(self.engine) as session, session.begin():
+            session.query(models.Aisle).\
+                filter(models.Aisle.uuid == aisle_id).delete()
+            session.query(models.StoreAisle).\
+                filter(models.StoreAisle.aisle_uuid == aisle_id).delete()
 
-    def update_aisle(self, aisle_ent):
-        db_session = Session(engine)
-        db_session.query(Aisle).filter(Aisle.uuid == aisle_ent.id).update(
-            {Aisle.name: aisle_ent.name,
-             Aisle.categories: ','.join([f'{e.value}' for e in aisle_ent.categories]),
-             Aisle.capacity: aisle_ent.capacity}
-        )
-        db_session.commit()
-
-
-ap = SqliteAisleProvider()
-
-print(ap.get_aisles())
-print(ap.get_store_aisles(100))
-print(ap.get_store_aisles_id(100))
-print(ap.get_aisle(10))
-ap.add_aisle(100, aisle.Aisle(id=40, name='aisle4', categories=[Category.FISH, Category.FRUIT]))
-print(ap.get_store_aisles(100))
-ap.remove_aisle(40)
-print(ap.get_aisles())
-ap.update_aisle(aisle.Aisle(10, 'updated_aisle', categories=[Category.FISH, Category.FRUIT]))
-print(ap.get_aisles())
+    def update_aisle(self, aisle):
+        with Session(self.engine) as session, session.begin():
+            sorted_values = sorted(str(c.value) for c in aisle.categories)
+            categories_str = ','.join(sorted_values)
+            query = session.query(models.Aisle).\
+                filter(models.Aisle.uuid == aisle.id)
+            query.update({
+                models.Aisle.name: aisle.name,
+                models.Aisle.categories: categories_str,
+                models.Aisle.capacity: aisle.capacity,
+            })
