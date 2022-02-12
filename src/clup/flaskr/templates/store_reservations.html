@@ -8,52 +8,58 @@ Store Reservation
 <h4>Enabled</h4>
 <br>
 <ul>
-{% for id in enabled_ids %}
+    {% for id in enabled_ids %}
     <li>
-        <input type="button" id="consume_btn_{{ id }}" value="Consume {{ id }}">
+        <input id="consume_btn_{{ id }}" type="button" value="Consume {{ id }}">
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
 <br>
 <h4>To Free</h4>
 <br>
 <ul>
-{% for id in to_free_ids %}
+    {% for id in to_free_ids %}
     <li>
-        <input type="button" id="free_btn_{{ id }}" value="Free {{ id }}">
+        <input id="free_btn_{{ id }}" type="button" value="Free {{ id }}">
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
 <script>
-{% for id in enabled_ids %}
-$("#consume_btn_{{ id }}").click(function () {
-    $.ajax({
-        url: "{{ url_for('stores.store_pool_handler', store_id=store_id) }}",
-        type: "POST",
-        data: {
-            csrf_token: '{{ csrf_token() }}',
-            reservation_id: '{{ id }}',
-        },
-        success: function (result) {
-            location.reload();
-        },
+    {%
+        for id in enabled_ids %}
+    $("#consume_btn_{{ id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.store_pool_handler', store_id=store_id) }}",
+            type: "POST",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                reservation_id: '{{ id }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
     });
-});
-{% endfor %}
-{% for id in to_free_ids %}
-$("#free_btn_{{ id }}").click(function () {
-    $.ajax({
-        url: "{{ url_for('stores.store_pool_handler', store_id=store_id) }}",
-        type: "DELETE",
-        data: {
-            csrf_token: '{{ csrf_token() }}',
-            reservation_id: '{{ id }}',
-        },
-        success: function (result) {
-            location.reload();
-        },
+    {%
+        endfor %
+    }
+    {%
+        for id in to_free_ids %}
+    $("#free_btn_{{ id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('stores.store_pool_handler', store_id=store_id) }}",
+            type: "DELETE",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                reservation_id: '{{ id }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
     });
-});
-{% endfor %}
+    {%
+        endfor %
+    }
 </script>
 {% endblock %}

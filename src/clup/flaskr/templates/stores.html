@@ -20,9 +20,9 @@ Stores
 <ul>
     {% for store in stores %}
     <li>
-        <a href="{{ url_for('stores.show_store', store_id=store.id) }}" >
+        <a href="{{ url_for('stores.show_store', store_id=store.id) }}">
             {{ store.name }}
-        </a> 
+        </a>
     </li>
     {% endfor %}
 </ul>

@@ -5,4 +5,3 @@ env/
 .todo.md
 .flake8
 *.sqlite
-

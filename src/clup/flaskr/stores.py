@@ -1,12 +1,12 @@
 import json
+from json import JSONDecodeError
 
-import flask
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
-
 from src.clup.entities.category import Category
+from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -14,7 +14,6 @@ from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
-from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 
 # from src.clup.entities.exceptions \
 #     import MaxCapacityReachedError, EmptyQueueError
@@ -107,8 +106,8 @@ def store_reservations(store_id):
     else:
         enabled = setup.lane_provider.get_store_pool(store_id).enabled
         to_free = setup.lane_provider.get_store_pool(store_id).to_free
-        return render_template('store_reservations.html', \
-            store_id=store_id, enabled_ids=enabled, to_free_ids=to_free)
+        return render_template('store_reservations.html',
+                               store_id=store_id, enabled_ids=enabled, to_free_ids=to_free)
 
 
 @bp.route('/stores/<store_id>/consumed', methods=['POST', 'DELETE'])
