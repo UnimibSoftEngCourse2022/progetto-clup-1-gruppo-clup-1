@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
