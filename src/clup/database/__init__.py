@@ -63,5 +63,21 @@ def db_populate():
         add_session.add(store_aisles2)
         add_session.commit()
 
+    query = add_session.query(Admin.id)
+    admins = query.all()
+
+    if len(admins) == 0:
+        admin1 = Admin(uuid=14, username='admin0', password='pass0')
+        add_session.add(admin1)
+        add_session.commit()
+
+    query = add_session.query(StoreAdmin.id)
+    store_admin = query.all()
+
+    if len(store_admin) == 0:
+        store_admin1 = StoreAdmin(admin_uuid=14, store_uuid=100)
+        add_session.add(store_admin1)
+        add_session.commit()
+
 
 db_populate()

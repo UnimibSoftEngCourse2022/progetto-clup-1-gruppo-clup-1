@@ -106,7 +106,7 @@ def store_reservations(store_id):
     else:
         enabled = setup.lane_provider.get_store_pool(store_id).enabled
         to_free = setup.lane_provider.get_store_pool(store_id).to_free
-        return render_template('store_reservations.html', \
+        return render_template('store_reservations.html',
                                store_id=store_id, enabled_ids=enabled, to_free_ids=to_free)
 
 
