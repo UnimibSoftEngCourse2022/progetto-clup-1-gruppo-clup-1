@@ -42,7 +42,9 @@ for aisle_id in conad_aisle_ids:
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
-cru = ConsumeReservationUseCase(setup.lane_provider, setup.reservation_provider)
+cru = ConsumeReservationUseCase(
+    setup.lane_provider, setup.reservation_provider
+)
 
 usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
 
@@ -73,7 +75,8 @@ def show_store(store_id):
             if store.id == store_id:
                 capacity = int(request.values['capacity'])
                 usu.execute(store, capacity)
-                return redirect(url_for('stores.show_store', store_id=store.id))
+                return redirect(url_for('stores.show_store',
+                                store_id=store.id))
     else:
         for store in slu.execute():
             if store.id == store_id:
@@ -107,7 +110,9 @@ def store_reservations(store_id):
         enabled = setup.lane_provider.get_store_pool(store_id).enabled
         to_free = setup.lane_provider.get_store_pool(store_id).to_free
         return render_template('store_reservations.html',
-                               store_id=store_id, enabled_ids=enabled, to_free_ids=to_free)
+                               store_id=store_id,
+                               enabled_ids=enabled,
+                               to_free_ids=to_free)
 
 
 @bp.route('/stores/<store_id>/consumed', methods=['POST', 'DELETE'])

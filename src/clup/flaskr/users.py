@@ -6,7 +6,8 @@ from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
-from src.clup.usecases.user_change_password_usecase import UserChangePasswordUseCase
+from src.clup.usecases.user_change_password_usecase \
+    import UserChangePasswordUseCase
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
@@ -113,7 +114,8 @@ def change_password_page():
         new_password = form.new_password.data
         ucp = UserChangePasswordUseCase(setup.user_provider)
         try:
-            username = LoadUserDataUseCase(setup.user_provider).execute(current_user.get_id()).username
+            ludu = LoadUserDataUseCase(setup.user_provider)
+            username = ludu.execute(current_user.get_id()).username
             ucp.execute(username, old_password, new_password)
             return redirect(url_for('users.user_logout'))
         except ValueError:

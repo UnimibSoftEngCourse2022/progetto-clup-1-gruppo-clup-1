@@ -54,7 +54,7 @@ class SqliteAisleProvider:
                 capacity=aisle.capacity,
             )
             model_store_aisle = models.StoreAisle(
-                store_uuid=store_id, 
+                store_uuid=store_id,
                 aisle_uuid=aisle.id,
             )
             session.add(model_aisle)
