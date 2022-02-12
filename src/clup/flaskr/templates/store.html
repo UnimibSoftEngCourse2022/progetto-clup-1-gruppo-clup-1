@@ -10,19 +10,19 @@ Stores
 </ul>
 <div id="aisle_checkboxes">
     <ul>
-    {% for aisle_id in aisle_ids %}
+        {% for aisle_id in aisle_ids %}
         <li>
-            <input type="checkbox" id="{{ aisle_id }}">
+            <input id="{{ aisle_id }}" type="checkbox">
             <label for="{{ aisle_id }}">{{ aisle_id }}</label>
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
 </div>
 <a href="{{ url_for('stores.store_reservations', store_id=store.id) }}">Reservations!</a>
 <p>Active Pool Length: {{ active_pool_len }}</p>
 <br>
 <ul>
-{% for reservation_id in store_pool_enabled %}
+    {% for reservation_id in store_pool_enabled %}
     <li>
         Consume: {{ reservation_id }}
         <input id="consume_btn_{{ reservation_id }}" type="button" value="CONSUME!">
@@ -30,7 +30,7 @@ Stores
     {% endfor %}
 </ul>
 <br>
-<input type="button" id="make_reservation_btn"  value="Make Reservation">
+<input id="make_reservation_btn" type="button" value="Make Reservation">
 <script>
     function updateStore() {
         var new_name = $("#name").val();
@@ -61,18 +61,18 @@ Stores
     <button onclick="updateStore()">Update Store!</button>
 </div>
 <script>
-$("#make_reservation_btn").click(function() {
-    $aisle_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
-        return $(this).attr("id");
+    $("#make_reservation_btn").click(function () {
+        $aisle_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
+            return $(this).attr("id");
         }).get();
-    $.ajax({
-        url: "{{ url_for('stores.store_reservations', store_id=store.id) }}",
-        type: "POST",
-        data: {
-            csrf_token: "{{ csrf_token() }}",
-            aisle_ids: JSON.stringify($aisle_ids_list),
-        },
+        $.ajax({
+            url: "{{ url_for('stores.store_reservations', store_id=store.id) }}",
+            type: "POST",
+            data: {
+                csrf_token: "{{ csrf_token() }}",
+                aisle_ids: JSON.stringify($aisle_ids_list),
+            },
+        });
     });
-}); 
 </script>
 {% endblock %}

@@ -4,4 +4,4 @@ env/
 .DS_Store
 .todo.md
 .flake8
-
+*.sqlite
