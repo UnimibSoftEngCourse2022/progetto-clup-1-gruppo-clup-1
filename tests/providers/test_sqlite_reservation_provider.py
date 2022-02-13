@@ -102,7 +102,7 @@ class TestSqliteReservationProvider(unittest.TestCase):
         with Session(self.engine) as session, session.begin():
             session.add(mr1)
 
-        self.rp.remove_reservation('10')
+        self.rp.delete_reservation('10')
 
         with Session(self.engine) as session, session.begin():
             reservations = session.query(models.Reservation).all()
@@ -116,7 +116,7 @@ class TestSqliteReservationProvider(unittest.TestCase):
             session.add(mr2)
             session.add(mr3)
 
-        reservations = self.rp.remove_reservation_from_aisle('20', '200')
+        reservations = self.rp.delete_reservation_from_aisle('20', '200')
 
         with Session(self.engine) as session, session.begin():
             reservations = session.query(models.Reservation).all()

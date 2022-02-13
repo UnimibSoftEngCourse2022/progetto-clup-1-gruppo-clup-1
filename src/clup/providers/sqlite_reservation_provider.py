@@ -2,9 +2,11 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.reservation import Reservation
+from src.clup.providers.reservation_provider_abc \
+    import ReservationProvider
 
 
-class SqliteReservationProvider:
+class SqliteReservationProvider(ReservationProvider):
     def __init__(self, engine):
         self.engine = engine
 
@@ -42,13 +44,16 @@ class SqliteReservationProvider:
             )
             session.add(model_reservation)
 
-    def remove_reservation(self, reservation_id):
+    def update_reservation(self, reservation):
+        raise NotImplementedError()
+
+    def delete_reservation(self, reservation_id):
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation).\
                 filter(models.Reservation.uuid == reservation_id)
             query.delete()
 
-    def remove_reservation_from_aisle(self, reservation_id, aisle_id):
+    def delete_reservation_from_aisle(self, reservation_id, aisle_id):
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation).\
                 filter(models.Reservation.uuid == reservation_id).\
