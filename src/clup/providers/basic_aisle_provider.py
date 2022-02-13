@@ -6,7 +6,7 @@ class BasicAisleProvider(AisleProvider):
         self.aisles = {}
 
     def get_aisles(self):
-        raise UnimplementedError()
+        raise NotImplementedError()
 
     def get_store_aisles(self, store_id):
         if store_id not in self.aisles.keys():
