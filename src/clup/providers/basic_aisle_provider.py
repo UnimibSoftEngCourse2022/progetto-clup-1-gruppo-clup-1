@@ -5,12 +5,15 @@ class BasicAisleProvider(AisleProvider):
     def __init__(self):
         self.aisles = {}
 
+    def get_aisles(self):
+        raise UnimplementedError()
+
     def get_store_aisles(self, store_id):
         if store_id not in self.aisles.keys():
             raise ValueError('wrong store_id')
         return self.aisles[store_id]
 
-    def get_store_aisles_id(self, store_id):
+    def get_store_aisle_ids(self, store_id):
         if store_id not in self.aisles.keys():
             raise ValueError("wrong store_id")
         return [aisle.id for aisle in self.aisles[store_id]]

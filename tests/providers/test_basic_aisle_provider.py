@@ -87,8 +87,8 @@ class TestBasicAisleProvider(unittest.TestCase):
         aauc.execute(store2_id, aisle3_name, categories)
         aauc.execute(store2_id, aisle4_name, categories)
 
-        aisles1_id = bap.get_store_aisles_id(store1_id)
-        aisles2_id = bap.get_store_aisles_id(store1_id)
+        aisles1_id = bap.get_store_aisle_ids(store1_id)
+        aisles2_id = bap.get_store_aisle_ids(store1_id)
         aisles1 = bap.get_store_aisles(store1_id)
         aisles2 = bap.get_store_aisles(store2_id)
         is_aisles_id_correct = True

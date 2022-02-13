@@ -3,9 +3,11 @@ from sqlalchemy.orm import Session
 import src.clup.database.models as models
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
+from src.clup.providers.aisle_provider_abc \
+    import AisleProvider
 
 
-class SqliteAisleProvider:
+class SqliteAisleProvider(AisleProvider):
     def __init__(self, engine):
         self.engine = engine
 
