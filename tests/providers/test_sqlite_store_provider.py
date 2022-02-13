@@ -57,6 +57,24 @@ class TestSqliteStoreProvider(unittest.TestCase):
             self.assertEqual(store.address, 'via1')
             self.assertEqual(store.secret, 'key1')
 
+    def test_store_is_updated(self):
+        ms1 = models.Store(uuid='10', name='s1', address='via1', secret='key1')
+        with Session(self.engine) as session, session.begin():
+            session.add(ms1)
+        updated_store = Store('10', 'news1', 'newvia1', 'newkey1')
+
+        self.sp.update_store(updated_store)
+
+        with Session(self.engine) as session, session.begin():
+            stores = session.query(models.Store).all()
+            store = stores[0]
+
+            self.assertEqual(len(stores), 1)
+            self.assertEqual(store.uuid, '10')
+            self.assertEqual(store.name, 'news1')
+            self.assertEqual(store.address, 'newvia1')
+            self.assertEqual(store.secret, 'newkey1')
+
     def test_store_and_relative_aisles_are_removed_from_db(self):
         ms1 = models.Store(uuid='10', name='s1', address='via1', secret='key1')
         ma1 = models.Aisle(uuid='100', name='a1', categories='1', capacity=5)
@@ -70,7 +88,7 @@ class TestSqliteStoreProvider(unittest.TestCase):
             session.add(msa1)
             session.add(msa2)
 
-        self.sp.remove_store('10')
+        self.sp.delete_store('10')
 
         with Session(self.engine) as session, session.begin():
             stores = session.query(models.Store).all()

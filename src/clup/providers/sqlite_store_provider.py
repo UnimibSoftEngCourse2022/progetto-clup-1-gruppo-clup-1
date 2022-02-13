@@ -2,9 +2,10 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.store import Store
+from src.clup.providers.store_provider_abc import StoreProvider
 
 
-class SqliteStoreProvider:
+class SqliteStoreProvider(StoreProvider):
     def __init__(self, engine):
         self.engine = engine
 
@@ -25,7 +26,17 @@ class SqliteStoreProvider:
             )
             session.add(model_store)
 
-    def remove_store(self, store_id):
+    def update_store(self, store):
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.Store).\
+                filter(models.Store.uuid == store.id)
+            query.update({
+                models.Store.name: store.name,
+                models.Store.address: store.address,
+                models.Store.secret: store.secret,
+            })
+
+    def delete_store(self, store_id):
         with Session(self.engine) as session, session.begin():
             session.query(models.Store).\
                 filter(models.Store.uuid == store_id).delete()
