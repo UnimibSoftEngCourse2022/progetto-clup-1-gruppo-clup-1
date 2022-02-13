@@ -7,7 +7,7 @@ class EnableAdminUseCase:
         if store_id not in [store.id for store in self.store_provider.get_stores()]:
             raise ValueError("store not existing")
         store = [store for store in self.store_provider.get_stores() if store.id == store_id][0]
-        if store.secret== secret:
+        if store.secret == secret:
             if admin_id not in [admin.id for admin in self.admin_provider.get_admins()]:
                 raise ValueError("admin not existing")
             self.admin_provider.get_admin(admin_id).store = store_id
