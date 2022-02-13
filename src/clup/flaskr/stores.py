@@ -24,21 +24,7 @@ bp = Blueprint('stores', __name__)
 slu = StoreListUseCase(setup.store_provider)
 
 asu = AddStoreUseCase(setup.store_provider, setup.lane_provider)
-esselunga = asu.execute('Esselunga', 'Campofiorenzo', 1)
-conad = asu.execute('Conad', 'Catania', 10)
-
 aau = AddAisleUseCase(setup.aisle_provider)
-aau.execute(esselunga.id, 'pane', [Category.MEAT])
-aau.execute(esselunga.id, 'pesce', [Category.FISH])
-aau.execute(conad.id, 'salumi', [Category.FRUIT])
-aau.execute(conad.id, 'frutta', [Category.MEAT])
-
-esselunga_aisle_ids = setup.aisle_provider.get_store_aisles_id(esselunga.id)
-for aisle_id in esselunga_aisle_ids:
-    setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
-conad_aisle_ids = setup.aisle_provider.get_store_aisles_id(conad.id)
-for aisle_id in conad_aisle_ids:
-    setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
@@ -47,6 +33,27 @@ cru = ConsumeReservationUseCase(
 )
 
 usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
+
+@bp.route('/stores/init')
+@login_required
+def init_stores():
+    esselunga = asu.execute('Esselunga', 'Campofiorenzo', 1)
+    conad = asu.execute('Conad', 'Catania', 10)
+
+    aau.execute(esselunga.id, 'pane', [Category.MEAT])
+    aau.execute(esselunga.id, 'pesce', [Category.FISH])
+    aau.execute(conad.id, 'salumi', [Category.FRUIT])
+    aau.execute(conad.id, 'frutta', [Category.MEAT])
+    
+    esselunga_aisle_ids = setup.aisle_provider.get_store_aisle_ids(esselunga.id)
+    for aisle_id in esselunga_aisle_ids:
+        setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
+    conad_aisle_ids = setup.aisle_provider.get_store_aisle_ids(conad.id)
+    for aisle_id in conad_aisle_ids:
+        setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
+
+    return redirect(url_for('stores.show_stores'))
+    
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
@@ -82,7 +89,7 @@ def show_store(store_id):
             if store.id == store_id:
                 pool = setup.lane_provider.get_store_pool(store_id)
                 active_pool_len = len(pool.enabled)
-                aisle_ids = setup.aisle_provider.get_store_aisles_id(store_id)
+                aisle_ids = setup.aisle_provider.get_store_aisle_ids(store_id)
                 args = {
                     'store': store,
                     'active_pool_len': active_pool_len,

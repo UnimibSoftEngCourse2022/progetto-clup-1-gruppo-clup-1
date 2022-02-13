@@ -25,8 +25,7 @@ Store Reservation
     {% endfor %}
 </ul>
 <script>
-    {%
-        for id in enabled_ids %}
+    {% for id in enabled_ids %}
     $("#consume_btn_{{ id }}").click(function () {
         $.ajax({
             url: "{{ url_for('stores.store_pool_handler', store_id=store_id) }}",
@@ -40,11 +39,8 @@ Store Reservation
             },
         });
     });
-    {%
-        endfor %
-    }
-    {%
-        for id in to_free_ids %}
+    {% endfor %}
+    {% for id in to_free_ids %}
     $("#free_btn_{{ id }}").click(function () {
         $.ajax({
             url: "{{ url_for('stores.store_pool_handler', store_id=store_id) }}",
@@ -58,8 +54,6 @@ Store Reservation
             },
         });
     });
-    {%
-        endfor %
-    }
+    {% endfor %}
 </script>
 {% endblock %}
