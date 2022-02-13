@@ -1,4 +1,8 @@
-class BasicReservationProvider:
+from src.clup.providers.reservation_provider_abc \
+    import ReservationProvider
+
+
+class BasicReservationProvider(ReservationProvider):
     def __init__(self):
         self.reservations = []
 
@@ -10,4 +14,8 @@ class BasicReservationProvider:
             raise ValueError('reservation id already present')
         self.reservations.append(reservation)
 
-    # TODO: get_reservations_with_id(reservation_id)
+    def update_reservation(self, reservation):
+        raise NotImplementedError()
+
+    def delete_reservation(self, reservation_id):
+        raise NotImplementedError()
