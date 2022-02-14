@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
@@ -60,6 +60,13 @@ class StoreAdmin(Base):
     id = Column(Integer, primary_key=True)
     admin_uuid = Column(String, ForeignKey('admin.id'), unique=True)
     store_uuid = Column(String, ForeignKey('store.id'))
+
+
+class Appointment(Base):
+    __tablename__ = 'appointment'
+    id = Column(Integer, primary_key=True)
+    reservation_uuid = Column(String, ForeignKey('reservation.uuid'))
+    date_time = Column(DateTime)
 
 
 def create_initial_data(engine):
