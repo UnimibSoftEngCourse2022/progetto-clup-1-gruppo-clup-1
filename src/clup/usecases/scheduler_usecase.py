@@ -11,7 +11,7 @@ class SchedulerUseCase:
         appointments = self.appointment_provider.get_appointments()
         for appointment in appointments:
             if appointment.date_time == date_time:
-                reservations = self.reservation_provider.get_reservations_with_id(appointment.id)
+                reservations = self.reservation_provider.get_reservations_with_id(appointment.reservation_id)
                 store_pool = self.lane_provider.get_store_pool(appointment.store_id)
                 all_in_pools = True
 
