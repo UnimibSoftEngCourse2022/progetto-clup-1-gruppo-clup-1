@@ -1,10 +1,4 @@
-{% extends 'base.html' %}
-{% block title %}
-Stores
-{% endblock %}
-
-{% block content%}
-
+{% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
 <script>
     function updateStore() {
         var new_name = $("#name").val();
@@ -19,152 +13,107 @@ Stores
                 address: new_address,
                 capacity: new_capacity,
             },
-            success: function (result) {
-                <div class="modal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Success</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>All went smooth</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-btn-primary" data-bs-dismiss="modal" onclick="location.reload()">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            success: function(result) { 
+                <div class = "modal" tabindex = "-1" >
+                    <div class = "modal-dialog" >
+                    <div class = "modal-content" >
+                    <div class = "modal-header" >
+                    <h5 class = "modal-title" > Success </h5> 
+                    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button> 
+                </div > 
+                <div class = "modal-body" >
+                    <p > All went smooth </p> 
+                    </div >
+                <div class = "modal-footer" >
+                    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button> 
+                    </div> 
+                </div> 
+            </div>
+        </div>
             },
-            error: function (result) {
-                <div class="modal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Error</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Something went wrong...</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-btn-primary" data-bs-dismiss="modal" onclick="location.reload()">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            error: function(result) { 
+                <div class = "modal" tabindex = "-1" >
+                    <div class = "modal-dialog">
+                    <div class = "modal-content">
+                    <div class = "modal-header">
+                    <h5 class = "modal-title" > Error </h5> 
+                    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button> 
+                </div > 
+                <div class = "modal-body">
+                    <p > Something went wrong... </p> 
+                    </div >
+                     <div class = "modal-footer" >
+                    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button> 
+                </div > 
+            </div>
+        </div > 
+    </div>
             }
         });
     }
 </script>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <div class="container-fluid">
-                <div class="card text-white text-center mb-3" style="max-width: 36rem;">
-                    <div class="card-header color" style="background: #126311">
-                        Store Information
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-title">{{ store.name }}</h2>
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">{{ store.name }}</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
                         <div class="mb-3 row">
                             <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
                             <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext text-white"
-                                    id="staticStoreaddress" value="{{ store.address }}">
+                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress" value="{{ store.address }}">
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="staticWaitingListLength" class="col-sm-2 col-form-label">Waiting List
                                 Length:</label>
                             <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext text-white"
-                                    id="staticWaitingListLength" value="{{ waiting_queue_len }}">
+                                <input type="text" readonly class="form-control-plaintext" id="staticWaitingListLength" value="{{ waiting_queue_len }}">
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="staticActivePoolLength" class="col-sm-2 col-form-label">Active Pool
                                 Length:</label>
                             <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext text-white"
-                                    id="staticActivePoolLength" value="{{ active_pool_len }}">
+                                <input type="text" readonly class="form-control-plaintext" id="staticActivePoolLength" value="{{ active_pool_len }}">
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="staticCurrentPeopleInside" class="col-sm-2 col-form-label">Current People
                                 Inside:</label>
                             <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext text-white"
-                                    id="staticCurrentPeopleInside" value="{{ current_people_quantity }}">
+                                <input type="text" readonly class="form-control-plaintext" id="staticCurrentPeopleInside" value="{{ current_people_quantity }}">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <form action="{{ url_for('stores.make_reservation_into_store', id=store.id) }}" ,
-                                    method="post">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                                    <button class="btn btn-outline-primary btn-lg" type="submit">Make
+                    </div>
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Update Information</p>
+                        <form>
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><br><br>
+                            <input class="form-control" type="text" placeholder="Name" id="name" aria-label="store name"><br>
+                            <input class="form-control" type="text" placeholder="Address" id="address" aria-label="store address"><br>
+                            <input class="form-control" type="text" placeholder="Capacity" id="capacity" aria-label="store capacity"><br>
+                            <button id="update_store_information" type="button" onclick="updateStore()">Update</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col align-items-center">
+                        <form action="{{ url_for('stores.make_reservation_into_store', id=store.id) }}" , method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <button id="make_reservation" type="submit">Make
                                         Reservation</button>
-                                </form>
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-outline-primary btn-lg" id="delete_reservation_wq"
-                                    type="submit">Delete
+                        </form>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="delete_reservation_wq" type="submit">Delete
                                     Reservation(WQ)</button>
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-outline-primary btn-lg" id="free_btn" type="submit">Free store
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="free_btn" type="submit">Free store
                                     space</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card text-white text-center  mb-3" style="max-width: 36rem;">
-                <div class="card-header color" style="background: #126311">
-                    Update Store Information
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ store.name }}</h5>
-                    <form>
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                        <input class="form-control" type="text" placeholder="Name" id="name"
-                            aria-label="store name"><br>
-                        <input class="form-control" type="text" placeholder="Address" id="address"
-                            aria-label="store address"><br>
-                        <input class="form-control" type="text" placeholder="Capacity" id="capacity"
-                            aria-label="store capacity"><br>
-                        <button class="btn btn-outline-primary btn-lg" type="button"
-                            onclick="updateStore()">Update</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="col">
-            <div class="container-fluid">
-                <div class="card text-white text-center  mb-3" style="max-width: 40rem;">
-                    <div class="card-header color" style="background: #126311;">
-                        Reservation
-                    </div>
-                    <div class="list-group">
-                        {% for reservation_id in active_pool %}
-                        <br>
-                        <div class="row">
-                            <div class="col-8">
-                                <input type="text" readonly class="form-control-plaintext text-white"
-                                    value="Consume: {{ reservation_id }}" style="margin-left: 5%;">
-                            </div>
-                            <div class="col-4">
-                                <button class="btn btn-outline-primary btn-lg" id="consume_btn_{{ reservation_id }}"
-                                    type="button">Consume</button>
-                            </div>
-                        </div>
-                        <br>
-                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -173,43 +122,60 @@ Stores
 </div>
 
 <script>
-
-    $("#delete_reservation_wq").click(function () {
+    $("#delete_reservation_wq").click(function() {
         $.ajax({
             url: "{{ url_for('stores.delete_reservation_from_waiting_queue', store_id=store.id) }}",
             type: 'DELETE',
-            success: function (result) {
+            success: function(result) {
                 $("#test").append("Delete Reservation From WQ Success.");
             }
         });
     });
 
-    $("#free_btn").click(function () {
+    $("#free_btn").click(function() {
         $.ajax({
             url: "{{ url_for('stores.free_handler', store_id=store.id) }}",
             type: 'DELETE',
             data: {
                 csrf_token: '{{ csrf_token() }}',
             },
-            success: function (result) {
+            success: function(result) {
                 location.reload();
             },
         });
     });
 
-    {% for reservation_id in active_pool %}
-    $("#consume_btn_{{ reservation_id }}").click(function () {
+    { % for reservation_id in active_pool % }
+    $("#consume_btn_{{ reservation_id }}").click(function() {
         $.ajax({
             url: "{{ url_for('stores.consume_handler', store_id=store.id, reservation_id=reservation_id) }}",
             type: 'DELETE',
             data: {
                 csrf_token: '{{ csrf_token() }}',
             },
-            success: function (result) {
+            success: function(result) {
                 location.reload();
             },
         });
-    });
-    {% endfor %}
+    }); 
+    { % endfor % }
 </script>
-{% endblock %}
+{% endblock %}{% block style %}
+<style>
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+    
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information {
+        background-color: #FF8A00E6;
+        ;
+    }
+</style>{% endblock %}
