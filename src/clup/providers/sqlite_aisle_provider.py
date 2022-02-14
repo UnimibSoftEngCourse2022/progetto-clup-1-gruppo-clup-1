@@ -46,6 +46,8 @@ class SqliteAisleProvider(AisleProvider):
             return [sa.aisle_uuid for sa in store_aisles]
 
     def add_aisle(self, store_id, aisle):
+        if aisle.id in [a.id for a in self.get_aisles()]:
+            raise ValueError("unable to add new aisle, id already present")
         with Session(self.engine) as session, session.begin():
             sorted_values = sorted(str(c.value) for c in aisle.categories)
             categories_str = ','.join(sorted_values)
@@ -63,6 +65,8 @@ class SqliteAisleProvider(AisleProvider):
             session.add(model_store_aisle)
 
     def remove_aisle(self, aisle_id):
+        if aisle_id not in [a.id for a in self.get_aisles()]:
+            raise ValueError("unable to remove aisle, id not present")
         with Session(self.engine) as session, session.begin():
             session.query(models.Aisle). \
                 filter(models.Aisle.uuid == aisle_id).delete()
@@ -70,6 +74,8 @@ class SqliteAisleProvider(AisleProvider):
                 filter(models.StoreAisle.aisle_uuid == aisle_id).delete()
 
     def update_aisle(self, aisle):
+        if aisle.id not in [a.id for a in self.get_aisles()]:
+            raise ValueError("unable to update aisle, id not present")
         with Session(self.engine) as session, session.begin():
             sorted_values = sorted(str(c.value) for c in aisle.categories)
             categories_str = ','.join(sorted_values)

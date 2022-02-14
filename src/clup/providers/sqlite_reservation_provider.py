@@ -18,6 +18,9 @@ class SqliteReservationProvider(ReservationProvider):
             return reservations
 
     def get_user_reservations(self, user_id):
+        if user_id not in [res.user_id for res in self.get_reservations()]:
+            raise ValueError('user_id not present, unable to find his reservations')
+
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation). \
                 filter(models.Reservation.user_id == user_id)
@@ -31,6 +34,10 @@ class SqliteReservationProvider(ReservationProvider):
             query = session.query(models.Reservation). \
                 filter(models.Reservation.uuid == reservation_id)
             model_reservations = query.all()
+
+            if len(model_reservations) == 0:
+                raise ValueError("reservation_id not valid, unable to find any reservation")
+
             reservations = [Reservation(mr.uuid, mr.aisle_id, mr.user_id)
                             for mr in model_reservations]
             return reservations
@@ -48,6 +55,8 @@ class SqliteReservationProvider(ReservationProvider):
         raise NotImplementedError()
 
     def delete_reservation(self, reservation_id):
+        if reservation_id not in [r.id for r in self.get_reservations()]:
+            raise ValueError("unable to delete reservation, not existing")
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation). \
                 filter(models.Reservation.uuid == reservation_id)

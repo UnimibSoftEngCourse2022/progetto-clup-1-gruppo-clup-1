@@ -50,21 +50,24 @@ class TestSqliteReservationProvider(unittest.TestCase):
             session.add(mr2)
 
         reservations = self.rp.get_user_reservations('1000')
+
+        with self.assertRaises(ValueError):
+            self.rp.get_user_reservations('not an id')
+
         r = Reservation('10', '100', '1000')
 
         self.assertEqual(len(reservations), 1)
         self.assertTrue(r in reservations)
 
-    def test_no_reservations_with_unexistent_user_id(self):
+    def test_value_error_with_unexistent_user_id(self):
         mr1 = models.Reservation(uuid='10', aisle_id='100', user_id='1000')
         mr2 = models.Reservation(uuid='20', aisle_id='200', user_id='2000')
         with Session(self.engine) as session, session.begin():
             session.add(mr1)
             session.add(mr2)
 
-        reservations = self.rp.get_user_reservations('9000')
-
-        self.assertEqual(len(reservations), 0)
+        with self.assertRaises(ValueError):
+            reservations = self.rp.get_user_reservations('9000')
 
     def test_only_reservations_with_given_uuid_id_are_returned(self):
         mr1 = models.Reservation(uuid='10', aisle_id='100', user_id='1000')

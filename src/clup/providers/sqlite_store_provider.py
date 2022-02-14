@@ -18,6 +18,9 @@ class SqliteStoreProvider(StoreProvider):
 
     def add_store(self, store):
         with Session(self.engine) as session, session.begin():
+            if store.id in [s.id for s in self.get_stores()]:
+                raise ValueError("store_id already present")
+
             model_store = models.Store(
                 uuid=store.id,
                 name=store.name,
@@ -27,6 +30,9 @@ class SqliteStoreProvider(StoreProvider):
             session.add(model_store)
 
     def update_store(self, store):
+        if store.id not in [s.id for s in self.get_stores()]:
+            raise ValueError("store_id not present, unable to update")
+
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Store). \
                 filter(models.Store.uuid == store.id)
@@ -37,6 +43,9 @@ class SqliteStoreProvider(StoreProvider):
             })
 
     def delete_store(self, store_id):
+        if store_id not in [s.id for s in self.get_stores()]:
+            raise ValueError("store_id not present, unable to update")
+
         with Session(self.engine) as session, session.begin():
             session.query(models.Store). \
                 filter(models.Store.uuid == store_id).delete()

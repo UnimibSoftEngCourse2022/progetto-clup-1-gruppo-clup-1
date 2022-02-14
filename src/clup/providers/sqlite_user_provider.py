@@ -17,6 +17,8 @@ class SqliteUserProvider:
 
     def add_user(self, user):
         with Session(self.engine) as session, session.begin():
+            if user.id in [u.id for u in self.get_users()]:
+                raise ValueError("user_id already present")
             model_user = models.User(
                 uuid=user.id,
                 username=user.username,
@@ -26,14 +28,20 @@ class SqliteUserProvider:
 
     def remove_user(self, user_id):
         with Session(self.engine) as session, session.begin():
+            if user_id not in [u.id for u in self.get_users()]:
+                raise ValueError("user_id not present")
             session.query(models.User). \
                 filter(models.User.uuid == user_id).delete()
 
     def update_user(self, user):
         with Session(self.engine) as session, session.begin():
+            if user.id not in [u.id for u in self.get_users()]:
+                raise ValueError("user_id already present")
+
             query = session.query(models.User). \
                 filter(models.User.uuid == user.id)
             query.update({
                 models.User.username: user.username,
                 models.User.password: user.password,
             })
+

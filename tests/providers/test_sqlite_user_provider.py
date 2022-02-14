@@ -46,6 +46,8 @@ class TestSqliteUserProvider(unittest.TestCase):
         u = User('10', 'u1', 'p1')
 
         self.up.add_user(u)
+        with self.assertRaises(ValueError):
+            self.up.add_user(u)
 
         with Session(self.engine) as session, session.begin():
             users = session.query(models.User).all()
@@ -61,6 +63,8 @@ class TestSqliteUserProvider(unittest.TestCase):
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
 
+        with self.assertRaises(ValueError):
+            self.up.remove_user('not_existing_id')
         self.up.remove_user('10')
 
         with Session(self.engine) as session, session.begin():
@@ -73,6 +77,9 @@ class TestSqliteUserProvider(unittest.TestCase):
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
         updated_user = User('10', 'newu1', 'newp1')
+
+        with self.assertRaises(ValueError):
+            self.up.update_user(User('wrong_id', 'newu2', 'newp2'))
 
         self.up.update_user(updated_user)
 

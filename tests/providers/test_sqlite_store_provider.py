@@ -47,6 +47,9 @@ class TestSqliteStoreProvider(unittest.TestCase):
 
         self.sp.add_store(s)
 
+        with self.assertRaises(ValueError):
+            self.sp.add_store(s)
+
         with Session(self.engine) as session, session.begin():
             stores = session.query(models.Store).all()
             store = stores[0]
@@ -89,7 +92,9 @@ class TestSqliteStoreProvider(unittest.TestCase):
             session.add(msa2)
 
         self.sp.delete_store('10')
-
+        with self.assertRaises(ValueError):
+            self.sp.delete_store('10')
+            
         with Session(self.engine) as session, session.begin():
             stores = session.query(models.Store).all()
             aisles = session.query(models.Aisle).all()
