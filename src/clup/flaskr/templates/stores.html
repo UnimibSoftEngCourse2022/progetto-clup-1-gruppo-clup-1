@@ -4,19 +4,47 @@
         window.location.href = "{{ url_for('stores.add_store') }}";
     }
 </script>
-<div class="container-fluid">
-    <div class="card text-white text-center  mb-3" style="max-width: 36rem;">
-        <div class="card-header color" style="background: #50817e;">
-            All Stores
-        </div>
-        <div class="card-body">
-            <div class="list-group">
-                {% for store in stores %}
-                <a href="{{ url_for('stores.show_store', id=store.id) }}" class="list-group-item list-group-item-action" style="color: rgb(0, 0, 0); background-color:rgb(255, 255, 255);">{{ store.name }}</a> {% endfor %}
+
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text-white">Manage your stores <br> or add a new one.</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <div class="form-outline flex-fill">
+                                <input id="search-input" type="search" id="form1" class="form-control form-control-lg" />
+                                <label class="form-label" for="form1">Search your stores</label>
+                            </div>
+                            <button id="search-button" type="button" class="btn btn-primary">
+                  <i class="fas fa-search"></i>
+                </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" onclick="performAddStore()">Add a Store</button>
         </div>
     </div>
 </div>
 
-{% endblock %}
+<div class="card text-white text-center  mb-3" style="max-width: 36rem;">
+    <div class="card-header color" style="background: #50817e;">
+        All Stores
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            {% for store in stores %}
+            <a href="{{ url_for('stores.show_store', id=store.id) }}" class="list-group-item list-group-item-action" style="color: rgb(0, 0, 0); background-color:rgb(255, 255, 255);">{{ store.name }}</a> {% endfor %}
+        </div>
+        <button type="submit" onclick="performAddStore()">Add a Store</button>
+    </div>
+</div>
+<script>
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+    searchButton.addEventListener('click', () => {
+        const inputValue = searchInput.value;
+        alert(inputValue);
+    });
+</script>{% endblock %}
