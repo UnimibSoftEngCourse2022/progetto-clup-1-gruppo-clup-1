@@ -19,7 +19,7 @@ class SqliteReservationProvider(ReservationProvider):
 
     def get_user_reservations(self, user_id):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Reservation).\
+            query = session.query(models.Reservation). \
                 filter(models.Reservation.user_id == user_id)
             model_reservations = query.all()
             reservations = [Reservation(mr.uuid, mr.aisle_id, mr.user_id)
@@ -28,7 +28,7 @@ class SqliteReservationProvider(ReservationProvider):
 
     def get_reservations_with_id(self, reservation_id):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Reservation).\
+            query = session.query(models.Reservation). \
                 filter(models.Reservation.uuid == reservation_id)
             model_reservations = query.all()
             reservations = [Reservation(mr.uuid, mr.aisle_id, mr.user_id)
@@ -49,13 +49,13 @@ class SqliteReservationProvider(ReservationProvider):
 
     def delete_reservation(self, reservation_id):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Reservation).\
+            query = session.query(models.Reservation). \
                 filter(models.Reservation.uuid == reservation_id)
             query.delete()
 
     def delete_reservation_from_aisle(self, reservation_id, aisle_id):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Reservation).\
-                filter(models.Reservation.uuid == reservation_id).\
+            query = session.query(models.Reservation). \
+                filter(models.Reservation.uuid == reservation_id). \
                 filter(models.Reservation.aisle_id == aisle_id)
             query.delete()

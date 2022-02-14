@@ -26,12 +26,12 @@ class SqliteUserProvider:
 
     def remove_user(self, user_id):
         with Session(self.engine) as session, session.begin():
-            session.query(models.User).\
+            session.query(models.User). \
                 filter(models.User.uuid == user_id).delete()
 
     def update_user(self, user):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.User).\
+            query = session.query(models.User). \
                 filter(models.User.uuid == user.id)
             query.update({
                 models.User.username: user.username,

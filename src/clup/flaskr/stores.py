@@ -34,6 +34,7 @@ cru = ConsumeReservationUseCase(
 
 usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
 
+
 @bp.route('/stores/init')
 @login_required
 def init_stores():
@@ -44,7 +45,7 @@ def init_stores():
     aau.execute(esselunga.id, 'pesce', [Category.FISH])
     aau.execute(conad.id, 'salumi', [Category.FRUIT])
     aau.execute(conad.id, 'frutta', [Category.MEAT])
-    
+
     esselunga_aisle_ids = setup.aisle_provider.get_store_aisle_ids(esselunga.id)
     for aisle_id in esselunga_aisle_ids:
         setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
@@ -53,7 +54,6 @@ def init_stores():
         setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
 
     return redirect(url_for('stores.show_stores'))
-    
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def show_store(store_id):
                 capacity = int(request.values['capacity'])
                 usu.execute(store, capacity)
                 return redirect(url_for('stores.show_store',
-                                store_id=store.id))
+                                        store_id=store.id))
     else:
         for store in slu.execute():
             if store.id == store_id:

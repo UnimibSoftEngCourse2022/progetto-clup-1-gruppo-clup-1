@@ -4,9 +4,9 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
+import src.clup.database.models as models
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
-import src.clup.database.models as models
 from src.clup.providers.sqlite_aisle_provider import SqliteAisleProvider
 
 

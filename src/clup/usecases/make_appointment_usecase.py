@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 
+from src.clup.entities.appointment import Appointment
 from src.clup.entities.reservation import Reservation
 
 
@@ -9,12 +10,13 @@ class MakeAppointmentUseCase:
         self.reservation_provider = reservation_provider
         self.appointment_provider = appointment_provider
 
-    def execute(self, user_id, aisle_ids, date):
+    def execute(self, user_id, aisle_ids, store, date):
         reservation_id = str(uuid.uuid1())
         if type(date) is not datetime:
             raise ValueError("Not a correct date")
 
-        self.appointment_provider.add_appointment(reservation_id, date)
+        appointment = Appointment(reservation_id, store, date)
+        self.appointment_provider.add_appointment(appointment)
 
         for aisle_id in aisle_ids:
             res = Reservation(reservation_id, aisle_id, user_id)

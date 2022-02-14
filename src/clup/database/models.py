@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
-
 Base = declarative_base()
 
 
@@ -66,6 +65,7 @@ class Appointment(Base):
     __tablename__ = 'appointment'
     id = Column(Integer, primary_key=True)
     reservation_uuid = Column(String, ForeignKey('reservation.uuid'))
+    store_id = Column(String, ForeignKey('store.uuid'))
     date_time = Column(DateTime)
 
 

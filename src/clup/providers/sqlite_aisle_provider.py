@@ -29,7 +29,7 @@ class SqliteAisleProvider(AisleProvider):
     def get_store_aisles(self, store_id):
         aisle_ids = self.get_store_aisle_ids(store_id)
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Aisle).\
+            query = session.query(models.Aisle). \
                 filter(models.Aisle.uuid.in_(aisle_ids))
             model_aisles = query.all()
             aisles = [Aisle(ma.uuid, ma.name,
@@ -40,7 +40,7 @@ class SqliteAisleProvider(AisleProvider):
 
     def get_store_aisle_ids(self, store_id):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.StoreAisle).\
+            query = session.query(models.StoreAisle). \
                 filter(models.StoreAisle.store_uuid == store_id)
             store_aisles = query.all()
             return [sa.aisle_uuid for sa in store_aisles]
@@ -64,16 +64,16 @@ class SqliteAisleProvider(AisleProvider):
 
     def remove_aisle(self, aisle_id):
         with Session(self.engine) as session, session.begin():
-            session.query(models.Aisle).\
+            session.query(models.Aisle). \
                 filter(models.Aisle.uuid == aisle_id).delete()
-            session.query(models.StoreAisle).\
+            session.query(models.StoreAisle). \
                 filter(models.StoreAisle.aisle_uuid == aisle_id).delete()
 
     def update_aisle(self, aisle):
         with Session(self.engine) as session, session.begin():
             sorted_values = sorted(str(c.value) for c in aisle.categories)
             categories_str = ','.join(sorted_values)
-            query = session.query(models.Aisle).\
+            query = session.query(models.Aisle). \
                 filter(models.Aisle.uuid == aisle.id)
             query.update({
                 models.Aisle.name: aisle.name,

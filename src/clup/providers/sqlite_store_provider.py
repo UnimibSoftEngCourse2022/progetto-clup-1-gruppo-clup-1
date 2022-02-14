@@ -28,7 +28,7 @@ class SqliteStoreProvider(StoreProvider):
 
     def update_store(self, store):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Store).\
+            query = session.query(models.Store). \
                 filter(models.Store.uuid == store.id)
             query.update({
                 models.Store.name: store.name,
@@ -38,17 +38,17 @@ class SqliteStoreProvider(StoreProvider):
 
     def delete_store(self, store_id):
         with Session(self.engine) as session, session.begin():
-            session.query(models.Store).\
+            session.query(models.Store). \
                 filter(models.Store.uuid == store_id).delete()
-            query = session.query(models.StoreAisle).\
+            query = session.query(models.StoreAisle). \
                 filter(models.StoreAisle.store_uuid == store_id)
             store_aisle_ids = [msa.aisle_uuid for msa in query.all()]
             query.delete()
-            session.query(models.Aisle).\
+            session.query(models.Aisle). \
                 filter(models.Aisle.uuid.in_(store_aisle_ids)).delete()
 
     def get_admin_ids(self, store_id):
         with Session(self.engine) as session, session.begin():
-            model_store_admins = session.query(models.StoreAdmin).\
+            model_store_admins = session.query(models.StoreAdmin). \
                 filter(models.StoreAdmin.store_uuid == store_id).all()
             return [msa.admin_uuid for msa in model_store_admins]

@@ -4,8 +4,8 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from src.clup.entities.store import Store
 import src.clup.database.models as models
+from src.clup.entities.store import Store
 from src.clup.providers.sqlite_store_provider \
     import SqliteStoreProvider
 

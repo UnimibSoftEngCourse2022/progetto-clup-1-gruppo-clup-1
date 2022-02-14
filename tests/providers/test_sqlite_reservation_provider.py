@@ -4,8 +4,8 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from src.clup.entities.reservation import Reservation
 import src.clup.database.models as models
+from src.clup.entities.reservation import Reservation
 from src.clup.providers.sqlite_reservation_provider \
     import SqliteReservationProvider
 

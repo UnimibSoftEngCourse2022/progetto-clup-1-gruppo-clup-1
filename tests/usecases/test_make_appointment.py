@@ -1,16 +1,20 @@
 import datetime
 import unittest
+
+from src.clup.entities.appointment import Appointment
 from src.clup.usecases.make_appointment_usecase import MakeAppointmentUseCase
+
 
 class MockAppointmentProvider:
     def __init__(self):
         self.appointments = {}
 
-    def add_appointment(self, reservation_id, date):
-        self.appointments[reservation_id] = (reservation_id, date)
+    def add_appointment(self, appointment):
+        self.appointments[appointment.reservation_id] = appointment
 
     def get_appointment(self, reservation_id):
         return self.appointments[reservation_id]
+
 
 class MockReservationProvider:
     def __init__(self):
@@ -30,7 +34,7 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
         aisle_ids = [1, 2, 3]
         date = datetime.datetime(2022, 2, 14, 10, 30)
 
-        mau.execute(user_id, aisle_ids, date)
+        mau.execute(user_id, aisle_ids, 1, date)
 
         self.assertEqual(len(mrp.reservations), 3)
         self.assertEqual(len(mapp.appointments), 1)
@@ -44,7 +48,7 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
         date = 5
 
         with self.assertRaises(ValueError):
-            mau.execute(user_id, aisle_ids, date)
+            mau.execute(user_id, aisle_ids, 1, date)
 
     def test_add_appointment_has_correct_info_added(self):
         mrp = MockReservationProvider()
@@ -54,13 +58,8 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
         aisle_ids = [1, 2, 3]
         date = datetime.datetime(2022, 2, 14, 10, 30)
 
-        res_id = mau.execute(user_id, aisle_ids, date)
+        res_id = mau.execute(user_id, aisle_ids, 1, date)
 
-        _, date_from_tuple = mapp.get_appointment(res_id)
-        is_date_correct = date_from_tuple == date
-        for reservation in mrp.reservations.values():
-            is_id_correct = reservation.id == res_id and reservation.user_id == user_id
+        appointment = Appointment(res_id, 1, date)
 
-            self.assertTrue(is_id_correct)
-
-        self.assertTrue(is_date_correct)
+        self.assertEqual(appointment, mapp.get_appointment(res_id))

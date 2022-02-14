@@ -26,12 +26,12 @@ class SqliteAdminProvider:
 
     def remove_admin(self, admin_id):
         with Session(self.engine) as session, session.begin():
-            session.query(models.Admin).\
+            session.query(models.Admin). \
                 filter(models.Admin.uuid == admin_id).delete()
 
     def update_admin(self, admin):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Admin).\
+            query = session.query(models.Admin). \
                 filter(models.Admin.uuid == admin.id)
             query.update({
                 models.Admin.username: admin.username,
@@ -40,6 +40,6 @@ class SqliteAdminProvider:
 
     def get_store_id(self, admin_id):
         with Session(self.engine) as session, session.begin():
-            model_store_admin = session.query(models.StoreAdmin).\
+            model_store_admin = session.query(models.StoreAdmin). \
                 filter(models.StoreAdmin.admin_uuid == admin_id).first()
             return model_store_admin.store_uuid

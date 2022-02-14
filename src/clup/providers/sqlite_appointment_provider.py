@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
+from src.clup.entities.appointment import Appointment
 
 
 class SqliteAppointmentProvider:
@@ -15,15 +16,23 @@ class SqliteAppointmentProvider:
             )
             session.add(model_appointment)
 
-    def get_appointments_id(self):
+    def get_appointments(self):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Appointment.reservation_uuid)
-            appointments_id = query.all()
-            return [str(app_id) for app_id in appointments_id]
+            query = session.query(models.Appointment)
+            appointments_model = query.all()
+            appointments = []
+            for app_m in appointments_model:
+                appointment = Appointment(
+                    reservation_id=app_m.reservation_uuid,
+                    store_id=app_m.store_id,
+                    date_time=app_m.date_time
+                )
+                appointments.append(appointment)
+            return appointments
 
     def get_appointment(self, reservation_id):
         with Session(self.engine) as session, session.begin():
-            query = session.query(models.Appointment).\
+            query = session.query(models.Appointment). \
                 filter(models.Appointment.reservation_uuid == reservation_id)
             reservation = query.all()[0]
             return reservation
