@@ -1,9 +1,7 @@
 import unittest
-from collections import defaultdict
 
-from src.clup.entities.active_pool import ActivePool
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class MockStoreProvider:
@@ -17,20 +15,9 @@ class MockStoreProvider:
         self.stores.append(store)
 
 
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.pools = defaultdict(ActivePool)
-
-    def get_waiting_queue(self, store_id):
-        raise NotImplementedError
-
-    def get_active_pool(self, store_id):
-        return self.pools[store_id]
-
-
 class TestAddStoreUseCase(unittest.TestCase):
     def setUp(self):
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.store_provider = MockStoreProvider()
         self.u = AddStoreUseCase(self.store_provider, self.queue_provider)
 
@@ -83,6 +70,6 @@ class TestAddStoreUseCase(unittest.TestCase):
         address = 'address'
         capacity = 1
         store = self.u.execute(name, address, capacity)
-        active_pool = self.queue_provider.get_active_pool(store.id)
+        active_pool = self.queue_provider.get_aisle_pool(store.id)
 
         self.assertEqual(capacity, active_pool.capacity)

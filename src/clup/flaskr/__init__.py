@@ -14,11 +14,11 @@ login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(u_id):
-    from src.clup.flaskr.global_setup import bup, bap
+    from src.clup.flaskr.global_setup import user_provider, admin_provider
     from src.clup.flaskr.flask_user import FlaskUser
-    
-    users = bup.get_users()
-    admins = bap.get_admins()
+
+    users = user_provider.get_users()
+    admins = admin_provider.get_admins()
     if u_id in [user.id for user in users]:
         return FlaskUser(u_id)
     elif u_id in [admin.id for admin in admins]:

@@ -1,11 +1,9 @@
 import dataclasses
 import unittest
-from collections import defaultdict
 
-from src.clup.entities.active_pool import ActivePool
 from src.clup.entities.store import Store
-from src.clup.providers.queue_provider_abc import QueueProvider
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
+from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
 class MockStoreProvider:
@@ -22,21 +20,10 @@ class MockStoreProvider:
                 dataclasses.replace(store_item, **args)
 
 
-class MockQueueProvider(QueueProvider):
-    def __init__(self):
-        self.pools = defaultdict(ActivePool)
-
-    def get_waiting_queue(self, store_id):
-        raise NotImplementedError
-
-    def get_active_pool(self, store_id):
-        return self.pools[store_id]
-
-
 class TestUpdateStoreUseCase(unittest.TestCase):
     def setUp(self):
         self.store_provider = MockStoreProvider()
-        self.queue_provider = MockQueueProvider()
+        self.queue_provider = MockLaneProvider()
         self.u = UpdateStoreUseCase(self.store_provider, self.queue_provider)
         self.store = Store(1, 'name', 'address')
         self.store_provider.stores.append(self.store)
@@ -80,8 +67,8 @@ class TestUpdateStoreUseCase(unittest.TestCase):
     def test_update_store_forwards_max_capacity_error(self):
         store_id = 1
         store = Store(1, 'name', 'address')
-        self.queue_provider.get_active_pool(store_id).capacity = 1
-        self.queue_provider.get_active_pool(store_id).add('a')
+        self.queue_provider.get_aisle_pool(store_id).capacity = 1
+        self.queue_provider.get_aisle_pool(store_id).add('a')
 
         with self.assertRaises(ValueError):
             self.u.execute(store, 0)

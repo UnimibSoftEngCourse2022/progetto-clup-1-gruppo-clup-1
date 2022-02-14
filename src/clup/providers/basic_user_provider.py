@@ -17,3 +17,8 @@ class BasicUserProvider:
         if user_id not in self.users.keys():
             raise ValueError("user-id not existing")
         del self.users[user_id]
+
+    def update_user(self, user):
+        if user.id not in self.users.keys():
+            raise ValueError("user_id not existing")
+        self.users[user.id] = user

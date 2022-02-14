@@ -1,24 +1,24 @@
 import unittest
 from collections.abc import Iterable
 
-from src.clup.entities.active_pool import ActivePool
+from src.clup.entities.aisle_pool import AislePool
 from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyPoolError
 
 
-class TestActivePool(unittest.TestCase):
+class TestAislePool(unittest.TestCase):
     def setUp(self):
-        self.ap = ActivePool(capacity=10)
+        self.ap = AislePool(capacity=10)
 
     def test_is_empty_after_init(self):
-        ap = ActivePool()
+        ap = AislePool()
 
         self.assertTrue(len(ap) == 0)
         self.assertEqual(ap.capacity, 0)
         self.assertEqual(ap.current_quantity, 0)
 
     def test_capacity_is_passed_in_init(self):
-        ap = ActivePool(capacity=10)
+        ap = AislePool(capacity=10)
 
         self.assertTrue(len(ap) == 0)
         self.assertEqual(ap.capacity, 10)
@@ -41,7 +41,7 @@ class TestActivePool(unittest.TestCase):
             self.ap.capacity = -1
 
     def test_capacity_is_not_set_less_than_total_elements(self):
-        ap = ActivePool(capacity=10)
+        ap = AislePool(capacity=10)
         ap.add('a')
         ap.add('b')
 
@@ -54,7 +54,7 @@ class TestActivePool(unittest.TestCase):
         self.assertTrue(len(self.ap) == 1)
 
     def test_add_throws_if_max_capacity_is_reached(self):
-        ap = ActivePool(capacity=1)
+        ap = AislePool(capacity=1)
         ap.add('a')
         ap.consume('a')
 
@@ -62,7 +62,7 @@ class TestActivePool(unittest.TestCase):
             ap.add('b')
 
     def test_add_throws_if_active_elements_fill_remaining_capacity(self):
-        ap = ActivePool(capacity=1)
+        ap = AislePool(capacity=1)
         ap.add('a')
 
         with self.assertRaises(MaxCapacityReachedError):

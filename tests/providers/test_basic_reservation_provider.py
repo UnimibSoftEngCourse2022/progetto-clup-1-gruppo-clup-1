@@ -30,12 +30,3 @@ class TestBasicReservationProvider(unittest.TestCase):
 
         self.assertTrue(r1 in self.brp.get_reservations())
         self.assertTrue(r2 in self.brp.get_reservations())
-
-    def test_add_reservations_with_same_id_throws(self):
-        r1 = Reservation(1, 2, 3)
-        r2 = Reservation(1, 4, 5)
-
-        self.brp.add_reservation(r1)
-
-        with self.assertRaises(ValueError):
-            self.brp.add_reservation(r2)

@@ -53,18 +53,6 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         with self.assertRaises(ValueError):
             ar.execute(admin2_username, admin2_password)
 
-    def test_admin_registered_store_set_to_default(self):
-        admin1_username = 1
-        admin1_password = 10
-        m_a_p = MockAdminProvider()
-        ar = AdminRegisterUsecase(m_a_p)
-
-        ar.execute(admin1_username, admin1_password)
-        admin = [admin for admin in m_a_p.get_admins()][0]
-        is_store_default = admin.store == 'default'
-
-        self.assertTrue(is_store_default)
-
     def test_admin_username_is_unique(self):
         m_a_p = MockAdminProvider()
         ar = AdminRegisterUsecase(m_a_p)

@@ -18,7 +18,7 @@ class UpdateStoreUseCase:
         for store_item in stores:
             if store_item.id == store.id:
                 self.store_provider.update_store(store)
-                pool = self.queue_provider.get_active_pool(store_item.id)
+                pool = self.queue_provider.get_aisle_pool(store_item.id)
                 pool.capacity = capacity
                 found = True
 

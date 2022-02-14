@@ -1,9 +1,9 @@
 import unittest
 from collections import defaultdict
 
-from src.clup.entities.active_pool import ActivePool
+from src.clup.entities.aisle_pool import AislePool
 from src.clup.entities.store import Store
-from src.clup.providers.queue_provider_abc import QueueProvider
+from src.clup.providers.lane_provider_abc import LaneProvider
 from src.clup.usecases.delete_store_usecase import DeleteStoreUseCase
 
 
@@ -21,14 +21,14 @@ class MockStoreProvider:
         self.stores.remove(to_remove)
 
 
-class MockQueueProvider(QueueProvider):
+class MockQueueProvider(LaneProvider):
     def __init__(self):
-        self.pools = defaultdict(ActivePool)
+        self.pools = defaultdict(AislePool)
 
     def get_waiting_queue(self, store_id):
         raise NotImplementedError
 
-    def get_active_pool(self, store_id):
+    def get_aisle_pool(self, store_id):
         return self.pools[store_id]
 
 

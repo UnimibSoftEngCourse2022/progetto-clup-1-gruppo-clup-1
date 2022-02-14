@@ -6,6 +6,7 @@ This is a typical structure for a python test file.
 
 AAA structure.  
 We can imagine our test is split into 3 sections:
+
 * Arrange: this is were we prepare our context
 * Act: here we run the behaviour we want to test
 * Assert: here we check for conditions

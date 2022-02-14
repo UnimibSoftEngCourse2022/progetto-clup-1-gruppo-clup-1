@@ -27,6 +27,6 @@ class AddStoreUseCase:
             raise ValueError('capacity is negative')
 
         self.store_provider.add_store(new_store)
-        active_pool = self.queue_provider.get_active_pool(store_id)
+        active_pool = self.queue_provider.get_aisle_pool(store_id)
         active_pool.capacity = capacity
         return new_store

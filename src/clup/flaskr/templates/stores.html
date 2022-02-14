@@ -6,20 +6,24 @@ Stores
 {% block content%}
 <h2>Stores</h2>
 
-<form action="/stores", method = "post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+<form , action="/stores" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
     <label for="name">Store name:</label><br>
-    <input type="text" id="name" name="name" placeholder="ex. Esselunga"><br>
+    <input id="name" name="name" placeholder="ex. Esselunga" type="text"><br>
     <label for="address">Store address:</label><br>
-    <input type="text" id="address" name="address" placeholder="ex. Via Garibaldi 10"><br>
+    <input id="address" name="address" placeholder="ex. Via Garibaldi 10" type="text"><br>
     <label for="capacity">Store capacity:</label><br>
-    <input type="int" id="capacity" name="capacity" placeholder="ex. 150"><br>
+    <input id="capacity" name="capacity" placeholder="ex. 150" type="int"><br>
     <input type="submit" value="Add">
 </form>
 
 <ul>
     {% for store in stores %}
-    <li><a href="{{ url_for('stores.show_store', id=store.id) }}" >{{ store.name }}</a> </li>
+    <li>
+        <a href="{{ url_for('stores.show_store', store_id=store.id) }}">
+            {{ store.name }}
+        </a>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}
