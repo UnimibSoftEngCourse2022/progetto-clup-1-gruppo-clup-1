@@ -1,6 +1,7 @@
 import flask
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
+from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
 from src.clup.flaskr.global_setup import bsp, bqp, brp
@@ -30,6 +31,8 @@ fru = FreeReservationUseCase(bqp)
 cru = ConsumeReservationUseCase(bqp)
 
 usu = UpdateStoreUseCase(bsp, bqp)
+
+ssu = SearchStoreUseCase(bsp)
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
