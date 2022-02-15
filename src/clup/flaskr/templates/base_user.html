@@ -1,5 +1,38 @@
 {% extends 'base.html' %} {% block icon %}
-<div style="display:flex; justify-content:flex-end; width:100%; padding:0;  margin-top: 5%; overflow-y: hidden">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto">
+
+      <li class="nav-item">
+        <a class="nav-link" href="">About</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+           <a class="dropdown-item">{{ user.username }}</a>
+          <a class="dropdown-item">e-mail</a>
+          <a class="dropdown-item">indirizzo</a>
+
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{url_for('users.change_password_page')}}">Change password</a>
+          <a class="dropdown-item" href="{{url_for('users.user_logout')}}">Logout</a>
+
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>
+{%endblock%} {% block content %} {% if current_user.is_authenticated %} {% endif %} {% endblock %}
+<!--<div style="display:flex; justify-content:flex-end; width:100%; padding:0;  margin-top: 5%; overflow-y: hidden">
     <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="current-color" bi bi-person-circle
              viewBox="0 0 16 16">
@@ -24,9 +57,9 @@
             </div>
             <div class="modal-body">
                 e-mail:
-                <!-- inserire email-->
+
                 <br> indirizzo:
-                <!-- inserire indirizzo-->
+
             </div>
             <div class="modal-footer">
                 <a href="{{url_for('users.change_password_page')}}" class="button">Change
@@ -37,5 +70,4 @@
             </div>
         </div>
     </div>
-</div>
-{%endblock%} {% block content %} {% if current_user.is_authenticated %} {% endif %} {% endblock %}
+</div>-->
