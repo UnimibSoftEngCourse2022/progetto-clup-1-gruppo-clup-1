@@ -48,9 +48,9 @@ class MockAisleProvider:
 class TestMakeAppointmentUsecase(unittest.TestCase):
     def setUp(self):
         self.maip = MockAisleProvider()
-        aisle1 = Aisle(1, 'aisle1', [], 10)
-        aisle2 = Aisle(2, 'aisle2', [], 10)
-        aisle3 = Aisle(3, 'aisle3', [], 10)
+        aisle1 = Aisle(1, 'aisle1', [], 100)
+        aisle2 = Aisle(2, 'aisle2', [], 100)
+        aisle3 = Aisle(3, 'aisle3', [], 100)
         self.maip.add_aisle(aisle1)
         self.maip.add_aisle(aisle2)
         self.maip.add_aisle(aisle3)
@@ -91,4 +91,4 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
 
         appointment = Appointment(res_id, 1, date)
 
-        self.assertEqual(appointment, mapp.get_appointment(res_id))
+        self.assertEqual(appointment.reservation_id, mapp.get_appointment(res_id).reservation_id)

@@ -18,6 +18,7 @@ class MakeAppointmentUseCase:
 
         if type(date) is not datetime:
             raise ValueError("Not a correct date")
+        date = datetime(year=date.year, month=date.month, day=date.day, hour=date.hour)
 
         if not self._check_enough_spaces_in_aisles(aisle_ids, date):
             raise MaxCapacityReachedError()
