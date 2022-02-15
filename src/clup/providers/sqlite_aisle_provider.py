@@ -26,6 +26,13 @@ class SqliteAisleProvider(AisleProvider):
                       for ma in model_aisles]
             return aisles
 
+    def get_aisle(self, aisle_id):
+        aisles = self.get_aisles()
+        aisle = [a for a in aisles if a.id == aisle_id]
+        if len(aisle) != 1:
+            raise ValueError("couldn't find aisle for this id")
+        return aisle[0]
+
     def get_store_aisles(self, store_id):
         aisle_ids = self.get_store_aisle_ids(store_id)
         with Session(self.engine) as session, session.begin():

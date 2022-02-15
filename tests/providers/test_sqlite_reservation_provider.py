@@ -67,7 +67,7 @@ class TestSqliteReservationProvider(unittest.TestCase):
             session.add(mr2)
 
         with self.assertRaises(ValueError):
-            reservations = self.rp.get_user_reservations('9000')
+            self.rp.get_user_reservations('9000')
 
     def test_only_reservations_with_given_uuid_id_are_returned(self):
         mr1 = models.Reservation(uuid='10', aisle_id='100', user_id='1000')
@@ -119,7 +119,7 @@ class TestSqliteReservationProvider(unittest.TestCase):
             session.add(mr2)
             session.add(mr3)
 
-        reservations = self.rp.delete_reservation_from_aisle('20', '200')
+        self.rp.delete_reservation_from_aisle('20', '200')
 
         with Session(self.engine) as session, session.begin():
             reservations = session.query(models.Reservation).all()

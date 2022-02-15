@@ -1,19 +1,26 @@
 import uuid
+from collections import Counter
 from datetime import datetime
 
 from src.clup.entities.appointment import Appointment
+from src.clup.entities.exceptions import MaxCapacityReachedError
 from src.clup.entities.reservation import Reservation
 
 
 class MakeAppointmentUseCase:
-    def __init__(self, reservation_provider, appointment_provider):
+    def __init__(self, reservation_provider, appointment_provider, aisle_provider):
         self.reservation_provider = reservation_provider
         self.appointment_provider = appointment_provider
+        self.aisle_provider = aisle_provider
 
     def execute(self, user_id, aisle_ids, store_id, date):
         reservation_id = str(uuid.uuid1())
+
         if type(date) is not datetime:
             raise ValueError("Not a correct date")
+
+        if not self._check_enough_spaces_in_aisles(aisle_ids, date):
+            raise MaxCapacityReachedError()
 
         appointment = Appointment(reservation_id, store_id, date)
         self.appointment_provider.add_appointment(appointment)
@@ -23,3 +30,18 @@ class MakeAppointmentUseCase:
             self.reservation_provider.add_reservation(res)
 
         return reservation_id
+
+    def _check_enough_spaces_in_aisles(self, aisle_ids, date):
+        enough_space = True
+        appointments_in_same_date = [a for a in self.appointment_provider.get_appointments() if a.date_time == date]
+        res_same_date_same_aisles = []
+        for appointment in appointments_in_same_date:
+            aisle_ids = [r.aisle_id for r in self.reservation_provider
+                .get_reservation_with_id(appointment.reservation_id) if r.aisle_id in aisle_ids]
+            res_same_date_same_aisles.extend(aisle_ids)
+        count_people_in_aisle = Counter(res_same_date_same_aisles)
+        for aisle_id in aisle_ids:
+            capacity = self.aisle_provider.get_aisle(aisle_id).capacity
+            if count_people_in_aisle[aisle_id] > capacity - 1:
+                enough_space = False
+        return enough_space
