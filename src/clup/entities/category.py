@@ -6,3 +6,6 @@ class Category(Enum):
     VEGETABLE = auto()
     FISH = auto()
     MEAT = auto()
+    BEAUTY = auto()
+    BAKERY = auto()
+    BEVERAGE = auto()

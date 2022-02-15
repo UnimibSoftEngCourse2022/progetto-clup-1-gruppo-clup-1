@@ -41,5 +41,5 @@ class SqliteAppointmentProvider:
         with Session(self.engine) as session, session.begin():
             if reservation_id not in [ap.reservation_id for ap in self.get_appointments()]:
                 raise ValueError("Reservation id not existing")
-            query = session.query(models.Appointment)\
+            query = session.query(models.Appointment) \
                 .filter(models.Appointment.reservation_uuid == reservation_id).delete()

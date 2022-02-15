@@ -94,7 +94,7 @@ class TestSqliteStoreProvider(unittest.TestCase):
         self.sp.delete_store('10')
         with self.assertRaises(ValueError):
             self.sp.delete_store('10')
-            
+
         with Session(self.engine) as session, session.begin():
             stores = session.query(models.Store).all()
             aisles = session.query(models.Aisle).all()

@@ -44,4 +44,3 @@ class SqliteUserProvider:
                 models.User.username: user.username,
                 models.User.password: user.password,
             })
-
