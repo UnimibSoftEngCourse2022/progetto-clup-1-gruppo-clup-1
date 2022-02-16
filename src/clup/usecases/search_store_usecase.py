@@ -6,7 +6,7 @@ class SearchStoreUseCase:
         stores = self.store_provider.get_stores()
         found = False
         for store_item in stores:
-            if store_item.name == store_name:
+            if store_name.lower() in store_item.name.lower():
                 found = True
                 return self.store_provider.get_founded_stores(store_item)
 
