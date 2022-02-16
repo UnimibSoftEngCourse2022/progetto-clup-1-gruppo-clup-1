@@ -1,7 +1,7 @@
-from src.clup.entities.store_manager import StoreManager
 from sqlalchemy.orm import Session
 
 from src.clup.database import models
+from src.clup.entities.store_manager import StoreManager
 
 
 class SqliteStoreManagerProvider:

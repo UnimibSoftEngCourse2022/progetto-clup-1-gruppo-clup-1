@@ -3,6 +3,7 @@ import unittest
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
 from src.clup.providers.basic_aisle_provider import BasicAisleProvider
+from src.clup.providers.basic_lane_provider import BasicLaneProvider
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 
 
@@ -81,7 +82,8 @@ class TestBasicAisleProvider(unittest.TestCase):
         store2_id = "store_id"
         categories = [Category.FISH]
         bap = BasicAisleProvider()
-        aauc = AddAisleUseCase(bap)
+        lp = BasicLaneProvider()
+        aauc = AddAisleUseCase(bap, lp)
         aauc.execute(store1_id, aisle1_name, categories)
         aauc.execute(store1_id, aisle2_name, categories)
         aauc.execute(store2_id, aisle3_name, categories)
