@@ -52,6 +52,11 @@
         });
     }
 </script>
+<script>
+    function performScanReservation() {
+        window.location.href = "{{ url_for('stores.qrcode') }}";
+    }
+</script>
 <div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
     <div class="container mt-4">
         <p class="h2 mb-4 text">{{ store.name }}</p>
@@ -115,6 +120,9 @@
                         <button id="free_btn" type="submit">Free store
                                     space</button>
                     </div>
+                    <div class="col align-items-center">
+                        <button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -162,7 +170,7 @@
 </script>
 {% endblock %}{% block style %}
 <style>
-    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information {
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
         color: white;
         z-index: 2;
         font: normal 300 25px/1 'Josefin Sans', sans-serif;
@@ -174,7 +182,7 @@
         border-radius: 8px;
     }
     
-    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information {
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
         background-color: #FF8A00E6;
         ;
     }

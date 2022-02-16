@@ -136,3 +136,7 @@ def free_handler(store_id):
         return '', 200
     except Exception as e:
         return f'Error {e}', 500
+
+@bp.route('/stores/qr_code_scan', methods=['GET'])
+def qrcode():
+    return render_template('qr_code_scan_page.html')
