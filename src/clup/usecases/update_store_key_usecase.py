@@ -23,6 +23,4 @@ class UpdateStoreKeyUseCase:
         self.store_provider.update_store(new_store)
 
 
-sp = SqliteStoreProvider(engine)
-usk = UpdateStoreKeyUseCase(sp)
-usk.execute(manager_username='manager', manager_password='password', new_key=1000)
+
