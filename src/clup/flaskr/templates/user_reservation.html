@@ -1,16 +1,25 @@
 {% extends 'base_user.html' %}
 
 {% block content %}
+
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+<div class="d-flex justify-content-center ">
 <form method="POST">
     {{ form.csrf_token }} {{ form.hidden_tag() }}
     {{ form.make_reservation(class="btn btn-outline-primary")}}
     {{ form.delete_reservation(class="btn btn-outline-primary")}}
 
  </form>
+    <br>
+<div id="qrcode"></div>
 
 
- {{reservation_id}}
+</div>
 
 
 
+ <script type="text/javascript">
+        new QRCode(document.getElementById("qrcode"), "{{reservation_id}}" );
+    </script>
 {% endblock %}
