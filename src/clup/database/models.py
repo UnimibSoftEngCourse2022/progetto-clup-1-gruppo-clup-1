@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
@@ -67,6 +67,22 @@ class Appointment(Base):
     reservation_uuid = Column(String, ForeignKey('reservation.uuid'))
     store_id = Column(String, ForeignKey('store.uuid'))
     date_time = Column(DateTime)
+
+
+class StoreManager(Base):
+    __tablename__ = 'store_manager'
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String, unique=True)
+    username = Column(String, unique=True)
+    password = Column(String)
+
+
+class StoreManagerSecretKey(Base):
+    __tablename__ = 'store_manager_secretkey'
+    id = Column(Integer, primary_key=True)
+    store_manager_uuid = Column(String, ForeignKey('store_manager.uuid'))
+    secret_key = Column(String)
+    active = Column(Boolean)
 
 
 def create_initial_data(engine):

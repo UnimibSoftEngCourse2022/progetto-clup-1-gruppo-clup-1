@@ -1,67 +1,31 @@
 import unittest
 
+from src.clup.database import engine
+from src.clup.providers.sqlite_store_manager_provider import SqliteStoreManagerProvider
+from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 
 
-class MockStoreManagerProvider:
-    def __init__(self):
-        self.store_managers = {}
+class TestStoreManagerCreateAndRegister(unittest.TestCase):
+    def test_everything_works(self):
+        ssmp = SqliteStoreManagerProvider(engine)
+        csm = CreateStoreManagerUseCase(ssmp)
+        secret_key = 'secret'
+        manager_id = csm.execute(secret_key)
+        rsm = StoreManagerRegisterUseCase(ssmp)
+        rsm.execute(secret_key, 'username', 'password')
+        ssmp.delete_store_manager(manager_id)
 
-    def add_manager(self, manager):
-        self.store_managers[manager.id] = manager
+    def test_correct_parameters_set(self):
+        ssmp = SqliteStoreManagerProvider(engine)
+        csm = CreateStoreManagerUseCase(ssmp)
+        secret_key = 'secret'
+        manager_id = csm.execute(secret_key)
+        rsm = StoreManagerRegisterUseCase(ssmp)
+        rsm.execute(secret_key, 'username', 'password')
+        manager = ssmp.get_manager(manager_id)
+        ssmp.delete_store_manager(manager_id)
 
-    def get_managers(self):
-        return self.store_managers.values()
-
-
-class TestStoreManagerRegisterUseCase(unittest.TestCase):
-    def test_manager_correctly_added(self):
-        msmp = MockStoreManagerProvider()
-        username = 'manager'
-        password = 'password'
-        secret_key = 'sk'
-        smr = StoreManagerRegisterUseCase(msmp, 'sk')
-
-        smr.execute(username, password, secret_key)
-        managers = msmp.get_managers()
-        manager = [mg for mg in managers if mg.username == username][0]
-        is_mg_present = manager.username == username
-
-        self.assertTrue(is_mg_present)
-
-    def test_wrong_sk_raise_exception(self):
-        msmp = MockStoreManagerProvider()
-        username = 'manager'
-        password = 'password'
-        secret_key = 'wrong sk'
-        smr = StoreManagerRegisterUseCase(msmp, 'sk')
-
-        with self.assertRaises(ValueError):
-            smr.execute(username, password, secret_key)
-
-    def test_none_fields_raise_exception(self):
-        msmp = MockStoreManagerProvider()
-        username = 'manager'
-        password = 'password'
-        secret_key = 'sk'
-        smr = StoreManagerRegisterUseCase(msmp, 'sk')
-
-        with self.assertRaises(ValueError):
-            smr.execute("", password, secret_key)
-
-        with self.assertRaises(ValueError):
-            smr.execute(username, "", secret_key)
-
-        with self.assertRaises(ValueError):
-            smr.execute(username, password, "")
-
-    def test_already_existing_username_raise_exception(self):
-        msmp = MockStoreManagerProvider()
-        username = 'manager'
-        password = 'password'
-        secret_key = 'sk'
-        smr = StoreManagerRegisterUseCase(msmp, 'sk')
-
-        smr.execute(username, password, secret_key)
-        with self.assertRaises(ValueError):
-            smr.execute(username, "other pw", secret_key)
+        self.assertTrue(manager.username == 'username')
+        self.assertTrue(manager.password == 'password')
+        self.assertTrue(manager.id == manager_id)
