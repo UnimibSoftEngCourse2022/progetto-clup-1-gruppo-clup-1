@@ -109,6 +109,4 @@ class SqliteStoreProvider(StoreProvider):
         with Session(self.engine) as session, session.begin():
             session.query(models.StoreManagerSecretKey) \
                 .filter(models.StoreManagerSecretKey.store_manager_uuid == manager_id) \
-                .update({
-                models.StoreManagerSecretKey.secret_key: secret_key
-            })
+                .update({models.StoreManagerSecretKey.secret_key: secret_key})

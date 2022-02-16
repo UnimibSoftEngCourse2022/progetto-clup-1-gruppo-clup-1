@@ -83,4 +83,4 @@ class TestAddAisleUseCase(unittest.TestCase):
         categories1 = [Category.FISH, Category.MEAT]
 
         with self.assertRaises(ValueError):
-            aisle1_id = aa.execute(store1_id, aisle1_name, categories1, capacity=-10)
+            aa.execute(store1_id, aisle1_name, categories1, capacity=-10)

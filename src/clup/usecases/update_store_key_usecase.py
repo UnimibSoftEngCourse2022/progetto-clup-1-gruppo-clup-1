@@ -1,6 +1,4 @@
-from src.clup.database import engine
 from src.clup.entities.store import Store
-from src.clup.providers.sqlite_store_provider import SqliteStoreProvider
 
 
 class UpdateStoreKeyUseCase:
@@ -21,6 +19,3 @@ class UpdateStoreKeyUseCase:
             secret=new_key
         )
         self.store_provider.update_store(new_store)
-
-
-
