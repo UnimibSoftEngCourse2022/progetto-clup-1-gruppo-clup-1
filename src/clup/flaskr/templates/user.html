@@ -1,36 +1,44 @@
 {% extends 'base_user.html' %}
-
 {% block content %}
-<div class="mask d-flex align-items-center h-100">
+<div class="mask d-flex align-text-center h-100">
     <div class="container mt-4">
-        <p class="h2 mb-4 text-black">Find your favorite store</p>
+        <p class="h2 mb-4 text-black text-center">Find your favorite store</p>
         <div class="card mb-4">
             <div class="card-body p-4">
                 <div class="row">
                     <div class="col-12">
-                        <div class="input-group">
-                            <div class="form-outline flex-fill">
-                                <input id="search-input" placeholder="Search your stores" type="search" id="form1"
-                                       class="form-control mr-sm-2"/>
-                            </div>
-                            <button id="search-button" type="button" class="btn btn-outline-success my-2 my-sm-0">
-                                search<i class="fas fa-search"></i>
-                            </button>
+                        <div class="input-group-rounded d-flex justify-content-center">
+
+                            <form method="POST" autocomplete="off">
+                                {{form.csrf_token}}
+                                <div class="input-group items-center">
+                                    <div class="form-outline">
+                                        {{ form.store(placeholder="store name", class="form-control") }}
+
+                                        </p>
+                                    </div>
+                                    {{ form.submit(class="btn btn-outline-primary")}}
+                                </div>
+
+                            </form>
                         </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    const searchButton = document.getElementById('search-button');
-    const searchInput = document.getElementById('search-input');
-    searchButton.addEventListener('click', () => {
-        const inputValue = searchInput.value;
-        alert(inputValue);
-    });
-</script>
+
+<div class="d-flex justify-content-center ">
+    <div class="list-group">
+        {% for n in st %}
+        <a class="list-group-item list-group-item-action">{{n.id}}</a>
+        {% endfor %}
+    </div>
+</div>
 
 
+</div>
 {% endblock %}

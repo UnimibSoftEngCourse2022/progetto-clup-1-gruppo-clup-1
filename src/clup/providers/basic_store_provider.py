@@ -20,3 +20,10 @@ class BasicStoreProvider:
 
     def add_to_queue(self, store_id, element):
         self.queues[store_id] += (element,)
+
+    def get_founded_stores(self, stor):
+        stores_founded = []
+        for store in self.stores:
+            if store.name == stor.name:
+                stores_founded.append([ store.id, store.name, store.address])
+        return stores_founded

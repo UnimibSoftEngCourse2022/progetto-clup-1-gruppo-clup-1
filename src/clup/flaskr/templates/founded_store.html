@@ -1,0 +1,25 @@
+{%set prova = stores|replace("[", "")%}
+
+{%set prova = prova|replace("'", "")%}
+{%set prova = prova|replace("]]", "")%}
+{%set prova = prova|replace(", ", " ")%}
+
+
+
+{% set list = prova.split('] ') %}
+
+
+{% extends 'base_user.html' %}
+{% block content %}
+<h1 class="text-center">Select your favorite store</h1>
+<div class="d-flex justify-content-center ">
+    <div class="list-group">
+        {% for n in list %}
+            {% set id= n[0:36] %}
+            <a href="{{ url_for('users.user_reservation', store_id=id)}}" class="list-group-item list-group-item-action">{{n[36:]}}</a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+{{stores}}

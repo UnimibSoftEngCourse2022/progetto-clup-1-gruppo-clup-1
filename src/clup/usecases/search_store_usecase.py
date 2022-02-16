@@ -8,7 +8,7 @@ class SearchStoreUseCase:
         for store_item in stores:
             if store_item.name == store_name:
                 found = True
-                return self.store_provider.get_founded_stores(store_name)
+                return self.store_provider.get_founded_stores(store_item)
 
         if not found:
             raise ValueError('store isnt in the stores list')

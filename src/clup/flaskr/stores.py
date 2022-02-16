@@ -1,10 +1,13 @@
 import flask
+import json
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
+
+from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
-from src.clup.flaskr.global_setup import bsp, bqp, brp
+from src.clup.flaskr.global_setup import bsp, bqp, brp, bup
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -23,6 +26,8 @@ slu = StoreListUseCase(bsp)
 asu = AddStoreUseCase(bsp, bqp)
 asu.execute('Esselunga', 'Campofiorenzo', 1)
 asu.execute('Conad', 'Catania', 10)
+asu.execute('Esselunga', 'Milano', 2)
+asu.execute('Esselunga', 'Verona', 2)
 
 mru = MakeReservationUseCase(bqp, brp)
 
@@ -33,6 +38,7 @@ cru = ConsumeReservationUseCase(bqp)
 usu = UpdateStoreUseCase(bsp, bqp)
 
 ssu = SearchStoreUseCase(bsp)
+
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
@@ -140,3 +146,18 @@ def free_handler(store_id):
 @bp.route('/stores/qr_code_scan', methods=['GET'])
 def qrcode():
     return render_template('qr_code_scan_page.html')
+
+@bp.route('/searchstores/<name>', methods=['POST'])
+def search_store(name):
+    print(name)
+    sl = ssu.execute(name)
+    u_id = current_user.get_id()
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    return sl
+
+
+
+
+
+
+
