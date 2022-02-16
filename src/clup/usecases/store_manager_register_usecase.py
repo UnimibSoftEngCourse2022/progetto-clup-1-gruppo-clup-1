@@ -1,7 +1,3 @@
-import uuid
-
-from src.clup.entities.store_manager import StoreManager
-
 
 class StoreManagerRegisterUseCase:
     def __init__(self, store_manager_provider):
