@@ -30,6 +30,17 @@ class SqliteAdminProvider:
             )
             session.add(model_admin)
 
+    def add_admin_to_store(self, admin_id, store_id):
+        if admin_id in [a.id for a in self.get_admins()]:
+            raise ValueError("unable to add new admin, id already used")
+
+        with Session(self.engine) as session, session.begin():
+            model_store_admin = models.StoreAdmin(
+                admin_uuid=admin_id,
+                store_uuid=store_id
+            )
+            session.add(model_store_admin)
+
     def remove_admin(self, admin_id):
         if admin_id not in [a.id for a in self.get_admins()]:
             raise ValueError("unable to remove admin, id not existing")
@@ -37,6 +48,8 @@ class SqliteAdminProvider:
         with Session(self.engine) as session, session.begin():
             session.query(models.Admin). \
                 filter(models.Admin.uuid == admin_id).delete()
+            session.query(models.StoreAdmin). \
+                filter(models.StoreAdmin.admin_uuid == admin_id).delete()
 
     def update_admin(self, admin):
         if admin.id not in [a.id for a in self.get_admins()]:
