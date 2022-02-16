@@ -2,12 +2,14 @@ import flask
 import json
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
+from src.clup.providers.basic_admin_provider import BasicAdminProvider
+from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
-from src.clup.flaskr.global_setup import bsp, bqp, brp, bup
+from src.clup.flaskr.global_setup import bsp, bqp, brp, bup, bap
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -39,11 +41,15 @@ usu = UpdateStoreUseCase(bsp, bqp)
 
 ssu = SearchStoreUseCase(bsp)
 
+luau = LoadAdminDataUseCase(bap)
+
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
 @login_required
 def show_stores():
+    a_id = current_user.get_id()
+    admin_data = luau.execute(a_id)
     if request.method == 'POST':
         store_name = request.values['name']
         store_address = request.values['address']
@@ -55,7 +61,7 @@ def show_stores():
             return 'ERROR'
     else:
         stores = slu.execute()
-        return render_template('stores.html', stores=stores)
+        return render_template('stores.html', stores=stores, admin=admin_data)
 
 @bp.route('/stores/add', methods=['GET'])
 @login_required
@@ -67,6 +73,8 @@ def add_store():
 @bp.route('/stores/<id>', methods=['GET', 'PUT'])
 @login_required
 def show_store(id):
+    a_id = current_user.get_id()
+    admin_data = luau.execute(a_id)
     if request.method == 'PUT':
         # abort(404)
         for store in slu.execute():
@@ -88,7 +96,7 @@ def show_store(id):
                     'current_people_quantity': current_people_quantity,
                     'active_pool': pool
                 }
-                return render_template('store.html', **args)
+                return render_template('store.html', **args, admin=admin_data)
         abort(404)
 
 
