@@ -85,6 +85,13 @@ class StoreManagerSecretKey(Base):
     active = Column(Boolean)
 
 
+class StoreStoreManager(Base):
+    __tablename__ = 'store_store_manager'
+    id = Column(Integer, primary_key=True)
+    store_manager_uuid = Column(String, ForeignKey('store_manager.uuid'))
+    store_uuid = Column(String, ForeignKey('store.uuid'))
+
+
 def create_initial_data(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

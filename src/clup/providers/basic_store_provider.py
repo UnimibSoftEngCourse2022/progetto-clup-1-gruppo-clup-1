@@ -14,3 +14,6 @@ class BasicStoreProvider:
             raise ValueError('Store already present')
 
         self.stores.append(store)
+
+    def add_manager_to_store(self, store_id, manager_id):
+        pass  # TODO

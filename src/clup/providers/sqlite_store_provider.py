@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.store import Store
+from src.clup.entities.store_manager import StoreManager
 from src.clup.providers.store_provider_abc import StoreProvider
 
 
@@ -61,3 +62,53 @@ class SqliteStoreProvider(StoreProvider):
             model_store_admins = session.query(models.StoreAdmin). \
                 filter(models.StoreAdmin.store_uuid == store_id).all()
             return [msa.admin_uuid for msa in model_store_admins]
+
+    def add_manager_to_store(self, store_id, manager_id):
+        with Session(self.engine) as session, session.begin():
+            new_ssm = models.StoreStoreManager(
+                store_manager_uuid=manager_id,
+                store_uuid=store_id
+            )
+            session.add(new_ssm)
+
+    def get_store_manager_by_username(self, username):
+        with Session(self.engine) as session, session.begin():
+            sm = session.query(models.StoreManager) \
+                .filter(models.StoreManager.username == username).all()
+            if len(sm) == 0:
+                raise ValueError("unable to find store manager")
+
+            store_manager_model = sm[0]
+            store_manager = StoreManager(
+                id=store_manager_model.uuid,
+                username=store_manager_model.username,
+                password=store_manager_model.password
+            )
+
+            return store_manager
+
+    def get_store_from_manager_id(self, manager_id):
+        with Session(self.engine) as session, session.begin():
+            store_id = session.query(models.StoreStoreManager.store_uuid) \
+                .filter(models.StoreStoreManager.store_manager_uuid == manager_id).all()
+            if len(store_id) != 1:
+                raise ValueError("unable to find store connected to this manager")
+
+            store_id = store_id[0][0]
+
+            stores = self.get_stores()
+
+            store = [store for store in stores if store.id == store_id]
+
+            if len(store) != 1:
+                raise ValueError("unable to find store with this id")
+
+            return store[0]
+
+    def update_secret_key(self, manager_id, secret_key):
+        with Session(self.engine) as session, session.begin():
+            session.query(models.StoreManagerSecretKey) \
+                .filter(models.StoreManagerSecretKey.store_manager_uuid == manager_id) \
+                .update({
+                models.StoreManagerSecretKey.secret_key: secret_key
+            })
