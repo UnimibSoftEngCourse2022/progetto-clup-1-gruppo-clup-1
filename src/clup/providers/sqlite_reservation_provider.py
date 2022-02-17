@@ -62,6 +62,15 @@ class SqliteReservationProvider(ReservationProvider):
                 filter(models.Reservation.uuid == reservation_id)
             query.delete()
 
+    def remove_reservation_with_user_check(self, reservation_id, user_id):
+        if reservation_id not in [r.id for r in self.get_reservations()]:
+            raise ValueError("unable to delete reservation, not existing")
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.Reservation). \
+                filter(models.Reservation.uuid == reservation_id,
+                       models.Reservation.user_id == user_id)
+            query.delete()
+
     def delete_reservation_from_aisle(self, reservation_id, aisle_id):
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation). \
