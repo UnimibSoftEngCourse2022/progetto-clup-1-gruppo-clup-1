@@ -8,11 +8,12 @@ class SqliteAppointmentProvider:
     def __init__(self, engine):
         self.engine = engine
 
-    def add_appointment(self, reservation_id, date):
+    def add_appointment(self, appointment):
         with Session(self.engine) as session, session.begin():
             model_appointment = models.Appointment(
-                reservation_uuid=reservation_id,
-                date=date
+                reservation_uuid=appointment.reservation_id,
+                date_time=appointment.date_time,
+                store_id=appointment.store_id
             )
             session.add(model_appointment)
 
