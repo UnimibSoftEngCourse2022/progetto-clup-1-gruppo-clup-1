@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">Add Store</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
+                        <form action="/stores" , method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <input class="form-control" type="text" placeholder="Name" name="name" aria-label="store name"><br>
+                            <input class="form-control" type="text" placeholder="Address" name="address" aria-label="store address"><br>
+                            <input class="form-control" type="text" placeholder="Capacity" name="capacity" aria-label="store capacity"><br>
+                            <button id="add_button" type="submit">Add</button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> {% endblock %}{% block style %}
+<style>
+    #add_button {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+    
+    #add_button {
+        background-color: #FF8A00E6;
+        ;
+    }
+</style>{% endblock %}

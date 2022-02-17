@@ -7,6 +7,11 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
+from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
+from src.clup.usecases.search_store_usecase import SearchStoreUseCase
+from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
+
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -23,8 +28,8 @@ bp = Blueprint('stores', __name__)
 
 slu = StoreListUseCase(setup.store_provider)
 
-asu = AddStoreUseCase(setup.store_provider, setup.lane_provider)
-aau = AddAisleUseCase(setup.aisle_provider)
+asu = AddStoreUseCase(setup.store_provider)
+aau = AddAisleUseCase(setup.aisle_provider, setup.lane_provider)
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
@@ -55,10 +60,16 @@ def init_stores():
 
     return redirect(url_for('stores.show_stores'))
 
+ssu = SearchStoreUseCase(setup.store_provider)
+
+luau = LoadAdminDataUseCase(setup.admin_provider)
+
 
 @bp.route('/stores', methods=['GET', 'POST'])
 @login_required
 def show_stores():
+    a_id = current_user.get_id()
+    admin_data = luau.execute(a_id)
     if request.method == 'POST':
         store_name = request.values['name']
         store_address = request.values['address']
@@ -70,12 +81,20 @@ def show_stores():
             return 'ERROR'
     else:
         stores = slu.execute()
-        return render_template('stores.html', stores=stores)
+        return render_template('stores.html', stores=stores, admin=admin_data)
+
+@bp.route('/stores/add', methods=['GET'])
+@login_required
+def add_store():
+        stores = slu.execute()
+        return render_template('add_store.html', stores=stores)
 
 
 @bp.route('/stores/<store_id>', methods=['GET', 'PUT'])
 @login_required
 def show_store(store_id):
+    a_id = current_user.get_id()
+    admin_data = luau.execute(a_id)
     if request.method == 'PUT':
         # abort(404)
         for store in slu.execute():
@@ -96,7 +115,7 @@ def show_store(store_id):
                     'store_pool_enabled': pool.enabled,
                     'aisle_ids': aisle_ids,
                 }
-                return render_template('store.html', **args)
+                return render_template('store.html', **args, admin=admin_data)
         abort(404)
 
 
@@ -138,3 +157,15 @@ def store_pool_handler(store_id):
             return '', 200
         except Exception:
             abort(400)
+
+@bp.route('/stores/qr_code_scan', methods=['GET'])
+def qrcode():
+    return render_template('qr_code_scan_page.html')
+
+@bp.route('/searchstores/<name>', methods=['POST'])
+def search_store(name):
+    print(name)
+    sl = ssu.execute(name)
+    u_id = current_user.get_id()
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    return sl

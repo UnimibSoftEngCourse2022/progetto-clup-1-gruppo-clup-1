@@ -9,17 +9,26 @@ from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.usecases.user_change_password_usecase \
     import UserChangePasswordUseCase
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from . import stores
+
 from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
+from .forms.search_store_form import SearchStoreForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
+from .forms.user_reservation_form import UserReservationForm
+from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
+from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
 bp = Blueprint('users', __name__)
 
 ur_def = UserRegisterUsecase(setup.user_provider)
 ur_def.execute('davide', 'prova')
-ar_def = AdminRegisterUsecase(setup.admin_provider)
-ar_def.execute('amministratore', 'password')
+ar_def = AdminRegisterUsecase(setup.admin_provider, setup.store_provider)
+# ar_def.execute('amministratore', 'password')
+
+mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
+# cru = ConsumeReservationUseCase(bqp)
 
 
 # TO FIX
@@ -67,9 +76,9 @@ def user_login_page():
             if logged_type == 'user':
                 return redirect(url_for('users.user_page'))
             if logged_type == 'admin':
-                return redirect(url_for('users.admin_page'))
+                return redirect(url_for('stores.show_stores'))
         except ValueError:
-            flash('Something went wrong', category='danger')
+            flash('Incorrent credentials', category='danger')
             return redirect(url_for('users.user_login_page'))
     else:
         if form.is_submitted():
@@ -77,12 +86,48 @@ def user_login_page():
     return render_template('user_login.html', form=form)
 
 
-@bp.route('/account')
+@bp.route('/account', methods=['GET', 'POST'])
 @login_required
 def user_page():
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
-    return render_template('user.html', user=user_data)
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    form = SearchStoreForm()
+    st = bsp.get_stores()
+    if form.validate_on_submit():
+        store_list = stores.search_store(form.store.data)
+        print(store_list)
+        return redirect(url_for('users.founded_store', stores=store_list))
+
+    return render_template('user.html', user=user_data, form=form, st=st)
+
+
+@bp.route('/founded_store/<stores>')
+def founded_store(stores):
+    u_id = current_user.get_id()
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    return render_template('founded_store.html', stores=stores, user=user_data)
+
+
+@bp.route('/reservation/<store_id>', methods=['GET', 'POST'])
+def user_reservation(store_id):
+    u_id = current_user.get_id()
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    form = UserReservationForm()
+
+    if form.validate_on_submit():
+        reservation = mru.execute(store_id, u_id)
+        return redirect(url_for('users.user_make_reservation', store_id=store_id, user=user_data, form=form,
+                                reservation_id=reservation.id))
+
+    return render_template('user_reservation.html', store=store_id, user=user_data, form=form)
+
+
+@bp.route('/reservation/<store_id>/<reservation_id>', methods=['GET', 'POST'])
+def user_make_reservation(store_id, reservation_id):
+    u_id = current_user.get_id()
+    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    form = UserReservationForm()
+    return render_template('user_reservation.html', store=store_id, user=user_data, form=form, reservation_id=reservation_id)
 
 
 @bp.route('/admin/account')

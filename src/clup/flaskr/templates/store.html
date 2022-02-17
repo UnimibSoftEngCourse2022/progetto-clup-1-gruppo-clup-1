@@ -1,36 +1,4 @@
-{% extends 'base.html' %}
-{% block title %}
-Stores
-{% endblock %}
-
-{% block content%}
-<h2>{{ store.name }}</h2>
-<ul>
-    <li>{{ store.address }}</li>
-</ul>
-<div id="aisle_checkboxes">
-    <ul>
-        {% for aisle_id in aisle_ids %}
-        <li>
-            <input id="{{ aisle_id }}" type="checkbox">
-            <label for="{{ aisle_id }}">{{ aisle_id }}</label>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-<a href="{{ url_for('stores.store_reservations', store_id=store.id) }}">Reservations!</a>
-<p>Active Pool Length: {{ active_pool_len }}</p>
-<br>
-<ul>
-    {% for reservation_id in store_pool_enabled %}
-    <li>
-        Consume: {{ reservation_id }}
-        <input id="consume_btn_{{ reservation_id }}" type="button" value="CONSUME!">
-    </li>
-    {% endfor %}
-</ul>
-<br>
-<input id="make_reservation_btn" type="button" value="Make Reservation">
+{% extends 'base_admin.html' %} {% block title %} Stores {% endblock %} {% block content%}
 <script>
     function updateStore() {
         var new_name = $("#name").val();
@@ -45,21 +13,130 @@ Stores
                 address: new_address,
                 capacity: new_capacity,
             },
-            success: function (result) {
-                location.reload();
+            success: function(result) { 
+                <div class = "modal" tabindex = "-1" >
+                    <div class = "modal-dialog" >
+                    <div class = "modal-content" >
+                    <div class = "modal-header" >
+                    <h5 class = "modal-title" > Success </h5> 
+                    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button> 
+                </div > 
+                <div class = "modal-body" >
+                    <p > All went smooth </p> 
+                    </div >
+                <div class = "modal-footer" >
+                    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button> 
+                    </div> 
+                </div> 
+            </div>
+        </div>
             },
+            error: function(result) { 
+                <div class = "modal" tabindex = "-1" >
+                    <div class = "modal-dialog">
+                    <div class = "modal-content">
+                    <div class = "modal-header">
+                    <h5 class = "modal-title" > Error </h5> 
+                    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button> 
+                </div > 
+                <div class = "modal-body">
+                    <p > Something went wrong... </p> 
+                    </div >
+                     <div class = "modal-footer" >
+                    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button> 
+                </div > 
+            </div>
+        </div > 
+    </div>
+            }
         });
     }
 </script>
-<div>
-    <label for="name">Store name:</label><br>
-    <input id="name" placeholder="ex. Esselunga" type="text"><br>
-    <label for="address">Store address:</label><br>
-    <input id="address" placeholder="ex. Barzano" type="text"><br>
-    <label for="capacity">Store capacity:</label><br>
-    <input id="capacity" placeholder="ex. 150" type="text"><br>
-    <button onclick="updateStore()">Update Store!</button>
+<script>
+    function performScanReservation() {
+        window.location.href = "{{ url_for('stores.qrcode') }}";
+    }
+</script>
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">{{ store.name }}</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
+                        <div class="mb-3 row">
+                            <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress" value="{{ store.address }}">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="staticWaitingListLength" class="col-sm-2 col-form-label">Waiting List Length:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticWaitingListLength" value="{{ waiting_queue_len }}">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="staticActivePoolLength" class="col-sm-2 col-form-label">Active Pool Length:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticActivePoolLength" value="{{ active_pool_len }}">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="staticCurrentPeopleInside" class="col-sm-2 col-form-label">Current People Inside:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticCurrentPeopleInside" value="{{ current_people_quantity }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Update Information</p>
+                        <form>
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><br><br>
+                            <input class="form-control" type="text" placeholder="Name" id="name" aria-label="store name"><br>
+                            <input class="form-control" type="text" placeholder="Address" id="address" aria-label="store address"><br>
+                            <input class="form-control" type="text" placeholder="Capacity" id="capacity" aria-label="store capacity"><br>
+                            <button id="update_store_information" type="button" onclick="updateStore()">Update</button>
+                        </form>
+                    </div>
+                </div>
+                <div id="aisle_checkboxes">
+                    <ul>
+                        {% for aisle_id in aisle_ids %}
+                        <li>
+                            <input id="{{ aisle_id }}" type="checkbox">
+                            <label for="{{ aisle_id }}">{{ aisle_id }}</label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <input id="make_reservation_btn" type="button" value="Make Reservation">
+                <div class="row">
+                    <div class="col align-items-center">
+                        <form action="{{ url_for('stores.make_reservation_into_store', id=store.id) }}" , method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <button id="make_reservation" type="submit">Make
+                                        Reservation</button>
+                        </form>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="delete_reservation_wq" type="submit">Delete
+                                    Reservation(WQ)</button>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="free_btn" type="submit">Free store
+                                    space</button>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 <script>
     $("#make_reservation_btn").click(function () {
         $aisle_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
@@ -75,4 +152,25 @@ Stores
         });
     });
 </script>
+{% endblock %}
+
+{% block style %}
+<style>
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
+        background-color: #FF8A00E6;
+        ;
+    }
+</style>
 {% endblock %}

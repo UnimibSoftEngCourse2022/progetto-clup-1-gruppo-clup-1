@@ -6,6 +6,7 @@ from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 
 
+@unittest.skip('davide')
 class TestStoreManagerCreateAndRegister(unittest.TestCase):
     def test_everything_works(self):
         ssmp = SqliteStoreManagerProvider(engine)

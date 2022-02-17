@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block icon %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{url_for('main.show_home')}}">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+  
+        <li class="nav-item">
+          <a class="nav-link" href="">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Account
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+             <a class="dropdown-item">{{ admin.username }}</a>
+            <a class="dropdown-item">e-mail</a>
+            <a class="dropdown-item">indirizzo</a>
+  
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{url_for('users.change_password_page')}}">Change password</a>
+            <a class="dropdown-item" href="{{url_for('users.user_logout')}}">Logout</a>
+  
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+{%endblock%}
+
+{% block content %}
+{% endblock %}
