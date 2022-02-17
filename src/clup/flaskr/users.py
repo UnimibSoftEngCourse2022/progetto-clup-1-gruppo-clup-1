@@ -6,6 +6,7 @@ from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.user_change_password_usecase \
     import UserChangePasswordUseCase
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
@@ -20,6 +21,7 @@ from .forms.user_reservation_form import UserReservationForm
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
+
 bp = Blueprint('users', __name__)
 
 ur_def = UserRegisterUsecase(setup.user_provider)
@@ -30,11 +32,7 @@ ar_def = AdminRegisterUsecase(setup.admin_provider, setup.store_provider)
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 # cru = ConsumeReservationUseCase(bqp)
 
-
-# TO FIX
-# @app.route('/')
-# def home():
-#     return render_template('home.html', bsp=bsp)
+ssu = SearchStoreUseCase(setup.store_provider)
 
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -55,15 +53,9 @@ def user_register_page():
     return render_template('user_register.html', form=form)
 
 
-# @app.route('/registered_users')
-# def show_registered_users():
-#     return render_template('registered_users.html', users=bup.get_users())
-
 
 @bp.route('/login', methods=['GET', 'POST'])
 def user_login_page():
-    # print(bup.get_users())
-    # print(bap.get_admins())
     form = UserLoginForm()
     if form.validate_on_submit():
         gl = GenericLoginUsecase(setup.admin_provider, setup.user_provider)
@@ -90,11 +82,11 @@ def user_login_page():
 @login_required
 def user_page():
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
     form = SearchStoreForm()
-    st = bsp.get_stores()
+    st = setup.store_provider.get_stores()
     if form.validate_on_submit():
-        store_list = stores.search_store(form.store.data)
+        store_list = ssu.execute(form.store.data)
         print(store_list)
         return redirect(url_for('users.founded_store', stores=store_list))
 
@@ -104,14 +96,14 @@ def user_page():
 @bp.route('/founded_store/<stores>')
 def founded_store(stores):
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
     return render_template('founded_store.html', stores=stores, user=user_data)
 
 
 @bp.route('/reservation/<store_id>', methods=['GET', 'POST'])
 def user_reservation(store_id):
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
     form = UserReservationForm()
 
     if form.validate_on_submit():

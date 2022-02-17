@@ -161,11 +161,3 @@ def store_pool_handler(store_id):
 @bp.route('/stores/qr_code_scan', methods=['GET'])
 def qrcode():
     return render_template('qr_code_scan_page.html')
-
-@bp.route('/searchstores/<name>', methods=['POST'])
-def search_store(name):
-    print(name)
-    sl = ssu.execute(name)
-    u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(bup).execute(u_id)
-    return sl
