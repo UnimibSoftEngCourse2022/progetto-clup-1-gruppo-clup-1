@@ -38,7 +38,7 @@ class MakeAppointmentUseCase:
         res_same_date_same_aisles = []
         for appointment in appointments_in_same_date:
             aisle_ids = [r.aisle_id for r in
-                         self.reservation_provider.get_reservation_with_id(appointment.reservation_id)
+                         self.reservation_provider.get_reservations_with_id(appointment.reservation_id)
                          if r.aisle_id in aisle_ids]
             res_same_date_same_aisles.extend(aisle_ids)
         count_people_in_aisle = Counter(res_same_date_same_aisles)

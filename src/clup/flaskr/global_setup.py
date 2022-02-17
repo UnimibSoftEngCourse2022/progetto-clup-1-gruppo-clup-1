@@ -1,3 +1,4 @@
+
 from src.clup.database import engine
 from src.clup.providers.basic_admin_provider import BasicAdminProvider
 from src.clup.providers.basic_lane_provider import BasicLaneProvider
@@ -15,3 +16,4 @@ aisle_provider = SqliteAisleProvider(engine)
 lane_provider = BasicLaneProvider()
 reservation_provider = SqliteReservationProvider(engine)
 appointment_provider = SqliteAppointmentProvider(engine)
+
