@@ -74,7 +74,7 @@ class TestSchedulerUsecase(unittest.TestCase):
         )
 
         su.execute(datetime.datetime(date.year, date.month, date.day, date.hour))
-       
+
         # se non ci sono dovrebbe crashare
         mlp.get_waiting_queue(1).pop()
         mlp.get_waiting_queue(2).pop()
