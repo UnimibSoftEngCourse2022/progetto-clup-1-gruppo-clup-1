@@ -7,16 +7,14 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
-from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
-from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
-from src.clup.usecases.search_store_usecase import SearchStoreUseCase
-from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
-
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
+from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
+from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
+from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
@@ -60,6 +58,7 @@ def init_stores():
 
     return redirect(url_for('stores.show_stores'))
 
+
 ssu = SearchStoreUseCase(setup.store_provider)
 
 luau = LoadAdminDataUseCase(setup.admin_provider)
@@ -83,11 +82,12 @@ def show_stores():
         stores = slu.execute()
         return render_template('stores.html', stores=stores, admin=admin_data)
 
+
 @bp.route('/stores/add', methods=['GET'])
 @login_required
 def add_store():
-        stores = slu.execute()
-        return render_template('add_store.html', stores=stores)
+    stores = slu.execute()
+    return render_template('add_store.html', stores=stores)
 
 
 @bp.route('/stores/<store_id>', methods=['GET', 'PUT'])
@@ -158,9 +158,11 @@ def store_pool_handler(store_id):
         except Exception:
             abort(400)
 
+
 @bp.route('/stores/qr_code_scan', methods=['GET'])
 def qrcode():
     return render_template('qr_code_scan_page.html')
+
 
 @bp.route('/searchstores/<name>', methods=['POST'])
 def search_store(name):

@@ -1,7 +1,8 @@
 import unittest
 
-from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.entities.store import Store
+from src.clup.usecases.search_store_usecase import SearchStoreUseCase
+
 
 class MockStoreProvider:
     def __init__(self):
@@ -31,12 +32,12 @@ class TestSearchStoreUsecase(unittest.TestCase):
         stores.append(store)
 
         stores_founded = self.u.execute(self.store.name)
-        
+
         self.assertCountEqual(stores_founded, stores)
 
     def test_store_is_founded_in_stores(self):
         stores = self.store_provider.get_stores()
-        
+
         stores_founded = self.u.execute(self.store.name)
 
         self.assertCountEqual(stores_founded, stores)

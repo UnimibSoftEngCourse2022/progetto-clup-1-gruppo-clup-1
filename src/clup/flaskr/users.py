@@ -6,19 +6,17 @@ from src.clup.usecases.admin_register_usecase import AdminRegisterUsecase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.user_change_password_usecase \
     import UserChangePasswordUseCase
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from . import stores
-
 from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
 from .forms.search_store_form import SearchStoreForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
 from .forms.user_reservation_form import UserReservationForm
-from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
-from src.clup.usecases.consume_reservation_usecase import ConsumeReservationUseCase
 
 bp = Blueprint('users', __name__)
 
@@ -28,6 +26,8 @@ ar_def = AdminRegisterUsecase(setup.admin_provider, setup.store_provider)
 # ar_def.execute('amministratore', 'password')
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
+
+
 # cru = ConsumeReservationUseCase(bqp)
 
 
@@ -127,7 +127,8 @@ def user_make_reservation(store_id, reservation_id):
     u_id = current_user.get_id()
     user_data = LoadUserDataUseCase(bup).execute(u_id)
     form = UserReservationForm()
-    return render_template('user_reservation.html', store=store_id, user=user_data, form=form, reservation_id=reservation_id)
+    return render_template('user_reservation.html', store=store_id, user=user_data, form=form,
+                           reservation_id=reservation_id)
 
 
 @bp.route('/admin/account')
