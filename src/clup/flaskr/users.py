@@ -12,7 +12,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
-from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
+from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.user_change_password_usecase \
     import UserChangePasswordUseCase
@@ -82,7 +82,7 @@ def user_login_page():
 @login_required
 def user_page():
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
+    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
     return render_template('user.html', user=user_data)
 
 
@@ -97,7 +97,7 @@ def show_user_stores():
 @bp.route('/reservation/<store_id>', methods=['GET', 'POST'])
 def user_reservation(store_id):
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
+    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
     form = UserReservationForm()
 
     if form.validate_on_submit():
@@ -110,7 +110,7 @@ def user_reservation(store_id):
 @bp.route('/reservation/<store_id>/<reservation_id>', methods=['GET', 'POST'])
 def user_make_reservation(store_id, reservation_id):
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
+    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
     form = UserReservationForm()
     return render_template('user_reservation.html', store=store_id, user=user_data, form=form, reservation_id=reservation_id)
 
@@ -138,7 +138,7 @@ def change_password_page():
         new_password = form.new_password.data
         ucp = UserChangePasswordUseCase(setup.user_provider)
         try:
-            ludu = LoadUserDataUseCase(setup.user_provider)
+            ludu = LoadUserUseCase(setup.user_provider)
             username = ludu.execute(current_user.get_id()).username
             ucp.execute(username, old_password, new_password)
             return redirect(url_for('users.user_logout'))

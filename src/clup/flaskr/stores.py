@@ -8,7 +8,6 @@ import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
-from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
