@@ -1,44 +1,60 @@
 {% extends 'base_user.html' %}
+
 {% block content %}
-<div class="mask d-flex align-text-center h-100">
-    <div class="container mt-4">
-        <p class="h2 mb-4 text-black text-center">Find your favorite store</p>
-        <div class="card mb-4">
-            <div class="card-body p-4">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="input-group-rounded d-flex justify-content-center">
-
-                            <form method="POST" autocomplete="off">
-                                {{form.csrf_token}}
-                                <div class="input-group items-center">
-                                    <div class="form-outline">
-                                        {{ form.store(placeholder="store name", class="form-control") }}
-
-                                        </p>
-                                    </div>
-                                    {{ form.submit(class="btn btn-outline-primary")}}
-                                </div>
-
-                            </form>
-                        </div>
-
-
+<div class="container" >
+    <div class="d-flex flex-row justify-content-center">
+        <div class="d-flex flex-column">
+            <p class="h2 my-4 text-black text-center">
+                Find your favorite store
+            </p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body p-4">
+            <div class="d-flex flex-row">
+                <div class="input-group">
+                    <input type="text" id="name_textbox" class="form-control" placeholder="Type a name to search..">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" id="clear_btn" type="button">
+                            Clear
+                        </button>
                     </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-center mt-4">
+                <div class="list-group" id="store_list">
+                    <div id="store_list_begin"/>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="d-flex justify-content-center ">
-    <div class="list-group">
-        {% for n in st %}
-        <a class="list-group-item list-group-item-action">{{n.id}}</a>
-        {% endfor %}
-    </div>
-</div>
+<script>
+function query_stores(name) {
+    $.ajax({
+        url: "{{ url_for('users.show_user_stores') }}" + "?name=" + name,
+        type: "GET",
+    }).done(function(data) {
+        console.log(data);
+        $("#store_list a").remove();
+        $.each(data, function(index, store) {
+           $("#store_list_begin").after('<a class="list-group-item list-group-item-action">' + store.name + '</a>');
+        });
+    });
+}
 
+$( document ).ready(function() {
+    query_stores("");
+});
 
-</div>
+$("#name_textbox").on("input", function() {
+    query_stores($( this ).val());
+});
+
+$("#clear_btn").click(function() {
+    $("#name_textbox").val("");
+    query_stores($("#name_textbox").val());
+});
+</script>
 {% endblock %}

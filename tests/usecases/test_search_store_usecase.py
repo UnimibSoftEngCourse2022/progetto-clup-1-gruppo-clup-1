@@ -37,6 +37,17 @@ class TestSearchStoreUsecase(unittest.TestCase):
         self.assertEqual(len(stores_found), 1)
         self.assertTrue(store in stores_found)
 
+    def test_all_stores_returned_on_empty_name(self):
+        stores = self.store_provider.get_stores()
+        store = Store(2, 'Esselunga', 'address')
+        stores.append(store)
+
+        stores_found = self.u.execute('')
+        
+        self.assertEqual(len(stores_found), 1)
+        self.assertTrue(store in stores_found)
+        
+
     def test_stores_found_is_empty_if_store_provider_is_empty(self):
         stores_found = self.u.execute('Conad')
 

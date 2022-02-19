@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, flash
+from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 
 import src.clup.flaskr.global_setup as setup
@@ -87,10 +87,17 @@ def user_page():
     st = setup.store_provider.get_stores()
     if form.validate_on_submit():
         store_list = ssu.execute(form.store.data)
-        print(store_list)
+        # print(store_list)
         return redirect(url_for('users.founded_store', stores=store_list))
 
     return render_template('user.html', user=user_data, form=form, st=st)
+
+@bp.route('/user/stores')
+def show_user_stores():
+    args = request.args
+    name = args.get('name', default='', type=str)
+    store_list = ssu.execute(name)
+    return jsonify(store_list)
 
 
 @bp.route('/founded_store/<stores>')
@@ -134,12 +141,6 @@ def admin_page():
 def user_logout():
     logout_user()
     return redirect(url_for('users.user_login_page'))
-
-
-# TODO
-# @app.errorhandler(CSRFError)
-# def handle_csrf_error(e):
-#     return render_template('csrf_error.html', reason=e.description), 400
 
 
 @bp.route('/account/change_password', methods=['GET', 'POST'])
