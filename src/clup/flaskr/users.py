@@ -31,8 +31,6 @@ from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 bp = Blueprint('users', __name__)
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
-# cru = ConsumeReservationUseCase(bqp)
-
 ssu = SearchStoreUseCase(setup.store_provider)
 
 

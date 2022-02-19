@@ -5,7 +5,7 @@
         var new_address = $("#address").val();
         var new_capacity = $("#capacity").val();
         $.ajax({
-            url: "{{ url_for('stores.show_store', store_id=store.id) }}",
+            url: "{{ url_for('stores.store', store_id=store.id) }}",
             type: "PUT",
             data: {
                 csrf_token: '{{ csrf_token() }}',
@@ -136,7 +136,7 @@
             return $(this).attr("id");
         }).get();
         $.ajax({
-            url: "{{ url_for('stores.store_reservations', store_id=store.id) }}",
+            url: "{{ url_for('stores.reservations', store_id=store.id) }}",
             type: "POST",
             data: {
                 csrf_token: "{{ csrf_token() }}",

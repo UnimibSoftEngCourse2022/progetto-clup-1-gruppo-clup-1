@@ -11,7 +11,6 @@ from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
 from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
-
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
@@ -23,21 +22,17 @@ from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
 bp = Blueprint('stores', __name__)
 
-slu = StoreListUseCase(setup.store_provider)
 
+slu = StoreListUseCase(setup.store_provider)
 asu = AddStoreUseCase(setup.store_provider)
 aau = AddAisleUseCase(setup.aisle_provider, setup.lane_provider)
-
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 cru = ConsumeReservationUseCase(
     setup.lane_provider, setup.reservation_provider
 )
-
 usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
-
 ssu = SearchStoreUseCase(setup.store_provider)
-
 luau = LoadAdminUseCase(setup.admin_provider)
 
 
@@ -65,12 +60,12 @@ def init_stores():
     aru.execute('admin1', 'password', esselunga.id, esselunga.secret)
     aru.execute('admin2', 'password', conad.id, conad.secret)
 
-    return redirect(url_for('stores.show_stores'))
+    return redirect(url_for('stores.stores'))
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
 @login_required
-def show_stores():
+def stores():
     a_id = current_user.get_id()
     admin_data = luau.execute(a_id)
     if request.method == 'POST':
@@ -79,7 +74,7 @@ def show_stores():
         store_capacity = int(request.values['capacity'])
         try:
             store = asu.execute(store_name, store_address, store_capacity)
-            return redirect(url_for('stores.show_store', store_id=store.id))
+            return redirect(url_for('stores.store', store_id=store.id))
         except ValueError:
             return 'ERROR'
     else:
@@ -96,7 +91,7 @@ def add_store():
 
 @bp.route('/stores/<store_id>', methods=['GET', 'PUT'])
 @login_required
-def show_store(store_id):
+def store(store_id):
     a_id = current_user.get_id()
     admin_data = luau.execute(a_id)
     if request.method == 'PUT':
@@ -105,8 +100,7 @@ def show_store(store_id):
             if store.id == store_id:
                 capacity = int(request.values['capacity'])
                 usu.execute(store, capacity)
-                return redirect(url_for('stores.show_store',
-                                        store_id=store.id))
+                return redirect(url_for('stores.store', store_id=store.id))
     else:
         for store in slu.execute():
             if store.id == store_id:
@@ -125,7 +119,7 @@ def show_store(store_id):
 
 @bp.route('/stores/<store_id>/reservations', methods=['GET', 'POST'])
 @login_required
-def store_reservations(store_id):
+def reservations(store_id):
     if request.method == 'POST':
         user_id = current_user.get_id()
         aisle_ids = request.values['aisle_ids']
@@ -145,8 +139,9 @@ def store_reservations(store_id):
                                to_free_ids=to_free)
 
 
-@bp.route('/stores/<store_id>/consumed', methods=['POST', 'DELETE'])
-def store_pool_handler(store_id):
+@bp.route('/stores/<store_id>/reservations/consumed', 
+    methods=['POST', 'DELETE'])
+def consumed_reservations(store_id):
     if request.method == 'POST':
         try:
             reservation_id = request.values['reservation_id']
