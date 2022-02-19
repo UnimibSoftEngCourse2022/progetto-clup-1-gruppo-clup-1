@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
+from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
 from src.clup.usecases.load_user_data_usecase import LoadUserDataUseCase
 from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
@@ -18,10 +19,7 @@ from src.clup.usecases.consume_reservation_usecase \
 from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
-from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
-
-# from src.clup.entities.exceptions \
-#     import MaxCapacityReachedError, EmptyQueueError
+from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
 
 bp = Blueprint('stores', __name__)
@@ -39,9 +37,12 @@ cru = ConsumeReservationUseCase(
 
 usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
 
+ssu = SearchStoreUseCase(setup.store_provider)
 
-@bp.route('/stores/init')
-@login_required
+luau = LoadAdminDataUseCase(setup.admin_provider)
+
+
+@bp.route('/data/init')
 def init_stores():
     esselunga = asu.execute('Esselunga', 'Campofiorenzo', 1)
     conad = asu.execute('Conad', 'Catania', 10)
@@ -51,18 +52,21 @@ def init_stores():
     aau.execute(conad.id, 'salumi', [Category.FRUIT])
     aau.execute(conad.id, 'frutta', [Category.MEAT])
 
-    esselunga_aisle_ids = setup.aisle_provider.get_store_aisle_ids(esselunga.id)
-    for aisle_id in esselunga_aisle_ids:
+    e_aisle_ids = setup.aisle_provider.get_store_aisle_ids(esselunga.id)
+    for aisle_id in e_aisle_ids:
         setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
-    conad_aisle_ids = setup.aisle_provider.get_store_aisle_ids(conad.id)
-    for aisle_id in conad_aisle_ids:
+    c_aisle_ids = setup.aisle_provider.get_store_aisle_ids(conad.id)
+    for aisle_id in c_aisle_ids:
         setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
+
+    uru = UserRegisterUsecase(setup.user_provider)
+    uru.execute('davide', 'prova')
+
+    aru = AdminRegisterUseCase(setup.admin_provider, setup.store_provider)
+    aru.execute('admin1', 'password', esselunga.id, esselunga.secret)
+    aru.execute('admin2', 'password', conad.id, conad.secret)
 
     return redirect(url_for('stores.show_stores'))
-
-ssu = SearchStoreUseCase(setup.store_provider)
-
-luau = LoadAdminDataUseCase(setup.admin_provider)
 
 
 @bp.route('/stores', methods=['GET', 'POST'])
@@ -87,8 +91,8 @@ def show_stores():
 @bp.route('/stores/add', methods=['GET'])
 @login_required
 def add_store():
-        stores = slu.execute()
-        return render_template('add_store.html', stores=stores)
+    stores = slu.execute()
+    return render_template('add_store.html', stores=stores)
 
 
 @bp.route('/stores/<store_id>', methods=['GET', 'PUT'])
@@ -158,6 +162,7 @@ def store_pool_handler(store_id):
             return '', 200
         except Exception:
             abort(400)
+
 
 @bp.route('/stores/qr_code_scan', methods=['GET'])
 def qrcode():

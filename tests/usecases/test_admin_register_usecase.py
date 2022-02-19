@@ -99,17 +99,17 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         self.admin_pvd.add_admin = Mock()
         self.admin_pvd.add_admin_to_store = Mock()
         same_secret_as_2 = 'secret2'
-        store3_id = 'store3'
-        s3 = Store(store3_id, 'name3', 'Firenze', same_secret_as_2)
+        s_id = 'store3'
+        s3 = Store(s_id, 'name3', 'Firenze', same_secret_as_2)
         self.msp.add_store(s3)
         username = 'usr'
         password = 'pwd'
-        
-        a_id = self.u.execute(username, password, store3_id, same_secret_as_2)
+
+        a_id = self.u.execute(username, password, s_id, same_secret_as_2)
         adm = Admin(a_id, username, password)
 
         self.admin_pvd.add_admin.assert_called_once_with(adm)
-        self.admin_pvd.add_admin_to_store.assert_called_once_with(a_id, store3_id)
+        self.admin_pvd.add_admin_to_store.assert_called_once_with(a_id, s_id)
 
     def test_register_on_unexistent_store_id_throws(self):
         with self.assertRaises(ValueError):

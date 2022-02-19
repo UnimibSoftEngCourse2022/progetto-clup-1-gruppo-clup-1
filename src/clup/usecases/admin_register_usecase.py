@@ -12,7 +12,7 @@ class AdminRegisterUseCase:
         if not username or not password:
             raise ValueError('missing fields')
 
-        if username in [adm.username for adm in self.admin_provider.get_admins()]:
+        if username in [a.username for a in self.admin_provider.get_admins()]:
             raise ValueError('username already present')
 
         found_store = None
