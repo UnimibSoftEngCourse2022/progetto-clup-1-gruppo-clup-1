@@ -11,7 +11,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
-from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
+from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.user_change_password_usecase \
@@ -119,7 +119,7 @@ def user_make_reservation(store_id, reservation_id):
 @login_required
 def admin_page():
     a_id = current_user.get_id()
-    admin_data = LoadAdminDataUseCase(setup.admin_provider).execute(a_id)
+    admin_data = LoadAdminUseCase(setup.admin_provider).execute(a_id)
     return render_template('admin.html', admin=admin_data)
 
 

@@ -8,7 +8,7 @@ import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
-from src.clup.usecases.load_admin_data_usecase import LoadAdminDataUseCase
+from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
 
@@ -38,7 +38,7 @@ usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
 
 ssu = SearchStoreUseCase(setup.store_provider)
 
-luau = LoadAdminDataUseCase(setup.admin_provider)
+luau = LoadAdminUseCase(setup.admin_provider)
 
 
 @bp.route('/data/init')
