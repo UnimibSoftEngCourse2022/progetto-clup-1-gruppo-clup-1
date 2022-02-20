@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_login import login_user, login_required
+from flask_login import login_required
 
 
 bp = Blueprint('store_manager', __name__)

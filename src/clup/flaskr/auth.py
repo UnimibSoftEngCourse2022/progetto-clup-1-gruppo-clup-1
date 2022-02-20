@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
-from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.user_change_password_usecase \
     import UserChangePasswordUseCase
@@ -11,7 +10,6 @@ from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
 from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
-from .forms.user_reservation_form import UserReservationForm
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
 

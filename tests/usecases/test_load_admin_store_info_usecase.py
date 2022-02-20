@@ -18,8 +18,10 @@ class TestLoadAdminStoreInfoUseCase(unittest.TestCase):
         self.store_provider = MockStoreProvider()
         self.aisle_provider = MockAisleProvider()
         self.lane_provider = MockLaneProvider()
-        self.u = LoadAdminStoreInfoUseCase(self.store_provider, 
-            self.aisle_provider, self.lane_provider, self.admin_provider)
+        self.u = LoadAdminStoreInfoUseCase(self.store_provider,
+                                           self.aisle_provider,
+                                           self.lane_provider,
+                                           self.admin_provider)
 
     def test_correct_store_is_loaded(self):
         store = Store('store_id', 'name', 'address')
@@ -43,7 +45,6 @@ class TestLoadAdminStoreInfoUseCase(unittest.TestCase):
         info_aisles = info['aisles']
 
         self.assertEqual(info_aisles, [aisle1, aisle2])
-
 
     def test_correct_store_capacity_calculated(self):
         store = Store('store_id', 'name', 'address')

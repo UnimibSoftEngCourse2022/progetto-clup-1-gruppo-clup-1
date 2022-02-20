@@ -1,7 +1,7 @@
 class LoadStoreInfoUseCase:
     def __init__(self, store_provider, aisle_provider):
-       self.store_provider = store_provider
-       self.aisle_provider = aisle_provider
+        self.store_provider = store_provider
+        self.aisle_provider = aisle_provider
 
     def execute(self, store_id):
         stores = self.store_provider.get_stores()

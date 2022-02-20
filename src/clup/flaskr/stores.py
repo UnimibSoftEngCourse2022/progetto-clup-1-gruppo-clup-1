@@ -139,8 +139,8 @@ def reservations(store_id):
                                to_free_ids=to_free)
 
 
-@bp.route('/stores/<store_id>/reservations/consumed', 
-    methods=['POST', 'DELETE'])
+@bp.route('/stores/<store_id>/reservations/consumed',
+          methods=['POST', 'DELETE'])
 def consumed_reservations(store_id):
     if request.method == 'POST':
         try:

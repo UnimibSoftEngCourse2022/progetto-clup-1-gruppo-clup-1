@@ -8,7 +8,7 @@ class MockAisleProvider(AisleProvider):
         self.aisles = defaultdict(list)
 
     def get_aisles(self):
-        return [a 
+        return [a
                 for store_aisles in self.aisles.values()
                 for a in store_aisles]
 

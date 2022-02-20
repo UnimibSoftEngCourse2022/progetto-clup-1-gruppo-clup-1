@@ -3,31 +3,16 @@ from flask import (
     render_template,
     url_for,
     redirect,
-    flash,
-    request,
-    jsonify,
 )
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
-from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
-from src.clup.usecases.user_change_password_usecase \
-    import UserChangePasswordUseCase
-from src.clup.usecases.load_store_info_usecase \
-    import LoadStoreInfoUseCase
 
-from .flask_user import FlaskUser
-from .forms.change_password import ChangePasswordForm
-from .forms.user_login_form import UserLoginForm
-from .forms.user_register_form import UserRegisterForm
 from .forms.user_reservation_form import UserReservationForm
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
-from src.clup.usecases.consume_reservation_usecase \
-    import ConsumeReservationUseCase
-from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
 
 bp = Blueprint('users', __name__)

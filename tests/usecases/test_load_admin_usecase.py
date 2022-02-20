@@ -29,7 +29,7 @@ class TestLoadAdminUsecase(unittest.TestCase):
 
     def test_unexistent_admin_id_throws(self):
         with self.assertRaises(ValueError):
-            admin = self.u.execute('1')
+            self.u.execute('1')
 
     def test_admin_with_id_is_returned(self):
         u1 = Admin('1', 'tizio', 'caio')

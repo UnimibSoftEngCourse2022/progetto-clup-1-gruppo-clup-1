@@ -29,7 +29,7 @@ class TestLoadUserDataUsecase(unittest.TestCase):
 
     def test_unexistent_user_id_throws(self):
         with self.assertRaises(ValueError):
-            user = self.u.execute('1')
+            self.u.execute('1')
 
     def test_user_with_id_is_returned(self):
         u1 = User('1', 'tizio', 'caio')
