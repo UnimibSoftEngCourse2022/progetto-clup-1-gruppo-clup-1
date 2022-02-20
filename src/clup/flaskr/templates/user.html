@@ -33,13 +33,14 @@
 <script>
 function query_stores(name) {
     $.ajax({
-        url: "{{ url_for('users.show_user_stores') }}" + "?name=" + name,
+        url: "{{ url_for('users.search_stores') }}" + "?name=" + name,
         type: "GET",
     }).done(function(data) {
         console.log(data);
         $("#store_list a").remove();
         $.each(data, function(index, store) {
-           $("#store_list_begin").after('<a class="list-group-item list-group-item-action">' + store.name + '</a>');
+            $("#store_list_begin").after(
+                '<a class="list-group-item list-group-item-action" href="/user/stores/' + store.id + '">' + store.name + '</a>');
         });
     });
 }

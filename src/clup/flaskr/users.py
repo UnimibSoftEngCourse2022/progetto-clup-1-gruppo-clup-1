@@ -43,11 +43,21 @@ def user_page():
 
 
 @bp.route('/user/stores')
-def show_user_stores():
+@login_required
+def search_stores():
     args = request.args
     name = args.get('name', default='', type=str)
     store_list = ssu.execute(name)
     return jsonify(store_list)
+
+
+@bp.route('/user/stores/<store_id>')
+@login_required
+def store_info(store_id):
+    # u = LoadStoreInfo(setup.store_provider, setup.aisle_provider)
+    # info = u.execute(store_id)
+    # return render_template('store.html', info=info)
+    return f'<h1>{store_id}</h1>'
 
 
 @bp.route('/reservation/<store_id>', methods=['GET', 'POST'])
