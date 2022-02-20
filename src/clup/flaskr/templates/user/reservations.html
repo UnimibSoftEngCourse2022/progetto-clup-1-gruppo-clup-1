@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block content%}
+{% include 'user/navigation.html' %}
+
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">User Reservations</p>
+                    </div>
+                </div>
+                <div id="aisle_checkboxes">
+                    <ul>
+                        {% for reservation in reservations %}
+                        <li>
+                            <p>
+                                Reservation in aisle {{ reservation.aisle_id }}
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="d-flex flex-row justify-content-around">
+                   <button id="cancel_reservation_btn" type="submit">Cancel Reservation</button>
+                   <!--<button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block style %}
+<style>
+    #cancel_reservation_btn, #make_reservation_btn, #scan_btn {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 8px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

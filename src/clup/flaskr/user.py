@@ -54,4 +54,8 @@ def store_time_slots(store_id):
 @bp.route('/user/reservations')
 @login_required
 def reservations():
-    return '<h1>User Reservations Page</h1>'
+    u_id = current_user.get_id()
+    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
+    reservations = setup.reservation_provider.get_user_reservations(u_id)
+    return render_template('user/reservations.html', user=user_data,
+                           reservations=reservations)

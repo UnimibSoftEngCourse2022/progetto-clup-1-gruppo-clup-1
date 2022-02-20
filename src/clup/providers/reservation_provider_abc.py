@@ -7,6 +7,14 @@ class ReservationProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_reservations_with_id(self, reservation_id):
+        pass
+
+    @abc.abstractmethod
+    def get_user_reservations(self, user_id):
+        pass
+
+    @abc.abstractmethod
     def add_reservation(self, reservation):
         pass
 
