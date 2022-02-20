@@ -15,5 +15,8 @@ class MockAisleProvider(AisleProvider):
     def get_store_aisle_ids(self, store_id):
         return [a.id for a in self.aisles[store_id]]
 
+    def get_store_aisles(self, store_id):
+        return [a for a in self.aisles[store_id]]
+
     def add_aisle(self, store_id, aisle):
         raise NotImplementedError()
