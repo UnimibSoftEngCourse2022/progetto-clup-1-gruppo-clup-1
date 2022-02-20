@@ -3,9 +3,10 @@ from sqlalchemy.exc import IntegrityError
 
 import src.clup.database.models as models
 from src.clup.entities.admin import Admin
+from src.clup.providers.admin_provider_abc import AdminProvider
 
 
-class SqliteAdminProvider:
+class SqliteAdminProvider(AdminProvider):
     def __init__(self, engine):
         self.engine = engine
 
