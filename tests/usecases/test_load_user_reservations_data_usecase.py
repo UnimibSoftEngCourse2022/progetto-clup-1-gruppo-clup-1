@@ -54,10 +54,27 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         store2 = Store('store2_id', 'name', 'address')
         aisle3 = Aisle('aisle3_id', 'a4', 'cat4')
         aisle4 = Aisle('aisle4_id', 'a3', 'cat3')
-        r3 = Reservation('r3', 'aisle3_id', 'user_id')
-        r4 = Reservation('r4', 'aisle4_id', 'user_id')
+        r3 = Reservation('r2', 'aisle3_id', 'user_id')
+        r4 = Reservation('r2', 'aisle4_id', 'user_id')
         self.store_provider.stores.append(store2)
         self.aisle_provider.aisles['store2_id'] = [aisle3, aisle4]
+        self.reservation_provider.reservations.extend([r3, r4])
+
+        reservations_data = self.u.execute('user_id')
+        
+        self.assertEqual(len(reservations_data), 2)
+
+    def test_multiple_reservations_in_store_counted(self):
+        store1 = Store('store1_id', 'name', 'address')
+        aisle1 = Aisle('aisle1_id', 'a1', 'cat1')
+        aisle2 = Aisle('aisle2_id', 'a2', 'cat2')
+        r1 = Reservation('r1', 'aisle1_id', 'user_id')
+        r2 = Reservation('r1', 'aisle2_id', 'user_id')
+        self.store_provider.stores.append(store1)
+        self.aisle_provider.aisles['store1_id'] = [aisle1, aisle2]
+        self.reservation_provider.reservations.extend([r1, r2])
+        r3 = Reservation('r2', 'aisle1_id', 'user_id')
+        r4 = Reservation('r2', 'aisle2_id', 'user_id')
         self.reservation_provider.reservations.extend([r3, r4])
 
         reservations_data = self.u.execute('user_id')

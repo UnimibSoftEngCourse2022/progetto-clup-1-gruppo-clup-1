@@ -12,6 +12,12 @@ class MockAisleProvider(AisleProvider):
                 for store_aisles in self.aisles.values()
                 for a in store_aisles]
 
+    def get_aisle(self, aisle_id):
+        return [a
+                for store_aisles in self.aisles.values()
+                for a in store_aisles
+                if a.id == aisle_id][0]
+
     def get_store_aisle_ids(self, store_id):
         return [a.id for a in self.aisles[store_id]]
 

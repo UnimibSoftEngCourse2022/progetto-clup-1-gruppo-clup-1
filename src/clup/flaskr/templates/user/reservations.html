@@ -16,11 +16,14 @@
                 </div>
                 <div id="aisle_checkboxes">
                     <ul>
-                        {% for reservation in reservations %}
+                        {% for store, aisles in stores_with_aisles %}
                         <li>
-                            <p>
-                                Reservation in aisle {{ reservation.aisle_id }}
-                            </p>
+                            <p>Store: {{ store.name }}</p>
+                            <ul>
+                                {% for aisle in aisles %}
+                                <li>{{ aisle.name }}</li>
+                                {% endfor %}
+                            </ul>
                         </li>
                         {% endfor %}
                     </ul>

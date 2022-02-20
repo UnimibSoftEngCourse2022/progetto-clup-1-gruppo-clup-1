@@ -7,6 +7,10 @@ class AisleProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_aisle(self, aisle_id):
+        pass
+
+    @abc.abstractmethod
     def get_store_aisle_ids(self, store_id):
         pass
 

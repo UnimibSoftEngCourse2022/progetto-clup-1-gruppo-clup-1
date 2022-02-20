@@ -4,6 +4,8 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
+from src.clup.usecases.load_user_reservations_data_usecase \
+    import LoadUserReservationsDataUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 
 
@@ -56,6 +58,9 @@ def store_time_slots(store_id):
 def reservations():
     u_id = current_user.get_id()
     user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
-    reservations = setup.reservation_provider.get_user_reservations(u_id)
+    lurdu = LoadUserReservationsDataUseCase(setup.reservation_provider,
+                                            setup.store_provider,
+                                            setup.aisle_provider)
+    stores_with_aisles = lurdu.execute(u_id)
     return render_template('user/reservations.html', user=user_data,
-                           reservations=reservations)
+                           stores_with_aisles=stores_with_aisles)
