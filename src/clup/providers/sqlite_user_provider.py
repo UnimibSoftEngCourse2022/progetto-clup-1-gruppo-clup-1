@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
@@ -10,37 +11,44 @@ class SqliteUserProvider:
 
     def get_users(self):
         with Session(self.engine) as session, session.begin():
-            model_users = session.query(models.User).all()
+            model_users = session.query(models.Account).filter(models.Account.type == 'user').all()
             users = [User(mu.uuid, mu.username, mu.password)
                      for mu in model_users]
             return users
 
     def add_user(self, user):
-        with Session(self.engine) as session, session.begin():
-            if user.id in [u.id for u in self.get_users()]:
-                raise ValueError("user_id already present")
-            model_user = models.User(
-                uuid=user.id,
-                username=user.username,
-                password=user.password,
-            )
-            session.add(model_user)
+        if user.username in [a.username for a in self.get_users()]:
+            raise ValueError('username already used')
+
+        try:
+            with Session(self.engine) as session, session.begin():
+                model_admin = models.Account(
+                    uuid=user.id,
+                    username=user.username,
+                    password=user.password,
+                    type='user'
+                )
+                session.add(model_admin)
+        except IntegrityError:
+            raise ValueError('admin id already used')
 
     def remove_user(self, user_id):
         with Session(self.engine) as session, session.begin():
             if user_id not in [u.id for u in self.get_users()]:
                 raise ValueError("user_id not present")
-            session.query(models.User). \
-                filter(models.User.uuid == user_id).delete()
+            session.query(models.Account). \
+                filter(models.Account.uuid == user_id,
+                       models.Account.type == 'user').delete()
 
     def update_user(self, user):
         with Session(self.engine) as session, session.begin():
             if user.id not in [u.id for u in self.get_users()]:
                 raise ValueError("user_id already present")
 
-            query = session.query(models.User). \
-                filter(models.User.uuid == user.id)
+            query = session.query(models.Account). \
+                filter(models.Account.uuid == user.id,
+                       models.Account.type == 'user')
             query.update({
-                models.User.username: user.username,
-                models.User.password: user.password,
+                models.Account.username: user.username,
+                models.Account.password: user.password,
             })

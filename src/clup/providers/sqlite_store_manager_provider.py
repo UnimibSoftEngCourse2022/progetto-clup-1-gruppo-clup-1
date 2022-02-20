@@ -29,10 +29,11 @@ class SqliteStoreManagerProvider:
 
     def add_manager(self, id, username, password):
         with Session(self.engine) as session, session.begin():
-            manager_model = models.StoreManager(
+            manager_model = models.Account(
                 uuid=id,
                 username=username,
-                password=password
+                password=password,
+                type='store_manager'
             )
             session.add(manager_model)
             session.query(models.StoreManagerSecretKey) \
@@ -41,17 +42,18 @@ class SqliteStoreManagerProvider:
 
     def delete_store_manager(self, manager_id):
         with Session(self.engine) as session, session.begin():
-            session.query(models.StoreManager) \
-                .filter(models.StoreManager.uuid == manager_id) \
-                .delete()
+            session.query(models.Account) \
+                .filter(models.Account.uuid == manager_id,
+                        models.Account.type == 'store_manager').delete()
             session.query(models.StoreManagerSecretKey) \
                 .filter(models.StoreManagerSecretKey.store_manager_uuid == manager_id) \
                 .delete()
 
     def get_manager(self, manager_id):
         with Session(self.engine) as session, session.begin():
-            manager_model = session.query(models.StoreManager) \
-                .filter(models.StoreManager.uuid == manager_id) \
+            manager_model = session.query(models.Account) \
+                .filter(models.Account.uuid == manager_id,
+                        models.Account.type == 'store_manager') \
                 .all()
             if len(manager_model) != 1:
                 raise ValueError('could not find any manager')

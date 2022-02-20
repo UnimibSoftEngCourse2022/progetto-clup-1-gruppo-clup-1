@@ -5,12 +5,13 @@ from sqlalchemy.orm import Session
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'user'
+class Account(Base):
+    __tablename__ = 'account'
     id = Column(Integer, primary_key=True)
     uuid = Column(String, unique=True)
-    username = Column(String)
+    username = Column(String, unique=True)
     password = Column(String)
+    type = Column(String)
 
 
 class Reservation(Base):
@@ -18,7 +19,7 @@ class Reservation(Base):
     id = Column(Integer, primary_key=True)
     uuid = Column(String)
     aisle_id = Column(String, ForeignKey('aisle.uuid'))
-    user_id = Column(String, ForeignKey('user.uuid'))
+    user_id = Column(String, ForeignKey('account.uuid'))
 
 
 class Aisle(Base):
@@ -46,19 +47,11 @@ class StoreAisle(Base):
     aisle_uuid = Column(String, ForeignKey('aisle.uuid'), unique=True)
 
 
-class Admin(Base):
-    __tablename__ = 'admin'
-    id = Column(Integer, primary_key=True)
-    uuid = Column(String, unique=True)
-    username = Column(String)
-    password = Column(String)
-
-
 class StoreAdmin(Base):
     __tablename__ = 'store_admin'
     id = Column(Integer, primary_key=True)
-    admin_uuid = Column(String, ForeignKey('admin.id'), unique=True)
-    store_uuid = Column(String, ForeignKey('store.id'))
+    admin_uuid = Column(String, ForeignKey('account.uuid'), unique=True)
+    store_uuid = Column(String, ForeignKey('store.uuid'))
 
 
 class Appointment(Base):
@@ -69,18 +62,10 @@ class Appointment(Base):
     date_time = Column(DateTime)
 
 
-class StoreManager(Base):
-    __tablename__ = 'store_manager'
-    id = Column(Integer, primary_key=True)
-    uuid = Column(String, unique=True)
-    username = Column(String, unique=True)
-    password = Column(String)
-
-
 class StoreManagerSecretKey(Base):
     __tablename__ = 'store_manager_secretkey'
     id = Column(Integer, primary_key=True)
-    store_manager_uuid = Column(String, ForeignKey('store_manager.uuid'))
+    store_manager_uuid = Column(String, ForeignKey('account.uuid'))
     secret_key = Column(String)
     active = Column(Boolean)
 
@@ -88,7 +73,7 @@ class StoreManagerSecretKey(Base):
 class StoreStoreManager(Base):
     __tablename__ = 'store_store_manager'
     id = Column(Integer, primary_key=True)
-    store_manager_uuid = Column(String, ForeignKey('store_manager.uuid'))
+    store_manager_uuid = Column(String, ForeignKey('account.uuid'))
     store_uuid = Column(String, ForeignKey('store.uuid'))
 
 
@@ -96,8 +81,8 @@ def create_initial_data(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
-    u1 = User(uuid=1, username='tizio', password='caio')
-    u2 = User(uuid=2, username='mario', password='rossi')
+    u1 = Account(uuid=1, username='tizio', password='caio', type='user')
+    u2 = Account(uuid=2, username='mario', password='rossi', type='user')
 
     r1 = Reservation(uuid=1000, aisle_id=10, user_id=1)
     r2 = Reservation(uuid=2000, aisle_id=20, user_id=2)

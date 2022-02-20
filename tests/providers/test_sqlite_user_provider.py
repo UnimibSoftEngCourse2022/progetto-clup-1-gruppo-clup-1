@@ -28,8 +28,8 @@ class TestSqliteUserProvider(unittest.TestCase):
         self.assertEqual(len(users), 0)
 
     def test_all_users_returned_from_non_empty_db(self):
-        mu1 = models.User(uuid='10', username='u1', password='p1')
-        mu2 = models.User(uuid='20', username='u2', password='p2')
+        mu1 = models.Account(uuid='10', username='u1', password='p1', type='user')
+        mu2 = models.Account(uuid='20', username='u2', password='p2', type='user')
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
             session.add(mu2)
@@ -50,7 +50,7 @@ class TestSqliteUserProvider(unittest.TestCase):
             self.up.add_user(u)
 
         with Session(self.engine) as session, session.begin():
-            users = session.query(models.User).all()
+            users = session.query(models.Account).filter(models.Account.type == 'user').all()
             user = users[0]
 
             self.assertEqual(len(users), 1)
@@ -59,7 +59,7 @@ class TestSqliteUserProvider(unittest.TestCase):
             self.assertEqual(user.password, 'p1')
 
     def test_user_is_removed_from_db(self):
-        mu1 = models.User(uuid='10', username='u1', password='p1')
+        mu1 = models.Account(uuid='10', username='u1', password='p1', type='user')
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
 
@@ -68,12 +68,12 @@ class TestSqliteUserProvider(unittest.TestCase):
         self.up.remove_user('10')
 
         with Session(self.engine) as session, session.begin():
-            users = session.query(models.User).all()
+            users = session.query(models.Account).filter(models.Account.type == 'user').all()
 
             self.assertEqual(len(users), 0)
 
     def test_user_is_updated(self):
-        mu1 = models.User(uuid='10', username='u1', password='p1')
+        mu1 = models.Account(uuid='10', username='u1', password='p1', type='user')
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
         updated_user = User('10', 'newu1', 'newp1')
@@ -84,7 +84,7 @@ class TestSqliteUserProvider(unittest.TestCase):
         self.up.update_user(updated_user)
 
         with Session(self.engine) as session, session.begin():
-            users = session.query(models.User).all()
+            users = session.query(models.Account).all()
             user = users[0]
 
             self.assertEqual(len(users), 1)

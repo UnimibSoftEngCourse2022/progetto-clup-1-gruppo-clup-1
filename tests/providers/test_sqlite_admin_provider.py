@@ -28,8 +28,8 @@ class TestSqliteAdminProvider(unittest.TestCase):
         self.assertEqual(len(admins), 0)
 
     def test_all_admins_returned_from_non_empty_db(self):
-        ma1 = models.Admin(uuid='10', username='u1', password='p1')
-        ma2 = models.Admin(uuid='20', username='u2', password='p2')
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma2 = models.Account(uuid='20', username='u2', password='p2', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
             session.add(ma2)
@@ -48,7 +48,7 @@ class TestSqliteAdminProvider(unittest.TestCase):
         self.ap.add_admin(a)
 
         with Session(self.engine) as session, session.begin():
-            admins = session.query(models.Admin).all()
+            admins = session.query(models.Account).filter(models.Account.type == 'admin').all()
             admin = admins[0]
 
             self.assertEqual(len(admins), 1)
@@ -57,19 +57,19 @@ class TestSqliteAdminProvider(unittest.TestCase):
             self.assertEqual(admin.password, 'p1')
 
     def test_admin_is_removed_from_db(self):
-        ma1 = models.Admin(uuid='10', username='u1', password='p1')
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
 
         self.ap.remove_admin('10')
 
         with Session(self.engine) as session, session.begin():
-            admins = session.query(models.Admin).all()
+            admins = session.query(models.Account).filter(models.Account.type == 'admin').all()
 
             self.assertEqual(len(admins), 0)
 
     def test_admin_is_updated(self):
-        ma1 = models.Admin(uuid='10', username='u1', password='p1')
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         updated_admin = Admin('10', 'newu1', 'newp1')
@@ -77,7 +77,7 @@ class TestSqliteAdminProvider(unittest.TestCase):
         self.ap.update_admin(updated_admin)
 
         with Session(self.engine) as session, session.begin():
-            admins = session.query(models.Admin).all()
+            admins = session.query(models.Account). filter(models.Account.type == 'admin').all()
             admin = admins[0]
 
             self.assertEqual(len(admins), 1)
@@ -86,10 +86,83 @@ class TestSqliteAdminProvider(unittest.TestCase):
             self.assertEqual(admin.password, 'newp1')
 
     def test_admin_store_id_is_returned(self):
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
         msa = models.StoreAdmin(admin_uuid='10', store_uuid='100')
         with Session(self.engine) as session, session.begin():
+            session.add(ma1)
             session.add(msa)
 
         store_id = self.ap.get_store_id('10')
 
         self.assertEqual(store_id, '100')
+
+    def test_admin_store_pair_is_added_to_table(self):
+        self.ap.add_admin_to_store('10', '200')
+
+        with Session(self.engine) as session, session.begin():
+            store_admins = session.query(models.StoreAdmin).all()
+            store_admin = store_admins[0]
+
+            self.assertEqual(len(store_admins), 1)
+            self.assertEqual(store_admin.admin_uuid, '10')
+            self.assertEqual(store_admin.store_uuid, '200')
+
+
+class TestSqliteAdminProviderIdValidation(unittest.TestCase):
+    def setUp(self):
+        db_path = Path(__file__).parent
+        self.db_file = db_path / Path('adminprovider2_testdb.sqlite')
+        self.engine = create_engine(f'sqlite:///{self.db_file}')
+        models.Base.metadata.drop_all(self.engine)
+        models.Base.metadata.create_all(self.engine)
+        self.ap = SqliteAdminProvider(self.engine)
+
+    def tearDown(self):
+        self.db_file.unlink()
+
+    def test_duplicate_id_throws(self):
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        with Session(self.engine) as session, session.begin():
+            session.add(ma1)
+        a = Admin('10', 'admin', 'pwd')
+
+        with self.assertRaises(ValueError):
+            self.ap.add_admin(a)
+
+    def test_duplicate_username_throws(self):
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        with Session(self.engine) as session, session.begin():
+            session.add(ma1)
+        a = Admin('100', 'u1', 'pwd')
+
+        with self.assertRaises(ValueError):
+            self.ap.add_admin(a)
+
+    def test_remove_on_unexistent_id_throws(self):
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        with Session(self.engine) as session, session.begin():
+            session.add(ma1)
+
+        with self.assertRaises(ValueError):
+            self.ap.remove_admin('100')
+
+    def test_update_on_unexistent_id_throws(self):
+        ma1 = models.Account(uuid='10', username='u1', password='p1',type='admin')
+        with Session(self.engine) as session, session.begin():
+            session.add(ma1)
+        a = Admin('100', 'u1', 'pwd')
+
+        with self.assertRaises(ValueError):
+            self.ap.update_admin(a)
+
+    def test_get_store_id_on_unexistent_id_throws(self):
+        with self.assertRaises(ValueError):
+            self.ap.get_store_id('10')
+
+    def test_giving_more_than_one_store_to_admin_throws(self):
+        msa = models.StoreAdmin(admin_uuid='10', store_uuid='200')
+        with Session(self.engine) as session, session.begin():
+            session.add(msa)
+
+        with self.assertRaises(ValueError):
+            self.ap.add_admin_to_store('10', '300')
