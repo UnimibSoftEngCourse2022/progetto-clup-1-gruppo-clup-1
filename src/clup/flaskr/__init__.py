@@ -45,9 +45,11 @@ def create_app(test_config=None):
     from . import stores
     from . import users
     from . import main
+    from . import auth
     app.register_blueprint(stores.bp)
     app.register_blueprint(users.bp)
     app.register_blueprint(main.bp)
+    app.register_blueprint(auth.bp)
 
     # SonarCloud CSRF Protection Requirements
     csrf = CSRFProtect()

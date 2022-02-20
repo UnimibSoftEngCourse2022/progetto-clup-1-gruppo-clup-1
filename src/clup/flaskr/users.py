@@ -34,48 +34,6 @@ mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 ssu = SearchStoreUseCase(setup.store_provider)
 
 
-@bp.route('/register', methods=['GET', 'POST'])
-def user_register_page():
-    form = UserRegisterForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password1.data
-        ur = UserRegisterUsecase(setup.user_provider)
-        try:
-            ur.execute(username, password)
-            return redirect(url_for('users.user_login_page'))
-        except ValueError:
-            flash('Something went wrong', category='danger')
-            return redirect(url_for('users.user_register_page'))
-    elif form.is_submitted():
-        flash("check all fields", category='danger')
-    return render_template('user_register.html', form=form)
-
-
-@bp.route('/login', methods=['GET', 'POST'])
-def user_login_page():
-    form = UserLoginForm()
-    if form.validate_on_submit():
-        gl = GenericLoginUsecase(setup.admin_provider, setup.user_provider)
-        username = form.username.data
-        password = form.password.data
-        try:
-            u_id, logged_type = gl.execute(username, password)
-            user = FlaskUser(u_id)
-            login_user(user)
-            if logged_type == 'user':
-                return redirect(url_for('users.user_page'))
-            if logged_type == 'admin':
-                return redirect(url_for('stores.show_stores'))
-        except ValueError:
-            flash('Incorrent credentials', category='danger')
-            return redirect(url_for('users.user_login_page'))
-    else:
-        if form.is_submitted():
-            flash('form not valid', category='danger')
-    return render_template('user_login.html', form=form)
-
-
 @bp.route('/account', methods=['GET', 'POST'])
 @login_required
 def user_page():
@@ -119,31 +77,3 @@ def admin_page():
     a_id = current_user.get_id()
     admin_data = LoadAdminUseCase(setup.admin_provider).execute(a_id)
     return render_template('admin.html', admin=admin_data)
-
-
-@bp.route('/logout')
-def user_logout():
-    logout_user()
-    return redirect(url_for('users.user_login_page'))
-
-
-@bp.route('/account/change_password', methods=['GET', 'POST'])
-@login_required
-def change_password_page():
-    form = ChangePasswordForm()
-    if form.validate_on_submit():
-        old_password = form.old_password.data
-        new_password = form.new_password.data
-        ucp = UserChangePasswordUseCase(setup.user_provider)
-        try:
-            ludu = LoadUserUseCase(setup.user_provider)
-            username = ludu.execute(current_user.get_id()).username
-            ucp.execute(username, old_password, new_password)
-            return redirect(url_for('users.user_logout'))
-        except ValueError:
-            flash('Something went wrong', category='danger')
-            return redirect(url_for('users.change_password_page'))
-    else:
-        if form.is_submitted():
-            flash('form not valid', category='danger')
-    return render_template('change_password.html', form=form)
