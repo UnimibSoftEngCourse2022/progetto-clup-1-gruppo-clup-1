@@ -82,7 +82,7 @@ def create_app(test_config=None):
             "func": "src.clup.flaskr:scheduler_job",
             "args": (),
             "trigger": "interval",
-            "seconds": 300,
+            "seconds": 10,
         }
     ]
 
