@@ -20,6 +20,9 @@ class MockAppointmentProvider:
     def get_appointments(self):
         return self.appointments.values()
 
+    def delete_appointment(self, appointment_id):
+        self.appointments[appointment_id] = None
+
 
 class MockReservationProvider:
     def __init__(self):
