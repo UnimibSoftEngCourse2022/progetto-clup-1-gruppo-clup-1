@@ -38,7 +38,8 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         reservations_data = self.u.execute('user_id')
         
         self.assertEqual(len(reservations_data), 1)
-        r_store, r_aisles = reservations_data[0]
+        r_id, r_store, r_aisles = reservations_data[0]
+        self.assertEqual(r_id, 'r1')
         self.assertEqual(r_store, store)
         self.assertEqual(r_aisles, [aisle1, aisle2])
 

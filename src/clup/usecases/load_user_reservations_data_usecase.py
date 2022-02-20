@@ -20,7 +20,7 @@ class LoadUserReservationsDataUseCase:
         for r_id, aisle_ids in reservation_with_aisle_ids.items():
             aisles = [self.aisle_provider.get_aisle(id) for id in aisle_ids]
             store = self._get_store(aisle_ids[0])
-            data.append((store, aisles))
+            data.append((r_id, store, aisles))
 
         return data
 
