@@ -16,13 +16,13 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         self.reservation_provider = MockReservationProvider()
         self.store_provider = MockStoreProvider()
         self.aisle_provider = MockAisleProvider()
-        self.u = LoadUserReservationsDataUseCase(self.reservation_provider, 
-                                                 self.store_provider, 
+        self.u = LoadUserReservationsDataUseCase(self.reservation_provider,
+                                                 self.store_provider,
                                                  self.aisle_provider)
 
     def test_empty_sequence_returned_on_no_reservations(self):
         reservations_data = self.u.execute('user_id')
-        
+
         self.assertEqual(len(reservations_data), 0)
 
     def test_store_with_reserved_aisles_returned(self):
@@ -36,7 +36,7 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         self.reservation_provider.reservations.extend([r1, r2])
 
         reservations_data = self.u.execute('user_id')
-        
+
         self.assertEqual(len(reservations_data), 1)
         r_id, r_store, r_aisles = reservations_data[0]
         self.assertEqual(r_id, 'r1')
@@ -62,7 +62,7 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         self.reservation_provider.reservations.extend([r3, r4])
 
         reservations_data = self.u.execute('user_id')
-        
+
         self.assertEqual(len(reservations_data), 2)
 
     def test_multiple_reservations_in_store_counted(self):
@@ -79,5 +79,5 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         self.reservation_provider.reservations.extend([r3, r4])
 
         reservations_data = self.u.execute('user_id')
-        
+
         self.assertEqual(len(reservations_data), 2)

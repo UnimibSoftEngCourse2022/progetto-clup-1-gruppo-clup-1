@@ -10,7 +10,6 @@ class LoadUserReservationsDataUseCase:
     def execute(self, user_id):
         user_reservations = \
             self.reservation_provider.get_user_reservations(user_id)
-        reservations_aisle_ids = [r.aisle_id for r in user_reservations]
 
         reservation_with_aisle_ids = defaultdict(list)
         for r in user_reservations:
