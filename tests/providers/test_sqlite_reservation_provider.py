@@ -129,3 +129,20 @@ class TestSqliteReservationProvider(unittest.TestCase):
             self.assertEqual(reservation.uuid, '20')
             self.assertEqual(reservation.aisle_id, '300')
             self.assertEqual(reservation.user_id, '2000')
+
+    def test_correct_store_id_returned_from_reservation(self):
+        mr1 = models.Reservation(uuid='20', aisle_id='200', user_id='2000')
+        mr2 = models.Reservation(uuid='20', aisle_id='300', user_id='2000')
+
+        msa1 = models.StoreAisle(aisle_uuid='200', store_uuid='correct_store')
+        msa2 = models.StoreAisle(aisle_uuid='300', store_uuid='correct_store')
+        msa3 = models.StoreAisle(aisle_uuid='400', store_uuid='not_correct_store')
+        with Session(self.engine) as session, session.begin():
+            session.add(mr1)
+            session.add(mr2)
+            session.add(msa1)
+            session.add(msa2)
+            session.add(msa3)
+
+        store_id = self.rp.get_store_from_reservation_id('20')
+        self.assertEqual(store_id, 'correct_store')

@@ -16,4 +16,3 @@ aisle_provider = SqliteAisleProvider(engine)
 lane_provider = BasicLaneProvider()
 reservation_provider = SqliteReservationProvider(engine)
 appointment_provider = SqliteAppointmentProvider(engine)
-

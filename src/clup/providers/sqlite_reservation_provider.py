@@ -77,3 +77,14 @@ class SqliteReservationProvider(ReservationProvider):
                 filter(models.Reservation.uuid == reservation_id). \
                 filter(models.Reservation.aisle_id == aisle_id)
             query.delete()
+
+    def get_store_from_reservation_id(self, reservation_id):
+        with Session(self.engine) as session, session.begin():
+            reservations = self.get_reservations_with_id(reservation_id)
+            aisle_ids = [r.aisle_id for r in reservations]
+            query = session.query(models.StoreAisle).all()
+            store_id = [sa.store_uuid for sa in query if sa.aisle_uuid in aisle_ids]
+            store_id = list(set(store_id))
+            if len(store_id) != 1:
+                raise ValueError("unable to find a store for this aisle")
+            return store_id[0]

@@ -35,7 +35,7 @@ def unauthorized_callback():
     return redirect(url_for('users.user_login_page'))
 
 
-def scheduler_job():
+def activate_appointment():
     from src.clup.usecases.scheduler_usecase import SchedulerUseCase
     from src.clup.flaskr.global_setup import appointment_provider, lane_provider, reservation_provider
 
@@ -52,6 +52,18 @@ def scheduler_job():
         lane_provider=lane_provider
     )
     suc.execute(date_time)
+
+
+def remove_unused_reservation_scheduler():
+    from src.clup.usecases.remove_unused_reservation import RemoveUnusedReservation
+    from src.clup.flaskr.global_setup import store_provider, lane_provider, reservation_provider
+
+    rur = RemoveUnusedReservation(
+        store_provider=store_provider,
+        lane_provider=lane_provider,
+        reservation_provider=reservation_provider
+    )
+    rur.execute()
 
 
 def create_app(test_config=None):
@@ -79,11 +91,19 @@ def create_app(test_config=None):
     app.config['JOBS'] = [
         {
             "id": "job1",
-            "func": "src.clup.flaskr:scheduler_job",
+            "func": "src.clup.flaskr:activate_appointment",
+            "args": (),
+            "trigger": "interval",
+            "seconds": 10,
+        },
+        {
+            "id": "job2",
+            "func": "src.clup.flaskr:remove_unused_reservation_scheduler",
             "args": (),
             "trigger": "interval",
             "seconds": 10,
         }
+
     ]
 
     scheduler = APScheduler()
