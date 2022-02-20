@@ -16,6 +16,8 @@ from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.user_change_password_usecase \
     import UserChangePasswordUseCase
+from src.clup.usecases.load_store_info_usecase \
+    import LoadStoreInfoUseCase
 
 from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
@@ -32,32 +34,6 @@ bp = Blueprint('users', __name__)
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
 ssu = SearchStoreUseCase(setup.store_provider)
-
-
-@bp.route('/account', methods=['GET', 'POST'])
-@login_required
-def user_page():
-    u_id = current_user.get_id()
-    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
-    return render_template('user.html', user=user_data)
-
-
-@bp.route('/user/stores')
-@login_required
-def search_stores():
-    args = request.args
-    name = args.get('name', default='', type=str)
-    store_list = ssu.execute(name)
-    return jsonify(store_list)
-
-
-@bp.route('/user/stores/<store_id>')
-@login_required
-def store_info(store_id):
-    # u = LoadStoreInfo(setup.store_provider, setup.aisle_provider)
-    # info = u.execute(store_id)
-    # return render_template('store.html', info=info)
-    return f'<h1>{store_id}</h1>'
 
 
 @bp.route('/reservation/<store_id>', methods=['GET', 'POST'])

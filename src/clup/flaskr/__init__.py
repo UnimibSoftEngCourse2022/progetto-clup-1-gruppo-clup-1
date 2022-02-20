@@ -30,7 +30,7 @@ def load_user(u_id):
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     flash("you must login first", category='danger')
-    return redirect(url_for('users.user_login_page'))
+    return redirect(url_for('auth.login'))
 
 
 def create_app(test_config=None):
@@ -46,10 +46,16 @@ def create_app(test_config=None):
     from . import users
     from . import main
     from . import auth
+    from . import store_manager
+    from . import admin
+    from . import user
     app.register_blueprint(stores.bp)
     app.register_blueprint(users.bp)
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(store_manager.bp)
+    app.register_blueprint(admin.bp)
+    app.register_blueprint(user.bp)
 
     # SonarCloud CSRF Protection Requirements
     csrf = CSRFProtect()

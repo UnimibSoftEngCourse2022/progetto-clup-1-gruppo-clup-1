@@ -48,9 +48,9 @@ def login():
             user = FlaskUser(u_id)
             login_user(user)
             if logged_type == 'user':
-                return redirect(url_for('users.user_page'))
+                return redirect(url_for('user.home'))
             if logged_type == 'admin':
-                return redirect(url_for('stores.stores'))
+                return redirect(url_for('admin.home'))
         except ValueError:
             flash('Incorrent credentials', category='danger')
             return redirect(url_for('auth.login'))
