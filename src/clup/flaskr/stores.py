@@ -139,23 +139,23 @@ def store(store_id):
 #                                to_free_ids=to_free)
 
 
-@bp.route('/stores/<store_id>/reservations/consumed',
-          methods=['POST', 'DELETE'])
-def consumed_reservations(store_id):
-    if request.method == 'POST':
-        try:
-            reservation_id = request.values['reservation_id']
-            cru.execute(store_id, reservation_id)
-            return '', 200
-        except Exception:
-            abort(400)
-    else:
-        try:
-            reservation_id = request.values['reservation_id']
-            fru.execute(store_id, reservation_id)
-            return '', 200
-        except Exception:
-            abort(400)
+# @bp.route('/stores/<store_id>/reservations/consumed',
+#           methods=['POST', 'DELETE'])
+# def consumed_reservations(store_id):
+#     if request.method == 'POST':
+#         try:
+#             reservation_id = request.values['reservation_id']
+#             cru.execute(store_id, reservation_id)
+#             return '', 200
+#         except Exception:
+#             abort(400)
+#     else:
+#         try:
+#             reservation_id = request.values['reservation_id']
+#             fru.execute(store_id, reservation_id)
+#             return '', 200
+#         except Exception:
+#             abort(400)
 
 
 @bp.route('/stores/qr_code_scan', methods=['GET'])

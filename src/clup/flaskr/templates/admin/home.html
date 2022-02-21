@@ -2,6 +2,11 @@
 
 {% block title %} Home {% endblock %} 
 
+{% block head %}
+<script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+{% endblock %}
+
+
 {% block content%}
 {% include 'admin/navigation.html' %}
 <script>
@@ -45,28 +50,71 @@
                 </div>
                 <div class="row">
                     <div class="col align-items-center">
-                        <button id="delete_reservation_wq" type="submit">
-                            Delete Reservation(WQ)
+                        <button id="consume_btn" type="submit">
+                            Consume Reservation
                         </button>
                     </div>
                     <div class="col align-items-center">
-                        <button id="free_btn" type="submit">Free store space</button>
-                    </div>
-                    <div class="col align-items-center">
-                        <button id="scan_btn" onclick="performScanReservation()">
-                            Scan Reservation
+                        <button id="free_btn" type="submit">
+                            Free Reservation
                         </button>
                     </div>
+                </div>
+                <div class="row">
+                    <div id="qr-reader"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Code scanned = ${decodedText}`, decodedResult);
+    }
+
+    function onScanFailure(error) {
+        console.log(`Scan failure`);
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+    /*
+    $("#consume_btn_{{ id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('admin.consumed_reservations', store_id=store_id) }}",
+            type: "POST",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                reservation_id: '{{ id }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });
+
+    $("#free_btn_{{ id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('admin.consumed_reservations', store_id=store_id) }}",
+            type: "DELETE",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                reservation_id: '{{ id }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });*/
+</script>
 {% endblock %}
 
 {% block style %}
 <style>
-    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
+    #free_btn, #consume_btn {
         color: white;
         z-index: 2;
         font: normal 300 25px/1 'Josefin Sans', sans-serif;
