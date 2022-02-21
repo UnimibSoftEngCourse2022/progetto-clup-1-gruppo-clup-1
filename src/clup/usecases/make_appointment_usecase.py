@@ -14,6 +14,8 @@ class MakeAppointmentUseCase:
         self.aisle_provider = aisle_provider
 
     def execute(self, user_id, aisle_ids, store_id, date):
+        self.reservation_provider.reservation_for_aisles_of_same_store(store_id, aisle_ids)
+
         reservation_id = str(uuid.uuid1())
 
         if type(date) is not datetime:
