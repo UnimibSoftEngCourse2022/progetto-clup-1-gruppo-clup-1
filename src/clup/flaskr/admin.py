@@ -49,7 +49,8 @@ def consumed_reservations():
                 setup.lane_provider, setup.reservation_provider)
             cru.execute(store_id, reservation_id)
             return '', 200
-        except Exception:
+        except Exception as e:
+            print(e)
             abort(400)
     else:
         try:
@@ -57,5 +58,6 @@ def consumed_reservations():
                 setup.lane_provider, setup.reservation_provider)
             fru.execute(store_id, reservation_id)
             return '', 200
-        except Exception:
+        except Exception as e:
+            print(e)
             abort(400)

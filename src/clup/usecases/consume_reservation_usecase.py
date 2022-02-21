@@ -10,8 +10,12 @@ class ConsumeReservationUseCase:
             raise ValueError("reservation_id not existing")
 
         for r in filtered:
+            print('1st aisle consumed')
             aisle_pool = self.lane_provider.get_aisle_pool(r.aisle_id)
+            print(aisle_pool.capacity)
             aisle_pool.consume(reservation_id)
+
+        print('aisle consumed')
 
         store_pool = self.lane_provider.get_store_pool(store_id)
         store_pool.consume(reservation_id)

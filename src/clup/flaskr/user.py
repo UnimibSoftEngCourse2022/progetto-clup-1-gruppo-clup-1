@@ -62,12 +62,17 @@ def make_reservation(store_id):
     aisle_ids = request.values['aisle_ids']
     try:
         aisle_ids_json = json.loads(aisle_ids)
-        print(aisle_ids_json)
+        # print(aisle_ids_json)
     except json.JSONDecodeError:
         abort(400)
     mru = MakeReservationUseCase(setup.lane_provider,
                                  setup.reservation_provider)
     mru.execute(user_id, store_id, aisle_ids_json)
+    for aisle_id in aisle_ids_json:
+        pool = setup.lane_provider.get_aisle_pool(aisle_id)
+        queue = setup.lane_provider.get_waiting_queue(aisle_id)
+        print(f'{aisle_id} - {pool.capacity} - {pool.current_quantity}')
+        print(list(queue))
     return '', 200
 
 
