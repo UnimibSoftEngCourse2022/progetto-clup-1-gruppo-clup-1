@@ -8,6 +8,13 @@ class SqliteStoreManagerProvider:
     def __init__(self, engine):
         self.engine = engine
 
+    def get_store_managers(self):
+        with Session(self.engine) as session, session.begin():
+            model_managers = session.query(models.Account).filter(models.Account.type == 'store_manager').all()
+            managers = [StoreManager(mm.uuid, mm.username, mm.password)
+                        for mm in model_managers]
+            return managers
+
     def create_new_store_manager(self, store_manager_id, secret_key):
         with Session(self.engine) as session, session.begin():
             model_store_manager_sk = models.StoreManagerSecretKey(

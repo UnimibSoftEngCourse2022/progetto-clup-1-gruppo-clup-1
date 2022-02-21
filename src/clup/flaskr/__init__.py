@@ -16,15 +16,18 @@ login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(u_id):
-    from src.clup.flaskr.global_setup import user_provider, admin_provider
+    from src.clup.flaskr.global_setup import user_provider, admin_provider, store_manager_provider
     from src.clup.flaskr.flask_user import FlaskUser
 
     users = user_provider.get_users()
     admins = admin_provider.get_admins()
+    managers = store_manager_provider.get_store_managers()
     if u_id in [user.id for user in users]:
-        return FlaskUser(u_id)
+        return FlaskUser(u_id, 'user')
     elif u_id in [admin.id for admin in admins]:
-        return FlaskUser(u_id)
+        return FlaskUser(u_id, 'admin')
+    elif u_id in [sm.id for sm in managers]:
+        return FlaskUser(u_id, 'store_manager')
     else:
         return None
 

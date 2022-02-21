@@ -21,7 +21,10 @@ from .forms.user_reservation_form import UserReservationForm
 bp = Blueprint('users', __name__)
 
 ur_def = UserRegisterUsecase(setup.user_provider)
-ur_def.execute('davide', 'prova')
+try:
+    ur_def.execute('davide', 'prova')
+except ValueError:
+    pass
 ar_def = AdminRegisterUsecase(setup.admin_provider, setup.store_provider)
 # ar_def.execute('amministratore', 'password')
 
@@ -66,19 +69,25 @@ def user_login_page():
     # print(bap.get_admins())
     form = UserLoginForm()
     if form.validate_on_submit():
-        gl = GenericLoginUsecase(setup.admin_provider, setup.user_provider)
+        gl = GenericLoginUsecase(
+            user_provider=setup.user_provider,
+            admin_provider=setup.admin_provider,
+            store_manager_provider=setup.store_manager_provider
+        )
         username = form.username.data
         password = form.password.data
         try:
             u_id, logged_type = gl.execute(username, password)
-            user = FlaskUser(u_id)
+            user = FlaskUser(u_id, logged_type)
             login_user(user)
-            if logged_type == 'user':
+            if current_user.get_type() == 'user':
                 return redirect(url_for('users.user_page'))
-            if logged_type == 'admin':
+            if current_user.get_type() == 'admin':
                 return redirect(url_for('stores.show_stores'))
+            if current_user.get_type() == 'store_manager':
+                return redirect(url_for('#'))  # TODO store_manager_page
         except ValueError:
-            flash('Incorrent credentials', category='danger')
+            flash('wrong credentials', category='danger')
             return redirect(url_for('users.user_login_page'))
     else:
         if form.is_submitted():
@@ -111,7 +120,7 @@ def founded_store(stores):
 @bp.route('/reservation/<store_id>', methods=['GET', 'POST'])
 def user_reservation(store_id):
     u_id = current_user.get_id()
-    user_data = LoadUserDataUseCase(bup).execute(u_id)
+    user_data = LoadUserDataUseCase(setup.user_provider).execute(u_id)
     form = UserReservationForm()
 
     if form.validate_on_submit():
