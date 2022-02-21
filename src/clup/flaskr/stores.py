@@ -117,26 +117,26 @@ def store(store_id):
         abort(404)
 
 
-@bp.route('/stores/<store_id>/reservations', methods=['GET', 'POST'])
-@login_required
-def reservations(store_id):
-    if request.method == 'POST':
-        user_id = current_user.get_id()
-        aisle_ids = request.values['aisle_ids']
-        try:
-            aisle_ids_json = json.loads(aisle_ids)
-            print(aisle_ids_json)
-        except JSONDecodeError:
-            abort(400)
-        mru.execute(user_id, store_id, aisle_ids_json)
-        return '', 200
-    else:
-        enabled = setup.lane_provider.get_store_pool(store_id).enabled
-        to_free = setup.lane_provider.get_store_pool(store_id).to_free
-        return render_template('store_reservations.html',
-                               store_id=store_id,
-                               enabled_ids=enabled,
-                               to_free_ids=to_free)
+# @bp.route('/stores/<store_id>/reservations', methods=['GET', 'POST'])
+# @login_required
+# def reservations(store_id):
+#     if request.method == 'POST':
+#         user_id = current_user.get_id()
+#         aisle_ids = request.values['aisle_ids']
+#         try:
+#             aisle_ids_json = json.loads(aisle_ids)
+#             print(aisle_ids_json)
+#         except JSONDecodeError:
+#             abort(400)
+#         mru.execute(user_id, store_id, aisle_ids_json)
+#         return '', 200
+#     else:
+#         enabled = setup.lane_provider.get_store_pool(store_id).enabled
+#         to_free = setup.lane_provider.get_store_pool(store_id).to_free
+#         return render_template('store_reservations.html',
+#                                store_id=store_id,
+#                                enabled_ids=enabled,
+#                                to_free_ids=to_free)
 
 
 @bp.route('/stores/<store_id>/reservations/consumed',

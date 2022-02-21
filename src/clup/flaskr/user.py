@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 
@@ -6,6 +8,7 @@ from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.load_user_reservations_data_usecase \
     import LoadUserReservationsDataUseCase
+from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 
 
@@ -51,6 +54,22 @@ def store_info(store_id):
 @login_required
 def store_time_slots(store_id):
     return '<h1>User Store Time Slots Page</h1>'
+
+
+@bp.route('/user/reservations/<store_id>', methods=['POST'])
+@login_required
+def make_reservation(store_id):
+    user_id = current_user.get_id()
+    aisle_ids = request.values['aisle_ids']
+    try:
+        aisle_ids_json = json.loads(aisle_ids)
+        print(aisle_ids_json)
+    except json.JSONDecodeError:
+        abort(400)
+    mru = MakeReservationUseCase(setup.lane_provider, 
+                                 setup.reservation_provider)
+    mru.execute(user_id, store_id, aisle_ids_json)
+    return '', 200
 
 
 @bp.route('/user/reservations')

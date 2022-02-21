@@ -53,7 +53,7 @@
             return $(this).attr("id");
         }).get();
         $.ajax({
-            url: "{{ url_for('stores.reservations', store_id=store.id) }}",
+            url: "{{ url_for('user.make_reservation', store_id=store.id) }}",
             type: "POST",
             data: {
                 csrf_token: "{{ csrf_token() }}",
