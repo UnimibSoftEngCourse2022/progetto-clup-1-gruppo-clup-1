@@ -1,0 +1,129 @@
+{% extends 'base.html' %} 
+
+{% block title %} Home {% endblock %} 
+
+{% block head %}
+<script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+{% endblock %}
+
+
+{% block content%}
+{% include 'admin/navigation.html' %}
+<script>
+    function performScanReservation() {
+        window.location.href = "{{ url_for('stores.qrcode') }}";
+    }
+</script>
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">{{ store.name }}</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
+                        <div class="mb-3 row">
+                            <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress" value="{{ store.address }}">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="capacity" class="col-sm-2 col-form-label">
+                                Capacity:
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="capacity" value="{{ capacity }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p>Aisles:</p>
+                    <ul>
+                        {% for aisle in aisles %}
+                        <li>
+                        <p><b>{{ aisle.name }}</b> | capacity: {{ aisle.capacity }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col align-items-center">
+                        <button id="consume_btn" type="submit">
+                            Consume Reservation
+                        </button>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="free_btn" type="submit">
+                            Free Reservation
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="qr-reader"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Code scanned = ${decodedText}`, decodedResult);
+    }
+
+    function onScanFailure(error) {
+        console.log(`Scan failure`);
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+    /*
+    $("#consume_btn_{{ id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('admin.consumed_reservations', store_id=store_id) }}",
+            type: "POST",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                reservation_id: '{{ id }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });
+
+    $("#free_btn_{{ id }}").click(function () {
+        $.ajax({
+            url: "{{ url_for('admin.consumed_reservations', store_id=store_id) }}",
+            type: "DELETE",
+            data: {
+                csrf_token: '{{ csrf_token() }}',
+                reservation_id: '{{ id }}',
+            },
+            success: function (result) {
+                location.reload();
+            },
+        });
+    });*/
+</script>
+{% endblock %}
+
+{% block style %}
+<style>
+    #free_btn, #consume_btn {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

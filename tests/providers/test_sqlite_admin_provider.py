@@ -147,7 +147,7 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
             self.ap.remove_admin('100')
 
     def test_update_on_unexistent_id_throws(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1',type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         a = Admin('100', 'u1', 'pwd')

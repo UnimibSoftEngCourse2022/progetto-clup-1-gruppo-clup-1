@@ -26,5 +26,3 @@ class SchedulerUseCase:
                         waiting_queue.insert(0, reservation)
                 if all_in_pools:
                     store_pool.add(reservation.id)
-
-

@@ -77,9 +77,13 @@ class StoreStoreManager(Base):
     store_uuid = Column(String, ForeignKey('store.uuid'))
 
 
-def create_initial_data(engine):
+def init_db(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+
+
+def create_initial_data(engine):
+    init_db(engine)
 
     u1 = Account(uuid=1, username='tizio', password='caio', type='user')
     u2 = Account(uuid=2, username='mario', password='rossi', type='user')

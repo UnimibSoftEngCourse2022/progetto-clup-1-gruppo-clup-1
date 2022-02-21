@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Store{% endblock %}
+
+{% block content%}
+<script>
+    function performScanReservation() {
+        window.location.href = "{{ url_for('stores.qrcode') }}";
+    }
+</script>
+
+{% include 'user/navigation.html' %}
+
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">{{ store.name }}</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
+                        <div class="mb-3 row">
+                            <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress" value="{{ store.address }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="aisle_checkboxes">
+                    <ul>
+                        {% for aisle in aisles %}
+                        <li>
+                            <input id="{{ aisle.id }}" type="checkbox" checked>
+                            <label for="{{ aisle.id }}">{{ aisle.name }}</label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="d-flex flex-row justify-content-around">
+                   <input id="make_reservation_btn" type="button" value="Make Reservation">
+                   <button id="cancel_reservation_btn" type="submit">Cancel Reservation</button>
+                   <!--<button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#make_reservation_btn").click(function () {
+        $aisle_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
+            return $(this).attr("id");
+        }).get();
+        $.ajax({
+            url: "{{ url_for('user.make_reservation', store_id=store.id) }}",
+            type: "POST",
+            data: {
+                csrf_token: "{{ csrf_token() }}",
+                aisle_ids: JSON.stringify($aisle_ids_list),
+            },
+        });
+    });
+</script>
+{% endblock %}
+
+{% block style %}
+<style>
+    #cancel_reservation_btn, #make_reservation_btn, #scan_btn {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 8px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

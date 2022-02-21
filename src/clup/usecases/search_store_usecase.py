@@ -2,13 +2,7 @@ class SearchStoreUseCase:
     def __init__(self, store_provider):
         self.store_provider = store_provider
 
-    def execute(self, store_name):
+    def execute(self, string):
         stores = self.store_provider.get_stores()
-        found = False
-        for store_item in stores:
-            if store_name.lower() in store_item.name.lower():
-                found = True
-                return self.store_provider.get_founded_stores(store_item)
-
-        if not found:
-            raise ValueError('store isnt in the stores list')
+        new_found = [s for s in stores if string.lower() in s.name.lower()]
+        return new_found

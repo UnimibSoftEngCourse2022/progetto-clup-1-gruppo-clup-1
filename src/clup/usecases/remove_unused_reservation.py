@@ -10,13 +10,8 @@ class RemoveUnusedReservation:
             store_pool = self.lane_provider.get_store_pool(store.id)
             reservation = store_pool.enabled
             reservations_in_stores_pools.extend(reservation)
-        try:
-            with open('./active_reservations.txt', 'r') as file:
-                old_reservations = []
-                for line in file:
-                    old_reservations.append(line.strip())
-        except FileNotFoundError:
-            old_reservations = []
+
+        old_reservations = self._get_old_reservations(reservations_in_stores_pools)
 
         to_be_removed = []
         if len(old_reservations) != 0:
@@ -37,3 +32,14 @@ class RemoveUnusedReservation:
         with open('./active_reservations.txt', 'w') as file:
             for res in reservations_in_stores_pools:
                 file.write(f'{res}\n')
+
+    def _get_old_reservations(self, reservations_in_stores_pools):
+        try:
+            with open('./active_reservations.txt', 'r') as file:
+                old_reservations = []
+                for line in file:
+                    old_reservations.append(line.strip())
+        except FileNotFoundError:
+            old_reservations = []
+
+        return old_reservations

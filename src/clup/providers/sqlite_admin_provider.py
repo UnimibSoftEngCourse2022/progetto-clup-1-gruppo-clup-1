@@ -3,9 +3,10 @@ from sqlalchemy.exc import IntegrityError
 
 import src.clup.database.models as models
 from src.clup.entities.admin import Admin
+from src.clup.providers.admin_provider_abc import AdminProvider
 
 
-class SqliteAdminProvider:
+class SqliteAdminProvider(AdminProvider):
     def __init__(self, engine):
         self.engine = engine
 
@@ -45,7 +46,7 @@ class SqliteAdminProvider:
 
     def remove_admin(self, admin_id):
         if admin_id not in [a.id for a in self.get_admins()]:
-            raise ValueError("not existing admin id")
+            raise ValueError("unexistent admin id")
 
         with Session(self.engine) as session, session.begin():
             session.query(models.Account). \
@@ -56,7 +57,7 @@ class SqliteAdminProvider:
 
     def update_admin(self, admin):
         if admin.id not in [a.id for a in self.get_admins()]:
-            raise ValueError("not existing admin id")
+            raise ValueError("unexistent admin id")
 
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Account). \
@@ -68,7 +69,7 @@ class SqliteAdminProvider:
 
     def get_store_id(self, admin_id):
         if admin_id not in [a.id for a in self.get_admins()]:
-            raise ValueError("not existing admin id")
+            raise ValueError("unexistent admin id")
 
         with Session(self.engine) as session, session.begin():
             model_store_admin = session.query(models.StoreAdmin). \
