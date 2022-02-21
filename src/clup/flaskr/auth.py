@@ -16,7 +16,7 @@ from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 bp = Blueprint('auth', __name__)
 
 
-@bp.route('/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def register():
     form = UserRegisterForm()
     if form.validate_on_submit():
@@ -32,6 +32,10 @@ def register():
     elif form.is_submitted():
         flash("check all fields", category='danger')
     return render_template('register.html', form=form)
+
+# TODO def user_register()^^^
+# TODO def admin_register()
+# TODO def store_manager_register()
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -76,6 +80,7 @@ def change_password():
     if form.validate_on_submit():
         old_password = form.old_password.data
         new_password = form.new_password.data
+        # TODO considerare i diversi tipi di current_user
         ucp = UserChangePasswordUseCase(setup.user_provider)
         try:
             ludu = LoadUserUseCase(setup.user_provider)

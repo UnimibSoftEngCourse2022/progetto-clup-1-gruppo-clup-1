@@ -10,6 +10,8 @@ class MakeReservationUseCase:
         self.reservation_provider = reservation_provider
 
     def execute(self, user_id, store_id, aisle_ids):
+        self.reservation_provider.reservation_for_aisles_of_same_store(store_id, aisle_ids)
+
         reservation_id = str(uuid.uuid1())
 
         for aisle_id in aisle_ids:

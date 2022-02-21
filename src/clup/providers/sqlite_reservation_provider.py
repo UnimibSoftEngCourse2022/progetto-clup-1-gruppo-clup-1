@@ -88,3 +88,11 @@ class SqliteReservationProvider(ReservationProvider):
             if len(store_id) != 1:
                 raise ValueError("unable to find a store for this aisle")
             return store_id[0]
+
+    def reservation_for_aisles_of_same_store(self, store_id,  reservations_aisle_ids):
+        with Session(self.engine) as session, session.begin():
+            for aisle_id in reservations_aisle_ids:
+                store_id_from_aisle = session.query(models.StoreAisle.store_uuid)\
+                    .filter(models.StoreAisle.aisle_uuid == aisle_id).all()
+                if store_id != store_id_from_aisle[0][0]:
+                    raise ValueError("reservation for aisle in different stores")

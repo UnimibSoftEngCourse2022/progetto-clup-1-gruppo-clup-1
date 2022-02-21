@@ -9,6 +9,12 @@ class SqliteUserProvider:
     def __init__(self, engine):
         self.engine = engine
 
+    def get_user(self, user_id):
+        for user in self.get_users():
+            if user.id == user_id:
+                return user
+        raise ValueError("unable to find user with this id")
+
     def get_users(self):
         with Session(self.engine) as session, session.begin():
             model_users = session.query(models.Account).filter(models.Account.type == 'user').all()

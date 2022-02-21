@@ -9,6 +9,7 @@ class MockReservationProvider:
     def __init__(self, throws_on_add=False):
         self.reservations = []
         self.throws_on_add = throws_on_add
+        self.store_aisle = []
 
     def get_reservations(self):
         return self.reservations
@@ -18,6 +19,11 @@ class MockReservationProvider:
             raise ValueError()
         self.reservations.append(reservation)
 
+    def reservation_for_aisles_of_same_store(self, store_id, aisle_ids):
+        for store, aisle in self.store_aisle:
+            for aisle_id in aisle_ids:
+                if aisle == aisle_id and store != store_id:
+                    raise ValueError
 
 class TestMakeReservationUseCase(unittest.TestCase):
     def setUp(self):
@@ -29,6 +35,9 @@ class TestMakeReservationUseCase(unittest.TestCase):
         self.reservation_provider = MockReservationProvider()
         self.u = MakeReservationUseCase(
             self.queue_provider, self.reservation_provider)
+        self.reservation_provider.store_aisle.append([self.store1_id, 10])
+        self.reservation_provider.store_aisle.append([self.store2_id, 20])
+
 
     def test_reservations_are_stored_in_reservation_provider(self):
         r1_aisle_id = 10
@@ -53,6 +62,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
         r_aisle1_id = 10
         r_aisle2_id = 20
         aisles = [r_aisle1_id, r_aisle2_id]
+        self.reservation_provider.store_aisle = [[self.store1_id, 10], [self.store1_id, 20]]
         r_id = self.u.execute(self.user1_id, self.store1_id, aisles)
         reservations = self.reservation_provider.get_reservations()
         r1 = Reservation(r_id, r_aisle1_id, self.user1_id)
@@ -61,9 +71,11 @@ class TestMakeReservationUseCase(unittest.TestCase):
         self.assertTrue(r1 in reservations)
         self.assertTrue(r2 in reservations)
 
-    @unittest.skip('to fix')
     def test_inconsistent_aisle_ids_and_store_id_throws(self):
-        pass
+        r1_aisle_id = 10
+        r2_aisle_id = 20
+        with self.assertRaises(ValueError):
+            self.u.execute(self.user1_id, self.store1_id, [r1_aisle_id, r2_aisle_id])
 
     def test_reservation_id_should_be_in_pools_if_aisle_pool_is_not_full(self):
         aisle_id = 10
