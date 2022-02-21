@@ -23,12 +23,19 @@ class MockAppointmentProvider:
 class MockReservationProvider:
     def __init__(self):
         self.reservations = []
-
+        self.store_aisle = []
+        
     def add_reservation(self, res):
         self.reservations.append(res)
 
     def get_reservations_with_id(self, reservation_id):
         return [res for res in self.reservations if res.id == reservation_id]
+
+    def reservation_for_aisles_of_same_store(self, store_id, aisle_ids):
+        for store, aisle in self.store_aisle:
+            for aisle_id in aisle_ids:
+                if aisle == aisle_id and store != store_id:
+                    raise ValueError
 
 
 class MockAisleProvider:
