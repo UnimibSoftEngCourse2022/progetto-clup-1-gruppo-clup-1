@@ -11,7 +11,6 @@ from src.clup.providers.sqlite_store_provider import SqliteStoreProvider
 from src.clup.providers.sqlite_user_provider import SqliteUserProvider
 from src.clup.providers.sqlite_admin_provider import SqliteAdminProvider
 
-
 user_provider = SqliteUserProvider(engine)
 admin_provider = SqliteAdminProvider(engine)
 store_manager_provider = SqliteStoreManagerProvider(engine)

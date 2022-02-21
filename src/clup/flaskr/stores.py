@@ -16,9 +16,7 @@ from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
-
 bp = Blueprint('stores', __name__)
-
 
 slu = StoreListUseCase(setup.store_provider)
 asu = AddStoreUseCase(setup.store_provider)

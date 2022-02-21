@@ -10,7 +10,6 @@ from src.clup.usecases.consume_reservation_usecase \
 from src.clup.usecases.free_reservation_usecase \
     import FreeReservationUseCase
 
-
 bp = Blueprint('admin', __name__)
 
 

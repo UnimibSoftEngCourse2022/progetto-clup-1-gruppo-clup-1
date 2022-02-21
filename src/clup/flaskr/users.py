@@ -14,7 +14,6 @@ from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from .forms.user_reservation_form import UserReservationForm
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 
-
 bp = Blueprint('users', __name__)
 
 mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
@@ -29,7 +28,8 @@ def user_reservation(store_id):
 
     if form.validate_on_submit():
         reservation = mru.execute(store_id, u_id)
-        return redirect(url_for('users.user_make_reservation', store_id=store_id, user=user_data, form=form, reservation_id=reservation.id))
+        return redirect(url_for('users.user_make_reservation', store_id=store_id, user=user_data, form=form,
+                                reservation_id=reservation.id))
 
     return render_template('user_reservation.html', store=store_id, user=user_data, form=form)
 

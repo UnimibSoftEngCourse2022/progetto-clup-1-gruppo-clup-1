@@ -77,7 +77,7 @@ class TestSqliteAdminProvider(unittest.TestCase):
         self.ap.update_admin(updated_admin)
 
         with Session(self.engine) as session, session.begin():
-            admins = session.query(models.Account). filter(models.Account.type == 'admin').all()
+            admins = session.query(models.Account).filter(models.Account.type == 'admin').all()
             admin = admins[0]
 
             self.assertEqual(len(admins), 1)

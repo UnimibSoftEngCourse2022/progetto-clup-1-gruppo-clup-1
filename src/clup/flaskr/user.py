@@ -11,7 +11,6 @@ from src.clup.usecases.load_user_reservations_data_usecase \
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 
-
 bp = Blueprint('user', __name__)
 
 

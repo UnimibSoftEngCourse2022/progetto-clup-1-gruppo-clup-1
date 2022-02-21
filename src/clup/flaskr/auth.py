@@ -12,7 +12,6 @@ from .forms.user_login_form import UserLoginForm
 from .forms.user_register_form import UserRegisterForm
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
-
 bp = Blueprint('auth', __name__)
 
 
@@ -32,6 +31,7 @@ def register():
     elif form.is_submitted():
         flash("check all fields", category='danger')
     return render_template('register.html', form=form)
+
 
 # TODO def user_register()^^^
 # TODO def admin_register()

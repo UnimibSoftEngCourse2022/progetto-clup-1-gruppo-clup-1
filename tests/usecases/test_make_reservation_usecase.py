@@ -25,6 +25,7 @@ class MockReservationProvider:
                 if aisle == aisle_id and store != store_id:
                     raise ValueError
 
+
 class TestMakeReservationUseCase(unittest.TestCase):
     def setUp(self):
         self.store1_id = 1
@@ -37,7 +38,6 @@ class TestMakeReservationUseCase(unittest.TestCase):
             self.queue_provider, self.reservation_provider)
         self.reservation_provider.store_aisle.append([self.store1_id, 10])
         self.reservation_provider.store_aisle.append([self.store2_id, 20])
-
 
     def test_reservations_are_stored_in_reservation_provider(self):
         r1_aisle_id = 10
