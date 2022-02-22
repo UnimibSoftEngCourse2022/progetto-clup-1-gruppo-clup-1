@@ -118,3 +118,20 @@ class TestSqliteStoreProvider(unittest.TestCase):
         self.assertEqual(len(admin_ids), 2)
         self.assertTrue('100' in admin_ids)
         self.assertTrue('200' in admin_ids)
+
+    def test_store_id_from_name_return_correct_value(self):
+        ms1 = models.Store(uuid='10', name='s1', address='via1', secret='key1')
+        ms2 = models.Store(uuid='20', name='s2', address='via2', secret='key2')
+        with Session(self.engine) as session, session.begin():
+            session.add(ms1)
+            session.add(ms2)
+        sp = SqliteStoreProvider(self.engine)
+
+        store1_id = sp.get_store_id_from_name_and_address('s1', 'via1')
+        store2_id = sp.get_store_id_from_name_and_address('s2', 'via2')
+
+        self.assertEqual(store1_id, '10')
+        self.assertEqual(store2_id, '20')
+
+        with self.assertRaises(ValueError):
+            sp.get_store_id_from_name_and_address('s1', 'via2')

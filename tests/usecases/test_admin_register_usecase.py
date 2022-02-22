@@ -31,6 +31,11 @@ class MockStoreProvider:
     def get_stores(self):
         return self.stores.values()
 
+    def get_store_id_from_name_and_address(self, store_name, store_address):
+        for store_id, store in self.stores.items():
+            if store.name == store_name and store.address == store_address:
+                return store_id
+
 
 class TestAdminRegisterUsecase(unittest.TestCase):
     def setUp(self):
@@ -50,7 +55,7 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         password = 'pwd'
         s_id = 'store1'
 
-        a_id = self.u.execute(username, password, s_id, 'secret1')
+        a_id = self.u.execute(username, password, 'name1', 'Milano', 'secret1')
         adm = Admin(a_id, username, password)
 
         self.admin_pvd.add_admin.assert_called_once_with(adm)
@@ -58,16 +63,16 @@ class TestAdminRegisterUsecase(unittest.TestCase):
 
     def test_null_or_empty_username_or_password_throws(self):
         with self.assertRaises(ValueError):
-            self.u.execute(None, 'pwd', 'store1', 'secret1')
+            self.u.execute(None, 'pwd', 'name1', 'Milano', 'secret1')
 
         with self.assertRaises(ValueError):
-            self.u.execute('usr', None, 'store2', 'secret2')
+            self.u.execute('usr', None, 'name2', 'Roma', 'secret2')
 
         with self.assertRaises(ValueError):
-            self.u.execute('', 'pwd', 'store1', 'secret1')
+            self.u.execute('', 'pwd', 'name1', 'Milano', 'secret1')
 
         with self.assertRaises(ValueError):
-            self.u.execute('usr', '', 'store2', 'secret2')
+            self.u.execute('usr', '', 'name2', 'Roma', 'secret2')
 
     def test_admin_username_is_unique(self):
         self.admin_pvd.get_admins = Mock()
@@ -75,21 +80,21 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         self.admin_pvd.get_admins.return_value = [existing_admin]
 
         with self.assertRaises(ValueError):
-            self.u.execute('usr', 'pwd2', 'store2', 20)
+            self.u.execute('usr', 'pwd2', 'name2', 'Roma', 20)
 
     def test_admin_with_wrong_secret_throws(self):
         wrong_secret = 'wrong'
 
         with self.assertRaises(ValueError):
-            self.u.execute('usr', 'pwd', 'store1', wrong_secret)
+            self.u.execute('usr', 'pwd', 'name1', 'Milano', wrong_secret)
 
     def test_admin_linked_to_correct_store(self):
         self.admin_pvd.add_admin_to_store = Mock()
         store1_id = 'store1'
         store2_id = 'store2'
 
-        a1_id = self.u.execute('admin1', 'pwd1', store1_id, 'secret1')
-        a2_id = self.u.execute('admin2', 'pwd2', store2_id, 'secret2')
+        a1_id = self.u.execute('admin1', 'pwd1', 'name1', 'Milano', 'secret1')
+        a2_id = self.u.execute('admin2', 'pwd2', 'name2', 'Roma', 'secret2')
 
         self.admin_pvd.add_admin_to_store.assert_any_call(a1_id, store1_id)
         self.admin_pvd.add_admin_to_store.assert_any_call(a2_id, store2_id)
@@ -105,7 +110,7 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         username = 'usr'
         password = 'pwd'
 
-        a_id = self.u.execute(username, password, s_id, same_secret_as_2)
+        a_id = self.u.execute(username, password, 'name3', 'Firenze', same_secret_as_2)
         adm = Admin(a_id, username, password)
 
         self.admin_pvd.add_admin.assert_called_once_with(adm)
@@ -113,4 +118,4 @@ class TestAdminRegisterUsecase(unittest.TestCase):
 
     def test_register_on_unexistent_store_id_throws(self):
         with self.assertRaises(ValueError):
-            self.u.execute('usr', 'pwd', 'unexistent_id', 'secret')
+            self.u.execute('usr', 'pwd', 'unexistent_name', 'unexistent_pwd', 'secret')

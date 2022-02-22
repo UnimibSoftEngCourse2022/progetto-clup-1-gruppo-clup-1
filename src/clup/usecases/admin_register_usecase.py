@@ -8,13 +8,14 @@ class AdminRegisterUseCase:
         self.admin_provider = admin_provider
         self.store_provider = store_provider
 
-    def execute(self, username, password, store_id, store_secret):
-        if not username or not password:
+    def execute(self, username, password, store_name, store_address, store_secret):
+        if not username or not password or not store_address or not store_name:
             raise ValueError('missing fields')
 
         if username in [a.username for a in self.admin_provider.get_admins()]:
             raise ValueError('username already present')
 
+        store_id = self.store_provider.get_store_id_from_name_and_address(store_name, store_address)
         found_store = None
         for store in self.store_provider.get_stores():
             if store.id == store_id:
