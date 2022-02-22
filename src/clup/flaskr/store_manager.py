@@ -4,7 +4,9 @@ from flask_login import login_required, current_user
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.flaskr.forms.add_store_form import AddStoreForm
 
+from src.clup.entities.category import Category
 from src.clup.flaskr import global_setup as setup
+from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
@@ -31,8 +33,19 @@ def data_init():
     rsm = StoreManagerRegisterUseCase(setup.store_manager_provider)
     rsm.execute('secret_key', 'boss', 'prova')
     asu = AddStoreUseCase(setup.store_provider)
-    asu.execute('Tigros', 'Solbiate Arno', id)
+    tigros = asu.execute('Tigros', 'Solbiate Arno', id)
     asu.execute('Carrefour', 'Jerago', id)
+    aau = AddAisleUseCase(setup.aisle_provider, setup.lane_provider)
+    aau.execute(tigros.id, 'aisle1', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle2', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle3', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle4', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle5', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle6', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle7', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle8', [Category.FISH, Category.MEAT])
+    aau.execute(tigros.id, 'aisle9', [Category.FISH, Category.MEAT])
+
     return redirect(url_for('store_manager.home'))
 
 

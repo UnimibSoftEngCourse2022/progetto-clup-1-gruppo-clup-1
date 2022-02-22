@@ -1,133 +1,55 @@
 {% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
-<script>
-    function updateStore() {
-        var new_name = $("#name").val();
-        var new_address = $("#address").val();
-        var new_capacity = $("#capacity").val();
-        $.ajax({
-            url: "{{ url_for('store_manager.store_info', store_id=store_info['store'].id) }}",
-            type: "PUT",
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-                name: new_name,
-                address: new_address,
-                capacity: new_capacity,
-            },
-            success: function(result) {
-                <div class = "modal" tabindex = "-1" >
-                    <div class = "modal-dialog" >
-                    <div class = "modal-content" >
-                    <div class = "modal-header" >
-                    <h5 class = "modal-title" > Success </h5>
-                    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button>
-                </div >
-                <div class = "modal-body" >
-                    <p > All went smooth </p>
-                    </div >
-                <div class = "modal-footer" >
-                    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-            },
-            error: function(result) {
-                <div class = "modal" tabindex = "-1" >
-                    <div class = "modal-dialog">
-                    <div class = "modal-content">
-                    <div class = "modal-header">
-                    <h5 class = "modal-title" > Error </h5>
-                    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button>
-                </div >
-                <div class = "modal-body">
-                    <p > Something went wrong... </p>
-                    </div >
-                     <div class = "modal-footer" >
-                    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button>
-                </div >
-            </div>
-        </div >
-    </div>
-            }
-        });
-    }
-</script>
-
-<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
-    <div class="container mt-4">
-        <p class="h2 mb-4 text">{{ store_info['store'].name}}</p>
-        <div class="card mb-4">
-            <div class="card-body p-4">
-                <div class="row">
-                    <div class="col-6">
-                        <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
-                        <div class="mb-3 row">
-                            <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress"
-                                       value="{{ store_info['store'].address }}">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="staticWaitingListLength" class="col-sm-2 col-form-label">Waiting List
-                                Length:</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" id="staticWaitingListLength"
-                                       value="{{ waiting_queue_len }}">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="staticActivePoolLength" class="col-sm-2 col-form-label">Active Pool
-                                Length:</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" id="staticActivePoolLength"
-                                       value="{{ active_pool_len }}">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="staticCurrentPeopleInside" class="col-sm-2 col-form-label">Current People
-                                Inside:</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext"
-                                       id="staticCurrentPeopleInside" value="{{ current_people_quantity }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <p class="h2 mb-4 text" style="color: darkorange;">Update Information</p>
-                        <form>
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/><br><br>
-                            <input class="form-control" type="text" placeholder="Name" id="name"
-                                   aria-label="store name"><br>
-                            <input class="form-control" type="text" placeholder="Address" id="address"
-                                   aria-label="store address"><br>
-                            <input class="form-control" type="text" placeholder="Capacity" id="capacity"
-                                   aria-label="store capacity"><br>
-                            <button id="update_store_information" type="button" onclick="updateStore()">Update</button>
-                        </form>
-                    </div>
-                </div>
-                <div id="aisle_checkboxes">
-                    <ul>
-                        {% for aisle_id in aisle_ids %}
-                        <li>
-                            <input id="{{ aisle_id }}" type="checkbox">
-                            <label for="{{ aisle_id }}">{{ aisle_id }}</label>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
 
 
+<div class="container">
+    <p class="h2 mb-4 text">{{ store_info['store'].name}}</p>
+    <div class="card min-vw-80">
+        <div class="card-body p-4 scroll ">
+            <div class="row">
+                    <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
+                    <div class="mb-3 row">
+                        <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress"
+                                   value="{{ store_info['store'].address }}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Aisles:</label>
+                        <ul class="list-group">
+                            {% for aisle in store_info['aisles'] %}
+                            <li class="list-group-item list-group-item-secondary">{{aisle.name}}
+                                <ul class="list-group">
+                                    {% for category in aisle.categories %}
+                                    <li class="list-group-item ">{{category.name}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="storeCapacity" class="col-sm-2 col-form-label">Capacity:</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control-plaintext" id="storeCapacity"
+                                   value="">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock%}
 
 
 {% block style %}
 <style>
+    body {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
     #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
         color: white;
         z-index: 2;
@@ -140,9 +62,18 @@
         border-radius: 8px;
     }
 
+    div.scroll {
+        margin: 4px;
+        padding: 4px;
+        /*width: 100vh;*/
+        height: 80vh;
+        /*overflow-x: hidden;*/
+        overflow-y: auto;
+        text-align: justify;
+    }
+
     #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
-        background-color: #FF8A00E6;
-        ;
+        background-color: #FF8A00E6;;
     }
 </style>
 {% endblock %}

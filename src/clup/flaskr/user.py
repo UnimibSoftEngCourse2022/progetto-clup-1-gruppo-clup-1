@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request, jsonify, abort
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
+from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.load_user_reservations_data_usecase \
@@ -45,8 +46,10 @@ def store_info(store_id):
     user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
     u = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)
     info = u.execute(store_id)
+    gsc = GetStoreCategoriesUseCase(setup.aisle_provider)
+    categories = gsc.execute(store_id)
     return render_template('user/store.html', user=user_data,
-                           store=info['store'], aisles=info['aisles'])
+                           store=info['store'], aisles=info['aisles'], categories=categories)
 
 
 @bp.route('/user/stores/<store_id>/slots')

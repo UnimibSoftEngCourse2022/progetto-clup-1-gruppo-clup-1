@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content%}
-Hi{{ sm.username }}
+
 <h1 class="text-center">Your stores:</h1>
 {% if stores|length == 0 %}
+<p class="text-center">non sono presenti store</p>
 <div class="d-flex justify-content-center">
     <button type = "button" id="add_btn" onclick = "add_store()" > Add New Store </button>
 </div>
@@ -18,7 +19,8 @@ Hi{{ sm.username }}
     
     <div class="list-group">
         {% for store in stores %}
-        <a href="{{ url_for('store_manager.store_info', store_id=store.id) }}" class="list-group-item list-group-item-action">{{store.name}}, {{store.address}}</a>
+        <a href="{{ url_for('store_manager.store_info', store_id=store.id) }}"
+           class="list-group-item list-group-item-action">{{store.name}}, {{store.address}}</a>
         {% endfor %}
     </div>
 
