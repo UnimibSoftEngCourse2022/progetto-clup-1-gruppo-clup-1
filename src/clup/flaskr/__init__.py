@@ -112,7 +112,7 @@ def create_app(test_config=None):
             "func": "src.clup.flaskr:remove_unused_reservation_scheduler",
             "args": (),
             "trigger": "interval",
-            "seconds": 10,
+            "seconds": 1800,
         }
 
     ]

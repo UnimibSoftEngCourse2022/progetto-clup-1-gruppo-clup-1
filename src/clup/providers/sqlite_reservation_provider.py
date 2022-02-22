@@ -18,8 +18,8 @@ class SqliteReservationProvider(ReservationProvider):
             return reservations
 
     def get_user_reservations(self, user_id):
-        if user_id not in [res.user_id for res in self.get_reservations()]:
-            raise ValueError('user_id not present, unable to find his reservations')
+        # if user_id not in [res.user_id for res in self.get_reservations()]:
+        #     raise ValueError('user_id not present, unable to find his reservations')
 
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation). \

@@ -23,9 +23,11 @@ def home():
                                       setup.lane_provider,
                                       setup.admin_provider)
     info = lasiu.execute(a_id)
+    print(info)
     return render_template('admin/home.html', admin=admin_data,
                            store=info['store'], aisles=info['aisles'],
-                           capacity=info['capacity'])
+                           capacity=info['capacity'], current_people=info['current_people'],
+                           enabled=info['enabled'])
 
 
 @bp.route('/admin/reservations/consumed', methods=['POST', 'DELETE'])
@@ -49,7 +51,8 @@ def consumed_reservations():
                 setup.lane_provider, setup.reservation_provider)
             cru.execute(store_id, reservation_id)
             return '', 200
-        except Exception:
+        except Exception as e:
+            print(e)
             abort(400)
     else:
         try:
@@ -57,5 +60,6 @@ def consumed_reservations():
                 setup.lane_provider, setup.reservation_provider)
             fru.execute(store_id, reservation_id)
             return '', 200
-        except Exception:
+        except Exception as e:
+            print(e)
             abort(400)

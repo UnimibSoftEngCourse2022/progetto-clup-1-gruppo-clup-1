@@ -24,7 +24,7 @@ class MockReservationProvider:
     def __init__(self):
         self.reservations = []
         self.store_aisle = []
-        
+
     def add_reservation(self, res):
         self.reservations.append(res)
 

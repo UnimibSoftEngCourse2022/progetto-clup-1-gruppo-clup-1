@@ -24,6 +24,7 @@ class LoadAdminStoreInfoUseCase:
 
         info['store'] = found_store
         info['aisles'] = store_aisles
-        full_capacity = sum(a.capacity for a in store_aisles)
-        info['capacity'] = full_capacity
+        info['capacity'] = sum(a.capacity for a in store_aisles)
+        info['enabled'] = len(self.lane_provider.get_store_pool(store_id).enabled)
+        info['current_people'] = len(self.lane_provider.get_store_pool(store_id).to_free)
         return info
