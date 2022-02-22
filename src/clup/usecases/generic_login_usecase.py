@@ -1,3 +1,6 @@
+from werkzeug.security import check_password_hash
+
+
 class GenericLoginUsecase:
     def __init__(self, admin_provider, user_provider, store_manager_provider):
         self.admin_provider = admin_provider
@@ -24,7 +27,7 @@ class GenericLoginUsecase:
     def _search_user(self, username, password, accounts):
         for account in accounts:
             if account.username == username:
-                if account.password == password:
+                if check_password_hash(account.password_hash, password):
                     return account.id
                 else:
                     raise ValueError("wrong password")

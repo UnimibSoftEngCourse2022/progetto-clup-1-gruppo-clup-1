@@ -28,8 +28,8 @@ class TestSqliteUserProvider(unittest.TestCase):
         self.assertEqual(len(users), 0)
 
     def test_all_users_returned_from_non_empty_db(self):
-        mu1 = models.Account(uuid='10', username='u1', password='p1', type='user')
-        mu2 = models.Account(uuid='20', username='u2', password='p2', type='user')
+        mu1 = models.Account(uuid='10', username='u1', password_hash='p1', type='user')
+        mu2 = models.Account(uuid='20', username='u2', password_hash='p2', type='user')
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
             session.add(mu2)
@@ -56,10 +56,10 @@ class TestSqliteUserProvider(unittest.TestCase):
             self.assertEqual(len(users), 1)
             self.assertEqual(user.uuid, '10')
             self.assertEqual(user.username, 'u1')
-            self.assertEqual(user.password, 'p1')
+            self.assertEqual(user.password_hash, 'p1')
 
     def test_user_is_removed_from_db(self):
-        mu1 = models.Account(uuid='10', username='u1', password='p1', type='user')
+        mu1 = models.Account(uuid='10', username='u1', password_hash='p1', type='user')
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
 
@@ -73,7 +73,7 @@ class TestSqliteUserProvider(unittest.TestCase):
             self.assertEqual(len(users), 0)
 
     def test_user_is_updated(self):
-        mu1 = models.Account(uuid='10', username='u1', password='p1', type='user')
+        mu1 = models.Account(uuid='10', username='u1', password_hash='p1', type='user')
         with Session(self.engine) as session, session.begin():
             session.add(mu1)
         updated_user = User('10', 'newu1', 'newp1')
@@ -90,4 +90,4 @@ class TestSqliteUserProvider(unittest.TestCase):
             self.assertEqual(len(users), 1)
             self.assertEqual(user.uuid, '10')
             self.assertEqual(user.username, 'newu1')
-            self.assertEqual(user.password, 'newp1')
+            self.assertEqual(user.password_hash, 'newp1')

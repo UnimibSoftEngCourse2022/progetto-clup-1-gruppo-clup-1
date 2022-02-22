@@ -1,25 +1,9 @@
 import unittest
 
-from src.clup.providers.store_provider_abc import StoreProvider
+from tests.usecases.mock_store_provider import MockStoreProvider
+
 from src.clup.entities.store import Store
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
-
-
-class MockStoreProvider(StoreProvider):
-    def __init__(self):
-        self.stores = []
-
-    def get_stores(self):
-        return self.stores
-
-    def add_store(self):
-        raise NotImplementedError()
-
-    def update_store(self):
-        raise NotImplementedError()
-
-    def delete_store(self):
-        raise NotImplementedError()
 
 
 class TestSearchStoreUsecase(unittest.TestCase):

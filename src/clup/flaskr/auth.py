@@ -16,8 +16,8 @@ from src.clup.usecases.user_change_password_usecase \
 from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
 from .forms.user_login_form import UserLoginForm
-from .forms.user_register_form import UserRegisterForm
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+
 
 bp = Blueprint('auth', __name__)
 
@@ -26,7 +26,8 @@ bp = Blueprint('auth', __name__)
 def register():
     return render_template('register.html')
 
-@bp.route('/register/user', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+
+@bp.route('/register/user', methods=['GET', 'POST'])
 def user_register():
     form = UserRegisterForm()
     if form.validate_on_submit():
@@ -43,7 +44,8 @@ def user_register():
         flash("check all fields", category='danger')
     return render_template('user_register.html', form=form)
 
-@bp.route('/register/admin', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+
+@bp.route('/register/admin', methods=['GET', 'POST'])
 def admin_register():
     form = AdminRegisterForm()
     if form.validate_on_submit():

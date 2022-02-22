@@ -16,3 +16,6 @@ class MockStoreProvider(StoreProvider):
 
     def delete_store(self, store_id):
         raise NotImplementedError()
+
+    def get_store_from_manager_id(self, manager_id):
+        raise NotImplementedError()

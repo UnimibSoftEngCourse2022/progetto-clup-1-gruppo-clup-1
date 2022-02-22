@@ -17,3 +17,7 @@ class StoreProvider(abc.ABC):
     @abc.abstractmethod
     def delete_store(self, store_id):
         pass
+
+    @abc.abstractmethod
+    def get_store_from_manager_id(self, manager_id):
+        pass

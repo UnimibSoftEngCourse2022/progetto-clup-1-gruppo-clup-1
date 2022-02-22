@@ -1,4 +1,7 @@
 import unittest
+from unittest.mock import Mock
+
+from werkzeug.security import check_password_hash
 
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 
@@ -23,70 +26,66 @@ class MockUserProvider:
 
 
 class TestUserRegisterUsecase(unittest.TestCase):
+    def setUp(self):
+        self.user_provider = MockUserProvider()
+        self.u = UserRegisterUsecase(self.user_provider)
+
     def test_user_in_mock_user_provider(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
-        user_id = 1
-        password = 10
+        self.user_provider.add_user = Mock()
+        username = 'pippo'
+        password = 'pwd'
 
-        ur.execute(user_id, password)
-        is_user_present = len(mock_user_provider.get_users()) == 1
+        u_id = self.u.execute(username, password)
 
-        self.assertTrue(is_user_present)
+        self.user_provider.add_user.assert_called_once()
+        args = self.user_provider.add_user.call_args.args
+        created_user = args[0]
+        self.assertEqual(created_user.id, u_id)
+        self.assertEqual(created_user.username, username)
+        self.assertTrue(check_password_hash(created_user.password_hash, password))
 
     def test_users_contains_only_correct_user(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
         user_id1 = 1
-        password1 = 10
+        password1 = 'pwd1'
         user_id2 = 2
 
-        ur.execute(user_id1, password1)
-        is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
-        is_user2_present = mock_user_provider.get_user(user_id2) is not None
+        self.u.execute(user_id1, password1)
+        is_user1_present = self.user_provider.get_user(user_id1).username == user_id1
+        is_user2_present = self.user_provider.get_user(user_id2) is not None
 
         self.assertTrue(is_user1_present)
         self.assertFalse(is_user2_present)
 
     def test_users_can_contain_multiple_users(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
         user_id1 = 1
-        password1 = 10
+        password1 = 'pwd1'
         user_id2 = 2
-        password2 = 20
+        password2 = 'pwd2'
 
-        ur.execute(user_id1, password1)
-        ur.execute(user_id2, password2)
-        is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
-        is_user2_present = mock_user_provider.get_user(user_id2).username == user_id2
+        self.u.execute(user_id1, password1)
+        self.u.execute(user_id2, password2)
+        is_user1_present = self.user_provider.get_user(user_id1).username == user_id1
+        is_user2_present = self.user_provider.get_user(user_id2).username == user_id2
 
         self.assertTrue(is_user1_present)
         self.assertTrue(is_user2_present)
 
     def test_null_field_raise_error(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
         with self.assertRaises(ValueError):
-            ur.execute(1, None)
+            self.u.execute('usr', None)
         with self.assertRaises(ValueError):
-            ur.execute(None, 1)
+            self.u.execute(None, 'pwd')
 
     def test_add_same_user_twice_raise_error(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
-        user_id1 = 1
-        password1 = 10
+        username = 'usr'
+        password = 'pwd'
 
-        ur.execute(user_id1, password1)
+        self.u.execute(username, password)
         with self.assertRaises(ValueError):
-            ur.execute(user_id1, password1)
+            self.u.execute(username, password)
 
     def test_empty_string_raise_error(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
-
         with self.assertRaises(ValueError):
-            ur.execute("", 10)
+            self.u.execute("", 'pwd1')
         with self.assertRaises(ValueError):
-            ur.execute(1, "")
+            self.u.execute('usr1', "")
