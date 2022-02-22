@@ -1,5 +1,7 @@
 import uuid
 
+from werkzeug.security import generate_password_hash
+
 from src.clup.entities.admin import Admin
 
 
@@ -28,7 +30,8 @@ class AdminRegisterUseCase:
             raise ValueError('invalid secret')
 
         admin_id = str(uuid.uuid1())
-        admin = Admin(admin_id, username, password)
+        pw_hash = generate_password_hash(password)
+        admin = Admin(admin_id, username, pw_hash)
 
         self.admin_provider.add_admin(admin)
         self.admin_provider.add_admin_to_store(admin_id, store_id)

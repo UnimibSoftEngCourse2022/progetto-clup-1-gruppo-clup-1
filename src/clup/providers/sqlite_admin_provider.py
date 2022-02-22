@@ -13,7 +13,7 @@ class SqliteAdminProvider(AdminProvider):
     def get_admins(self):
         with Session(self.engine) as session, session.begin():
             model_admins = session.query(models.Account).filter(models.Account.type == 'admin').all()
-            admins = [Admin(ma.uuid, ma.username, ma.password)
+            admins = [Admin(ma.uuid, ma.username, ma.password_hash)
                       for ma in model_admins]
             return admins
 
@@ -26,7 +26,7 @@ class SqliteAdminProvider(AdminProvider):
                 model_admin = models.Account(
                     uuid=admin.id,
                     username=admin.username,
-                    password=admin.password,
+                    password_hash=admin.password_hash,
                     type='admin'
                 )
                 session.add(model_admin)
@@ -64,7 +64,7 @@ class SqliteAdminProvider(AdminProvider):
                 filter(models.Account.uuid == admin.id)
             query.update({
                 models.Account.username: admin.username,
-                models.Account.password: admin.password,
+                models.Account.password_hash: admin.password_hash,
             })
 
     def get_store_id(self, admin_id):

@@ -28,8 +28,8 @@ class TestSqliteAdminProvider(unittest.TestCase):
         self.assertEqual(len(admins), 0)
 
     def test_all_admins_returned_from_non_empty_db(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
-        ma2 = models.Account(uuid='20', username='u2', password='p2', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
+        ma2 = models.Account(uuid='20', username='u2', password_hash='p2', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
             session.add(ma2)
@@ -54,10 +54,10 @@ class TestSqliteAdminProvider(unittest.TestCase):
             self.assertEqual(len(admins), 1)
             self.assertEqual(admin.uuid, '10')
             self.assertEqual(admin.username, 'u1')
-            self.assertEqual(admin.password, 'p1')
+            self.assertEqual(admin.password_hash, 'p1')
 
     def test_admin_is_removed_from_db(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
 
@@ -69,7 +69,7 @@ class TestSqliteAdminProvider(unittest.TestCase):
             self.assertEqual(len(admins), 0)
 
     def test_admin_is_updated(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         updated_admin = Admin('10', 'newu1', 'newp1')
@@ -83,10 +83,10 @@ class TestSqliteAdminProvider(unittest.TestCase):
             self.assertEqual(len(admins), 1)
             self.assertEqual(admin.uuid, '10')
             self.assertEqual(admin.username, 'newu1')
-            self.assertEqual(admin.password, 'newp1')
+            self.assertEqual(admin.password_hash, 'newp1')
 
     def test_admin_store_id_is_returned(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         msa = models.StoreAdmin(admin_uuid='10', store_uuid='100')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
@@ -121,7 +121,7 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
         self.db_file.unlink()
 
     def test_duplicate_id_throws(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         a = Admin('10', 'admin', 'pwd')
@@ -130,7 +130,7 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
             self.ap.add_admin(a)
 
     def test_duplicate_username_throws(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         a = Admin('100', 'u1', 'pwd')
@@ -139,7 +139,7 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
             self.ap.add_admin(a)
 
     def test_remove_on_unexistent_id_throws(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
 
@@ -147,7 +147,7 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
             self.ap.remove_admin('100')
 
     def test_update_on_unexistent_id_throws(self):
-        ma1 = models.Account(uuid='10', username='u1', password='p1', type='admin')
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         a = Admin('100', 'u1', 'pwd')

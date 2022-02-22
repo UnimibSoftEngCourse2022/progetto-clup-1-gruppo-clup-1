@@ -10,7 +10,7 @@ class Account(Base):
     id = Column(Integer, primary_key=True)
     uuid = Column(String, unique=True)
     username = Column(String, unique=True)
-    password = Column(String)
+    password_hash = Column(String)
     type = Column(String)
 
 

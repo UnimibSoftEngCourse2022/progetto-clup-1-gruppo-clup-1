@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import Mock
 
+from werkzeug.security import check_password_hash
+
 from src.clup.entities.store import Store
 from src.clup.entities.admin import Admin
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
@@ -56,9 +58,13 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         s_id = 'store1'
 
         a_id = self.u.execute(username, password, 'name1', 'Milano', 'secret1')
-        adm = Admin(a_id, username, password)
 
-        self.admin_pvd.add_admin.assert_called_once_with(adm)
+        self.admin_pvd.add_admin.assert_called_once()
+        args = self.admin_pvd.add_admin.call_args.args
+        created_admin = args[0]
+        self.assertEqual(created_admin.id, a_id)
+        self.assertEqual(created_admin.username, username)
+        self.assertTrue(check_password_hash(created_admin.password_hash, password))
         self.admin_pvd.add_admin_to_store.assert_called_once_with(a_id, s_id)
 
     def test_null_or_empty_username_or_password_throws(self):
@@ -111,9 +117,13 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         password = 'pwd'
 
         a_id = self.u.execute(username, password, 'name3', 'Firenze', same_secret_as_2)
-        adm = Admin(a_id, username, password)
 
-        self.admin_pvd.add_admin.assert_called_once_with(adm)
+        self.admin_pvd.add_admin.assert_called_once()
+        args = self.admin_pvd.add_admin.call_args.args
+        created_admin = args[0]
+        self.assertEqual(created_admin.id, a_id)
+        self.assertEqual(created_admin.username, username)
+        self.assertTrue(check_password_hash(created_admin.password_hash, password))
         self.admin_pvd.add_admin_to_store.assert_called_once_with(a_id, s_id)
 
     def test_register_on_unexistent_store_id_throws(self):
