@@ -15,6 +15,7 @@ from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 
 bp = Blueprint('stores', __name__)
 
@@ -52,9 +53,12 @@ def init_stores():
     uru.execute('davide', 'prova')
 
     aru = AdminRegisterUseCase(setup.admin_provider, setup.store_provider)
-    aru.execute('admin1', 'password', esselunga.id, esselunga.secret)
-    aru.execute('admin2', 'password', conad.id, conad.secret)
+    aru.execute('admin1', 'password', esselunga.name, esselunga.address, esselunga.secret)
+    aru.execute('admin2', 'password', conad.name, conad.address, conad.secret)
 
+    csm = CreateStoreManagerUseCase(setup.store_manager_provider)
+    csm.execute('secret_key')
+    
     return redirect(url_for('stores.stores'))
 
 
