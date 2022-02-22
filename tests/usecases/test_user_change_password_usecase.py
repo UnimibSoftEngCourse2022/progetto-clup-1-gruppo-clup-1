@@ -23,6 +23,7 @@ class MockUserProvider:
         self.users[user.id] = user
 
 
+@unittest.skip('change to account')
 class TestUserChangePasswordUsecase(unittest.TestCase):
     def test_change_password_set_new_password_with_correct_info(self):
         mock_user_provider = MockUserProvider()

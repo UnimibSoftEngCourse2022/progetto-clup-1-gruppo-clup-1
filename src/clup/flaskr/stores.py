@@ -52,8 +52,8 @@ def init_stores():
     uru.execute('davide', 'prova')
 
     aru = AdminRegisterUseCase(setup.admin_provider, setup.store_provider)
-    aru.execute('admin1', 'password', esselunga.id, esselunga.secret)
-    aru.execute('admin2', 'password', conad.id, conad.secret)
+    aru.execute('admin1', 'password', esselunga.name, esselunga.address, esselunga.secret)
+    aru.execute('admin2', 'password', conad.name, conad.address, conad.secret)
 
     return redirect(url_for('stores.stores'))
 

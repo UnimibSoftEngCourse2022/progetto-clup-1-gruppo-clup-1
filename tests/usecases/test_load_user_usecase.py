@@ -25,7 +25,7 @@ class TestLoadUserDataUsecase(unittest.TestCase):
 
         self.assertEqual(user.id, '1')
         self.assertEqual(user.username, 'tizio')
-        self.assertEqual(user.password, 'caio')
+        self.assertEqual(user.password_hash, 'caio')
 
     def test_unexistent_user_id_throws(self):
         with self.assertRaises(ValueError):
@@ -41,4 +41,4 @@ class TestLoadUserDataUsecase(unittest.TestCase):
 
         self.assertEqual(user.id, '2')
         self.assertEqual(user.username, 'pluto')
-        self.assertEqual(user.password, 'paperino')
+        self.assertEqual(user.password_hash, 'paperino')

@@ -25,7 +25,7 @@ class TestLoadAdminUsecase(unittest.TestCase):
 
         self.assertEqual(admin.id, '1')
         self.assertEqual(admin.username, 'tizio')
-        self.assertEqual(admin.password, 'caio')
+        self.assertEqual(admin.password_hash, 'caio')
 
     def test_unexistent_admin_id_throws(self):
         with self.assertRaises(ValueError):
@@ -41,4 +41,4 @@ class TestLoadAdminUsecase(unittest.TestCase):
 
         self.assertEqual(admin.id, '2')
         self.assertEqual(admin.username, 'pluto')
-        self.assertEqual(admin.password, 'paperino')
+        self.assertEqual(admin.password_hash, 'paperino')
