@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, current_user
+from .forms.registration_form import RegistrationForm
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
@@ -17,7 +18,20 @@ bp = Blueprint('auth', __name__)
 
 @bp.route('/register', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def register():
-    form = UserRegisterForm()
+     form = RegistrationForm()
+     if request.method == 'POST':
+        if request.form['submit_button'] == 'User':
+            return redirect(url_for('auth.user_register'))
+        elif request.form['submit_button'] == 'Admin':
+            pass # do something else
+        elif request.form['submit_button'] == 'Store Manager':
+            pass #
+     elif request.method == 'GET':
+        return render_template('register.html', form=form)
+
+@bp.route('/register/user', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+def user_register():
+    form = RegistrationForm()
     if form.validate_on_submit():
         username = form.username.data
         password = form.password1.data
@@ -30,7 +44,7 @@ def register():
             return redirect(url_for('auth.register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
-    return render_template('register.html', form=form)
+    return render_template('user_register.html', form=form)
 
 
 # TODO def user_register()^^^

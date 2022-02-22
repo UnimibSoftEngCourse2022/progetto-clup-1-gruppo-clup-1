@@ -5,36 +5,44 @@ User Register
 {% endblock %}
 
 {% block content %}
-<div class="container py-1">
-    <section class="vh-100 gradient-custom">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card bg-dark text-white" style="border-radius: 20rem;">
-                    <div class="card-body p-5 text-center">
-                        {{ form.csrf_token }}
-                        {{ form.hidden_tag() }}
-                        <h1 class="fw-bold mb-2 text-uppercase">Sign in</h1>
-                        <br>
-                        <div class="form-outline form-white mb-4">
-                            {{ form.username(placeholder="username") }}
-                        </div>
-                        <div class="form-outline form-white mb-4">
-                            {{ form.password1(placeholder="password") }}
-                        </div>
-                        <div class="form-outline form-white mb-4">
-                            {{ form.password2(placeholder="repeat password") }}
-                        </div>
-
-                        {{ form.submit(class="btn btn-outline-light btn-lg px-5") }}
-                        <p class="small mb-5 pb-lg-2">
-                            <a href="{{ url_for('auth.login')}}" class="text-white-50 fw-bold">
-                                already have an account?
-                            </a>
-                        </p>
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">Sign Up</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col align-items-center">
+                        <button id="user_register" type="submit" name="submit_button">User</button>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="admin_register" type="submit" name="submit_button">Admin</button>
+                    </div>
+                    <div class="col align-items-center">
+                        <button id="store_manager_register" type="submit" name="submit_button">Store Manager</button>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </div>
+{% endblock %}
+{% block style %}
+<style>
+    #user_register, #admin_register, #store_manager_register{
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+
+    #user_register, #admin_register, #store_manager_register{
+        background-color: #FF8A00E6;
+        ;
+    }
+</style>
 {% endblock %}
