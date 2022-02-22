@@ -24,7 +24,7 @@ class SqliteStoreManagerProvider(StoreManagerProvider):
                 secret_key=secret,
                 active=False
             )
-            session.add(model_store_manager_sk)
+            session.add(model_storemanager_sk)
 
     def get_id_from_secret(self, secret):
         with Session(self.engine) as session, session.begin():

@@ -114,8 +114,8 @@ class SqliteStoreProvider(StoreProvider):
     def get_store_id_from_name_and_address(self, store_name, store_address):
         with Session(self.engine) as session, session.begin():
             store = session.query(models.Store)\
-                        .filter(models.Store.name == store_name,
-                                models.Store.address == store_address).all()
+                .filter(models.Store.name == store_name,
+                        models.Store.address == store_address).all()
 
             if len(store) != 1:
                 raise ValueError("unable to find a store")

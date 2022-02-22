@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash
 
 from src.clup.providers.store_manager_provider_abc \
     import StoreManagerProvider
-from src.clup.entities.store import Store
 from src.clup.entities.store_manager import StoreManager
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 
@@ -65,7 +64,6 @@ class TestStoreManagerRegisterUsecase(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.u.execute('secret', 'usr', None)
-
 
     def test_store_manager_username_is_unique(self):
         self.store_manager_pvd.get_store_managers = Mock()

@@ -10,24 +10,25 @@ from src.clup.usecases.user_change_password_usecase \
 from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
 from .forms.user_login_form import UserLoginForm
-from .forms.user_register_form import UserRegisterForm
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+
 
 bp = Blueprint('auth', __name__)
 
 
 @bp.route('/register', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def register():
-     form = RegistrationForm()
-     if request.method == 'POST':
+    form = RegistrationForm()
+    if request.method == 'POST':
         if request.form['submit_button'] == 'User':
             return redirect(url_for('auth.user_register'))
         elif request.form['submit_button'] == 'Admin':
-            pass # do something else
+            pass  # do something else
         elif request.form['submit_button'] == 'Store Manager':
-            pass #
-     elif request.method == 'GET':
+            pass  #
+    elif request.method == 'GET':
         return render_template('register.html', form=form)
+
 
 @bp.route('/register/user', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def user_register():

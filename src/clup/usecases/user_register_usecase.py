@@ -15,7 +15,7 @@ class UserRegisterUsecase:
             raise ValueError('Null type not valid')
         if username in [usr.username for usr in self.user_provider.get_users()]:
             raise ValueError('username already present')
-        
+
         pw_hash = generate_password_hash(password)
         user = User(user_id, username, pw_hash)
         self.user_provider.add_user(user)
