@@ -58,7 +58,7 @@ def home():
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
     stores = setup.store_provider.get_stores_from_manager_id(store_manager.id)
-    return render_template('store_manager_home.html', sm=store_manager, stores=stores)
+    return render_template('store_manager/store_manager_home.html', sm=store_manager, stores=stores)
 
 
 @bp.route('/storemanager/stores/<store_id>')
@@ -66,7 +66,7 @@ def home():
 def store_info(store_id):
     store_info = liu.execute(store_id)
     print(store_info)
-    return render_template('store_view_manager.html',  store_info=store_info)
+    return render_template('store_manager/store_view_manager.html',  store_info=store_info)
 
 
 @bp.route('/storemanager/add_store', methods=['GET','POST'])
@@ -90,7 +90,7 @@ def add_store():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('add_store.html', form=form)
+    return render_template('store_manager/add_store.html', form=form)
 
 @bp.route('/storemanager/<store_id>/set_aisles', methods=['GET','POST'])
 @login_required
@@ -115,4 +115,4 @@ def set_aisles(store_id):
             abort(400)
     
     base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH, Category.BEVERAGE, Category.FRUIT, Category.OTHER]
-    return render_template('set_aisle.html', store_id=store_id, categories = base_categories) 
+    return render_template('store_manager/set_aisle.html', store_id=store_id, categories = base_categories) 
