@@ -1,5 +1,8 @@
-from flask import Blueprint, flash, redirect, url_for, render_template
+import json
+from flask import Blueprint, abort, flash, redirect, url_for, render_template, request
 from flask_login import login_required, current_user
+from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
+from src.clup.flaskr.forms.add_store_form import AddStoreForm
 
 from src.clup.flaskr import global_setup as setup
 from src.clup.usecases.add_store_usecase import AddStoreUseCase
@@ -7,6 +10,8 @@ from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_store_manager_usecase import LoadStoreManagerUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
+from src.clup.usecases.add_store_usecase import AddStoreUseCase
+from src.clup.entities.category import Category
 
 bp = Blueprint('store_manager', __name__)
 liu = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)
@@ -51,8 +56,50 @@ def store_info(store_id):
     return render_template('store_view_manager.html',  store_info=store_info)
 
 
-@bp.route('/storemanager/stores', methods=['POST'])
+@bp.route('/storemanager/add_store', methods=['GET','POST'])
 @login_required
-def create_store():
-    # Handle store creation
-    pass
+def add_store():
+    if not check_correct_account_type('store_manager'):
+        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        return redirect(url_for('auth.login'))
+    form = AddStoreForm()
+    if form.validate_on_submit():
+        store_name = form.name.data
+        store_address = form.address.data
+        asu = AddStoreUseCase(setup.store_provider)
+        id = current_user.id
+        try:
+            store = asu.execute(store_name, store_address, id)
+            return redirect(url_for('store_manager.set_aisles', store_id=store.id)) 
+        except ValueError:
+            flash('Unable to add store')
+            return redirect(url_for('store_manager.home'))
+    else:
+        if form.is_submitted():
+            flash('form not valid', category='danger')
+    return render_template('add_store.html', form=form)
+
+@bp.route('/storemanager/<store_id>/set_aisles', methods=['GET','POST'])
+@login_required
+def set_aisles(store_id):
+    if not check_correct_account_type('store_manager'):
+        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        return redirect(url_for('auth.login'))
+
+    if request.method == 'POST':
+        name = request.values['name']
+        capacity = int(request.values['capacity'])
+        categories = request.values['categories']
+        try:
+            categories_json = json.loads(categories)
+            categories_enum = [Category(int(c)) for c in categories_json]
+            for i in range(100):
+                print(categories_enum)
+            aau = AddAisleUseCase(setup.aisle_provider, setup.lane_provider)
+            aau.execute(store_id, name, categories_enum, capacity)
+            return redirect(url_for('store_manager.set_aisles', store_id=store_id))
+        except json.JSONDecodeError:
+            abort(400)
+    
+    base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH, Category.BEVERAGE, Category.FRUIT, Category.OTHER]
+    return render_template('set_aisle.html', store_id=store_id, categories = base_categories) 

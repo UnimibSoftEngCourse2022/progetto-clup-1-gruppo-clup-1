@@ -9,3 +9,4 @@ class Category(Enum):
     BEAUTY = auto()
     BAKERY = auto()
     BEVERAGE = auto()
+    OTHER = auto()
