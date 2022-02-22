@@ -26,7 +26,8 @@ def home():
     print(info)
     return render_template('admin/home.html', admin=admin_data,
                            store=info['store'], aisles=info['aisles'],
-                           capacity=info['capacity'], current_people=info['current_people'],)
+                           capacity=info['capacity'], current_people=info['current_people'],
+                           enabled=info['enabled'])
 
 
 @bp.route('/admin/reservations/consumed', methods=['POST', 'DELETE'])
