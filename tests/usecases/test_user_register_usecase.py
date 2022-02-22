@@ -50,51 +50,42 @@ class TestUserRegisterUsecase(unittest.TestCase):
         user_id2 = 2
 
         self.u.execute(user_id1, password1)
-        is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
-        is_user2_present = mock_user_provider.get_user(user_id2) is not None
+        is_user1_present = self.user_provider.get_user(user_id1).username == user_id1
+        is_user2_present = self.user_provider.get_user(user_id2) is not None
 
         self.assertTrue(is_user1_present)
         self.assertFalse(is_user2_present)
 
     def test_users_can_contain_multiple_users(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
         user_id1 = 1
         password1 = 'pwd1'
         user_id2 = 2
         password2 = 'pwd2'
 
         self.u.execute(user_id1, password1)
-        ur.execute(user_id2, password2)
-        is_user1_present = mock_user_provider.get_user(user_id1).username == user_id1
-        is_user2_present = mock_user_provider.get_user(user_id2).username == user_id2
+        self.u.execute(user_id2, password2)
+        is_user1_present = self.user_provider.get_user(user_id1).username == user_id1
+        is_user2_present = self.user_provider.get_user(user_id2).username == user_id2
 
         self.assertTrue(is_user1_present)
         self.assertTrue(is_user2_present)
 
     def test_null_field_raise_error(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
         with self.assertRaises(ValueError):
-            ur.execute('usr', None)
+            self.u.execute('usr', None)
         with self.assertRaises(ValueError):
-            ur.execute(None, 'pwd')
+            self.u.execute(None, 'pwd')
 
     def test_add_same_user_twice_raise_error(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
         username = 'usr'
         password = 'pwd'
 
-        ur.execute(username, password)
+        self.u.execute(username, password)
         with self.assertRaises(ValueError):
-            ur.execute(username, password)
+            self.u.execute(username, password)
 
     def test_empty_string_raise_error(self):
-        mock_user_provider = MockUserProvider()
-        ur = UserRegisterUsecase(mock_user_provider)
-
         with self.assertRaises(ValueError):
-            ur.execute("", 'pwd1')
+            self.u.execute("", 'pwd1')
         with self.assertRaises(ValueError):
-            ur.execute('usr1', "")
+            self.u.execute('usr1', "")
