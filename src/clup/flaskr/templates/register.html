@@ -5,6 +5,17 @@ User Register
 {% endblock %}
 
 {% block content %}
+<script>
+    function userRegistration() {
+        window.location.href = "{{ url_for('auth.user_register') }}";
+    }
+    function adminRegistration() {
+        window.location.href = "{{ url_for('auth.admin_register') }}";
+    }
+    function storeManagerRegistration() {
+        window.location.href = "{{ url_for('auth.store_manager_register') }}";
+    }
+</script>
 <div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
     <div class="container mt-4">
         <p class="h2 mb-4 text">Sign Up</p>
@@ -12,13 +23,13 @@ User Register
             <div class="card-body p-4">
                 <div class="row">
                     <div class="col align-items-center">
-                        <button id="user_register" type="submit" name="submit_button">User</button>
+                        <button id="user_register" type="submit" name="submit_button" onclick="userRegistration()">User</button>
                     </div>
                     <div class="col align-items-center">
-                        <button id="admin_register" type="submit" name="submit_button">Admin</button>
+                        <button id="admin_register" type="submit" name="submit_button" onclick="adminRegistration()">Admin</button>
                     </div>
                     <div class="col align-items-center">
-                        <button id="store_manager_register" type="submit" name="submit_button">Store Manager</button>
+                        <button id="store_manager_register" type="submit" name="submit_button" onclick="storeManagerRegistration()">Store Manager</button>
                     </div>
                 </div>
             </div>

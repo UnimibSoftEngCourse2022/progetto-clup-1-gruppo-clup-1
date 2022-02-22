@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-User Register
+Store manager Register
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@ User Register
                     <div class="card-body p-5 text-center">
                         {{ form.csrf_token }}
                         {{ form.hidden_tag() }}
-                        <h1 class="fw-bold mb-2 text-uppercase">Sign in</h1>
+                        <h1 class="fw-bold mb-2 text-uppercase">Sign up</h1>
                         <br>
                         <div class="form-outline form-white mb-4">
                             {{ form.username(placeholder="username") }}
@@ -25,7 +25,9 @@ User Register
                         <div class="form-outline form-white mb-4">
                             {{ form.password2(placeholder="repeat password") }}
                         </div>
-
+                        <div class="form-outline form-white mb-4">
+                            {{ form.secret_key(placeholder="secret key") }}
+                        </div>
                         {{ form.submit(class="btn btn-outline-light btn-lg px-5") }}
                         <p class="small mb-5 pb-lg-2">
                             <a href="{{ url_for('auth.login')}}" class="text-white-50 fw-bold">

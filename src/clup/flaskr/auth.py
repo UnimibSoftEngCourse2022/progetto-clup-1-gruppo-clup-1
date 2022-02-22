@@ -1,6 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, current_user
-from .forms.registration_form import RegistrationForm
+
+from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
+
+from .forms.store_manager_register_form import StoreManagerRegisterForm
+from .forms.admin_register_form import AdminRegisterForm
+from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
+
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
@@ -16,22 +22,13 @@ from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 bp = Blueprint('auth', __name__)
 
 
-@bp.route('/register', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+@bp.route('/register', methods=['GET'])  # conterrà solo i tre link alle tre diverse register per tipo
 def register():
-     form = RegistrationForm()
-     if request.method == 'POST':
-        if request.form['submit_button'] == 'User':
-            return redirect(url_for('auth.user_register'))
-        elif request.form['submit_button'] == 'Admin':
-            pass # do something else
-        elif request.form['submit_button'] == 'Store Manager':
-            pass #
-     elif request.method == 'GET':
-        return render_template('register.html', form=form)
+    return render_template('register.html')
 
 @bp.route('/register/user', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def user_register():
-    form = RegistrationForm()
+    form = UserRegisterForm()
     if form.validate_on_submit():
         username = form.username.data
         password = form.password1.data
@@ -41,15 +38,48 @@ def user_register():
             return redirect(url_for('auth.login'))
         except ValueError:
             flash('Something went wrong', category='danger')
-            return redirect(url_for('auth.register'))
+            return redirect(url_for('auth.user_register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
     return render_template('user_register.html', form=form)
 
+@bp.route('/register/admin', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+def admin_register():
+    form = AdminRegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password1.data
+        store_name = form.store_name.data
+        store_address = form.store_address.data
+        store_sk = form.store_sk.data
+        ar = AdminRegisterUseCase(setup.admin_provider, setup.store_provider)
+        try:
+            ar.execute(username, password, store_name, store_address, store_sk)
+            return redirect(url_for('auth.login'))
+        except ValueError:
+            flash('Something went wrong', category='danger')
+            return redirect(url_for('auth.admin_register'))
+    elif form.is_submitted():
+        flash("check all fields", category='danger')
+    return render_template('admin_register.html', form=form)
 
-# TODO def user_register()^^^
-# TODO def admin_register()
-# TODO def store_manager_register()
+@bp.route('/register/store_manager', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+def store_manager_register():
+    form = StoreManagerRegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password1.data
+        secret_key = form.secret_key.data
+        smr = StoreManagerRegisterUseCase(setup.store_manager_provider)
+        try:
+            smr.execute(secret_key, username, password)
+            return redirect(url_for('auth.login'))
+        except ValueError:
+            flash('Something went wrong', category='danger')
+            return redirect(url_for('auth.store_manager_register'))
+    elif form.is_submitted():
+        flash("check all fields", category='danger')
+    return render_template('store_manager_register.html', form=form)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
