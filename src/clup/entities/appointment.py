@@ -1,7 +1,7 @@
 ﻿from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(frozen=True)
 class Appointment:
     reservation_id: ...
     store_id: ...
