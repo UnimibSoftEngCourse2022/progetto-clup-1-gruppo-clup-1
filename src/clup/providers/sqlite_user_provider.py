@@ -18,7 +18,7 @@ class SqliteUserProvider:
     def get_users(self):
         with Session(self.engine) as session, session.begin():
             model_users = session.query(models.Account).filter(models.Account.type == 'user').all()
-            users = [User(mu.uuid, mu.username, mu.password)
+            users = [User(mu.uuid, mu.username, mu.password_hash)
                      for mu in model_users]
             return users
 
@@ -31,7 +31,7 @@ class SqliteUserProvider:
                 model_admin = models.Account(
                     uuid=user.id,
                     username=user.username,
-                    password=user.password,
+                    password_hash=user.password_hash,
                     type='user'
                 )
                 session.add(model_admin)
@@ -56,5 +56,5 @@ class SqliteUserProvider:
                        models.Account.type == 'user')
             query.update({
                 models.Account.username: user.username,
-                models.Account.password: user.password,
+                models.Account.password_hash: user.password_hash,
             })
