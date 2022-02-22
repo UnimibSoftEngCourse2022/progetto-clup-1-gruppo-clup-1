@@ -4,6 +4,8 @@ from flask import Blueprint, render_template, request, jsonify, abort
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
+from src.clup.entities.category import Category
+from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
 from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
@@ -62,15 +64,18 @@ def store_time_slots(store_id):
 @login_required
 def make_reservation(store_id):
     user_id = current_user.get_id()
-    aisle_ids = request.values['aisle_ids']
+    categories = request.values['categories']
     try:
-        aisle_ids_json = json.loads(aisle_ids)
-        print(aisle_ids_json)
+        categories_json = json.loads(categories)
+        categories_enum = [Category(int(c)) for c in categories_json]
+        fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
+        aisle_ids = fabc.execute(store_id, categories_enum)
     except json.JSONDecodeError:
         abort(400)
+
     mru = MakeReservationUseCase(setup.lane_provider,
                                  setup.reservation_provider)
-    mru.execute(user_id, store_id, aisle_ids_json)
+    mru.execute(user_id, store_id, aisle_ids)
     return '', 200
 
 
