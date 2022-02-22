@@ -73,6 +73,7 @@ def make_reservation(store_id):
         queue = setup.lane_provider.get_waiting_queue(aisle_id)
         print(f'{aisle_id} - {pool.capacity} - {pool.current_quantity}')
         print(list(queue))
+        print(list(pool))
     return '', 200
 
 

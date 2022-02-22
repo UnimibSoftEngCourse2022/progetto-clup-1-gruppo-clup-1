@@ -23,9 +23,10 @@ def home():
                                       setup.lane_provider,
                                       setup.admin_provider)
     info = lasiu.execute(a_id)
+    print(info)
     return render_template('admin/home.html', admin=admin_data,
                            store=info['store'], aisles=info['aisles'],
-                           capacity=info['capacity'])
+                           capacity=info['capacity'], current_people=info['current_people'],)
 
 
 @bp.route('/admin/reservations/consumed', methods=['POST', 'DELETE'])
