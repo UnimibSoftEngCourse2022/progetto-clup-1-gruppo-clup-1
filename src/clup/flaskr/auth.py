@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 
 from .forms.store_manager_register_form import StoreManagerRegisterForm
 from .forms.admin_register_form import AdminRegisterForm
+from .forms.user_register_form import UserRegisterForm
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
 
 
@@ -64,6 +65,7 @@ def admin_register():
     elif form.is_submitted():
         flash("check all fields", category='danger')
     return render_template('admin_register.html', form=form)
+
 
 @bp.route('/register/store_manager', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def store_manager_register():

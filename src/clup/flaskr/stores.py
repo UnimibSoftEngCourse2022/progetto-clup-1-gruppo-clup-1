@@ -58,7 +58,7 @@ def init_stores():
 
     csm = CreateStoreManagerUseCase(setup.store_manager_provider)
     csm.execute('secret_key')
-    
+
     return redirect(url_for('stores.stores'))
 
 
