@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
 
 Base = declarative_base()
 
@@ -80,32 +79,3 @@ class StoreStoreManager(Base):
 def init_db(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-
-
-def create_initial_data(engine):
-    init_db(engine)
-
-    u1 = Account(uuid=1, username='tizio', password='caio', type='user')
-    u2 = Account(uuid=2, username='mario', password='rossi', type='user')
-
-    r1 = Reservation(uuid=1000, aisle_id=10, user_id=1)
-    r2 = Reservation(uuid=2000, aisle_id=20, user_id=2)
-
-    a1 = Aisle(uuid=10, name='aisle1', categories='1,2', capacity=10)
-    a2 = Aisle(uuid=20, name='aisle2', categories='3,4', capacity=5)
-
-    s1 = Store(uuid=100, name='Esselunga', address='Milano', secret='0')
-
-    s1_a1 = StoreAisle(store_uuid=100, aisle_uuid=10)
-    s1_a2 = StoreAisle(store_uuid=100, aisle_uuid=20)
-
-    with Session(engine) as session, session.begin():
-        session.add(u1)
-        session.add(u2)
-        session.add(r1)
-        session.add(r2)
-        session.add(a1)
-        session.add(a2)
-        session.add(s1)
-        session.add(s1_a1)
-        session.add(s1_a2)
