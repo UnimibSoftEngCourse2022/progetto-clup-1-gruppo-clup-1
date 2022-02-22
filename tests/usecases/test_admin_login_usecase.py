@@ -18,6 +18,7 @@ class MockAdminProvider:
         return self.admins[admin_id]
 
 
+@unittest.skip('Unused')
 class TestAdminLoginUsecase(unittest.TestCase):
     def test_admin_login_only_if_admin_already_registered(self):
         m_a_p = MockAdminProvider()
