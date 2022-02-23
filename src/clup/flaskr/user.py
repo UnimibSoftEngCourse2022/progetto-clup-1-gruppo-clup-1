@@ -69,7 +69,7 @@ def make_reservation(store_id):
         categories_json = json.loads(categories)
         categories_enum = [Category(int(c)) for c in categories_json]
         fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
-        aisle_ids = fabc.execute(store_id, categories_enum)
+        aisle_ids_json = fabc.execute(store_id, categories_enum)
     except json.JSONDecodeError:
         abort(400)
 
