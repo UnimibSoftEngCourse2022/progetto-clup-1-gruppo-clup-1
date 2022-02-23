@@ -124,7 +124,7 @@ def make_appointment(store_id):
             mauc = MakeAppointmentUseCase(setup.reservation_provider,                                        
                                           setup.appointment_provider,                                        
                                           setup.aisle_provider)
-            selected_date = datetime.datetime(int(year), int(month), int(day), int(hour))
+            selected_date = datetime.datetime(int(year), int(month), int(day), int(hour), 0, 0)
         except json.JSONDecodeError:                                                                         
             abort(400)
 
@@ -156,15 +156,16 @@ def alternative_appointment():
         datetime_str = args['datetime']
         categories_str = args['categories']
         categories_list = categories_str.split(',')
-        categories_enum = [int(c) for c in categories_list[:-1]]
+        categories_enum = [Category(int(c)) for c in categories_list[:-1]]
+        print(categories_enum)
         date, time = datetime_str.split('T')
         year, month, day = date.split('-')
         hour = time.split(':')[0]
         date_time = datetime.datetime(int(year), int(month), int(day), int(hour))
         gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider, setup.appointment_provider)
         alt_stores = gasu.execute(categories_enum, date_time)
-        print(alt_stores)
-        return render_template("valid_stores.html")
+
+        return render_template("valid_stores.html", stores=alt_stores)
     except ValueError:
         flash("something went wrong", category='danger')
         return redirect(url_for('user.home'))

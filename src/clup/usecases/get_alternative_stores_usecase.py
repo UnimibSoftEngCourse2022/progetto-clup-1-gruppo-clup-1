@@ -14,8 +14,10 @@ class GetAlternativeStoresUseCase:
         stores = self.store_provider.get_stores()
         fabc = FilterAisleByCategoriesUseCase(self.aisle_provider)
         for store in stores:
+
             try:
                 aisle_ids = fabc.execute(store.id, categories)
+
                 mauc = MakeAppointmentUseCase(
                     reservation_provider=self.reservation_provider,
                     appointment_provider=self.appointment_provider,
@@ -25,4 +27,5 @@ class GetAlternativeStoresUseCase:
 
             except ValueError:
                 continue
+
         return valid_stores

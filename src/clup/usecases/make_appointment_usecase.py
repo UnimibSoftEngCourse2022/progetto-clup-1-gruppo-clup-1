@@ -36,7 +36,10 @@ class MakeAppointmentUseCase:
 
     def check_enough_spaces_in_aisles(self, aisle_ids, date):
         enough_space = True
-        appointments_in_same_date = [a for a in self.appointment_provider.get_appointments() if a.date_time == date]
+        appointments_in_same_date = [a for a in self.appointment_provider.get_appointments() if
+                                     a.date_time.year == date.year and
+                                     a.date_time.month == date.month and
+                                     a.date_time.day == date.day ] # TODO date.hour fa fallire il controllo
         res_same_date_same_aisles = []
         for appointment in appointments_in_same_date:
             aisle_ids = [r.aisle_id for r in

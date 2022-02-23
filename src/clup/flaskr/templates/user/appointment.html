@@ -72,7 +72,7 @@
             },
             statusCode:{
                 200: function () {
-                    $("#appointment").modal('show')
+                    //$("#appointment").modal('show')
 
                 },
                 402: function (){
@@ -80,7 +80,7 @@
                 },
                 401: function () {
                         cats = "";
-                        for (id in $cat_ids_list) {
+                        for (id of $cat_ids_list) {
                             cats += id + ",";
                         }
                         window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?datetime=" + document.getElementById('datePicker').value + "&categories=" + cats
