@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
+{% include 'store_manager/navigation.html' %}
 <div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
     <div class="container mt-4">
         <p class="h2 mb-4 text">Add Store</p>
@@ -7,14 +8,23 @@
                 <div class="row">
                     <div class="col-12">
                         <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
-                        <form action="/stores" , method="post">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                            <input class="form-control" type="text" placeholder="Name" name="name" aria-label="store name"><br>
-                            <input class="form-control" type="text" placeholder="Address" name="address" aria-label="store address"><br>
-                            <input class="form-control" type="text" placeholder="Capacity" name="capacity" aria-label="store capacity"><br>
-                            <button id="add_button" type="submit">Add</button>
-                        </form>
-
+                        <form method="POST">
+                        <div class="card-body p-5 text-center">
+                            {{ form.csrf_token }}
+                            {{ form.hidden_tag() }}
+                            <h1 class="fw-bold mb-2 text-uppercase">Compile</h1>
+                            <br>
+                            <div class="form-outline form-white mb-4">
+                                {{ form.name(placeholder="name") }}
+                            </div>
+                            <div class="form-outline form-white mb-4">
+                                {{ form.address(placeholder="address") }}
+                            </div>
+                            
+                            {{ form.submit(id="add_button") }}
+                            
+                        </div>
+                    </form>
                     </div>
                 </div>
 

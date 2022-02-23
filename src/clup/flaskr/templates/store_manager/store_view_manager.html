@@ -1,0 +1,79 @@
+{% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
+
+{% include 'store_manager/navigation.html' %}
+<div class="container">
+    <p class="h2 mb-4 text">{{ store_info['store'].name}}</p>
+    <div class="card min-vw-80">
+        <div class="card-body p-4 scroll ">
+            <div class="row">
+                    <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
+                    <div class="mb-3 row">
+                        <label for="staticStoreAddress" class="col-sm-2 col-form-label">Address:</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress"
+                                   value="{{ store_info['store'].address }}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Aisles:</label>
+                        <ul class="list-group">
+                            {% for aisle in store_info['aisles'] %}
+                            <li class="list-group-item list-group-item-secondary">{{aisle.name}}
+                                <ul class="list-group">
+                                    {% for category in aisle.categories %}
+                                    <li class="list-group-item ">{{category.name}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="storeCapacity" class="col-sm-2 col-form-label">Capacity:</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control-plaintext" id="storeCapacity"
+                                   value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}
+
+
+{% block style %}
+<style>
+    body {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+
+    div.scroll {
+        margin: 4px;
+        padding: 4px;
+        /*width: 100vh;*/
+        height: 70vh;
+        /*overflow-x: hidden;*/
+        overflow-y: auto;
+        text-align: justify;
+    }
+
+    #delete_reservation_wq, #free_btn, #make_reservation, #update_store_information, #scan_btn {
+        background-color: #FF8A00E6;;
+    }
+</style>
+{% endblock %}

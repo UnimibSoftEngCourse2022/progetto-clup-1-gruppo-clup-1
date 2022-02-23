@@ -29,10 +29,10 @@
                 </div>
                 <div id="aisle_checkboxes">
                     <ul>
-                        {% for aisle in aisles %}
+                        {% for cat in categories %}
                         <li>
-                            <input id="{{ aisle.id }}" type="checkbox" checked>
-                            <label for="{{ aisle.id }}">{{ aisle.name }}</label>
+                            <input id="{{ cat.value }}" type="checkbox" checked>
+                            <label for="{{ cat.value }}">{{ cat.name }}</label>
                         </li>
                         {% endfor %}
                     </ul>
@@ -49,7 +49,7 @@
 
 <script>
     $("#make_reservation_btn").click(function () {
-        $aisle_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
+        $cat_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
             return $(this).attr("id");
         }).get();
         $.ajax({
@@ -57,7 +57,7 @@
             type: "POST",
             data: {
                 csrf_token: "{{ csrf_token() }}",
-                aisle_ids: JSON.stringify($aisle_ids_list),
+                categories: JSON.stringify($cat_ids_list),
             },
         });
     });

@@ -55,7 +55,7 @@ class TestGetStoreCategoriesUseCase(unittest.TestCase):
         gsc = GetStoreCategoriesUseCase(self.maip)
         cat_list = gsc.execute('store1_id')
 
-        self.assertTrue(type(cat_list) == set)
+        self.assertTrue(type(cat_list) == list)
 
     def test_correct_categories_added(self):
         gsc = GetStoreCategoriesUseCase(self.maip)

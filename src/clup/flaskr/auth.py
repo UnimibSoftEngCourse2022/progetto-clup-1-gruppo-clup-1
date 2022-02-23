@@ -43,7 +43,7 @@ def user_register():
             return redirect(url_for('auth.user_register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
-    return render_template('user_register.html', form=form)
+    return render_template('auth/register.html', form=form)
 
 
 @bp.route('/register/admin', methods=['GET', 'POST'])
@@ -111,7 +111,7 @@ def login():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('login.html', form=form)
+    return render_template('auth/login.html', form=form)
 
 
 @bp.route('/logout')
@@ -141,4 +141,4 @@ def change_password():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('change_password.html', form=form)
+    return render_template('auth/change_password.html', form=form)

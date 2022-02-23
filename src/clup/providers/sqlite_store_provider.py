@@ -10,6 +10,13 @@ class SqliteStoreProvider(StoreProvider):
     def __init__(self, engine):
         self.engine = engine
 
+    def get_store(self, store_id):
+        stores = self.get_stores()
+        for store in stores:
+            if store.id == store_id:
+                return store
+        raise ValueError
+
     def get_stores(self):
         with Session(self.engine) as session, session.begin():
             model_stores = session.query(models.Store).all()
@@ -86,6 +93,15 @@ class SqliteStoreProvider(StoreProvider):
             )
 
             return store_manager
+
+    def get_stores_from_manager_id(self, manager_id):
+        with Session(self.engine) as session, session.begin():
+            manager_stores_id = session.query(models.StoreStoreManager.store_uuid)\
+                .filter(models.StoreStoreManager.store_manager_uuid == manager_id).all()
+
+            manager_stores_id = [q[0] for q in manager_stores_id]
+            stores = [self.get_store(store_id) for store_id in manager_stores_id]
+            return stores
 
     def get_store_from_manager_id(self, manager_id):
         with Session(self.engine) as session, session.begin():

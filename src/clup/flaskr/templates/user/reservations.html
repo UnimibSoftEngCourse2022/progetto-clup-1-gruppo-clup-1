@@ -4,7 +4,7 @@
 
 {% block content%}
 {% include 'user/navigation.html' %}
-<div class="container">
+<div class="container overflow-auto vh-100">
     {% for r_id, store, aisles in stores_with_aisles %}
     <div class="card my-4 p-2">
         <div class="d-flex flex-row">
@@ -32,6 +32,7 @@
     {% endfor %}
 </div>
 
+
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script type="text/javascript">
 {% for r_id, _, _ in stores_with_aisles %}
@@ -42,4 +43,13 @@
     });
 {% endfor %}
 </script>
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+</style>
 {% endblock %}

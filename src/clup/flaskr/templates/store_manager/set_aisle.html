@@ -1,0 +1,114 @@
+{% extends 'base.html' %} {% block title %} Stores {% endblock %} {% block content%}
+{% include 'store_manager/navigation.html' %}
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">Add Store</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Aisle Information</p>
+                        <form>
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><br><br>
+                            <input class="form-control" type="text" placeholder="Name" id="name" aria-label="Name"><br>
+                            <input class="form-control" type="text" placeholder="Capacity" id="capacity" aria-label="Capacity"><br>
+                            <div id="category_checkboxes">
+                                <ul class="list-group">
+                                    {% for category in categories %}
+                                    <li class="list-group-item">
+                                        <input id="{{ category.value }}" type="checkbox">
+                                        <label for="{{ category }}">{{ category.name }}</label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <br>
+                            <button id="create_aisle_btn" type="button" onclick="updateStore()">Create Aisle</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "modal" tabindex = "-1" aria-hidden="true" id="new_aisle">
+    <div class = "modal-dialog" >
+    <div class = "modal-content" >
+    <div class = "modal-header" >
+    <h5 class = "modal-title" > Success </h5> 
+</div > 
+<div class = "modal-body" >
+    <p > Aisle created. Do you want to create a new one? </p> 
+    </div >
+<div class = "modal-footer" >
+    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Yes </button> 
+    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "back_to_store_info()" > No </button>
+    </div> 
+</div> 
+</div>
+</div>
+
+<div class = "modal" tabindex = "-1" aria-hidden="true" id="error_aisle">
+    <div class = "modal-dialog" >
+    <div class = "modal-content" >
+    <div class = "modal-header" >
+    <h5 class = "modal-title" > Error </h5> 
+    <button type = "button" class = "btn-close" data-bs-dismiss = "modal" aria-label = "Close" > </button> 
+</div > 
+<div class = "modal-body" >
+    <p > Something went wrong </p> 
+    </div >
+<div class = "modal-footer" >
+    <button type = "button" class = "btn btn-btn-primary" data-bs-dismiss = "modal" onclick = "location.reload()" > Close </button> 
+    </div> 
+</div> 
+</div>
+</div>
+<script>
+    $("#create_aisle_btn").click(function () {
+        var new_name = $("#name").val();
+        var new_capacity = $("#capacity").val();
+        $category_list = $("#category_checkboxes input:checkbox:checked").map(function () {
+            return $(this).attr("id");
+        }).get();
+        $.ajax({
+            url: "{{ url_for('store_manager.set_aisles', store_id = store_id) }}",
+            type: "POST",
+            data: {
+                csrf_token: "{{ csrf_token() }}",
+                name: new_name,
+                capacity: new_capacity,
+                categories: JSON.stringify($category_list),
+            },
+            success: function(result) { 
+                $("#new_aisle").modal('show')
+            },
+            error: function(result){
+                $("#error_aisle").modal('show')
+            }
+        });
+    });
+
+    function back_to_store_info() {
+        window.location.href = "{{ url_for('store_manager.store_info', store_id=store_id) }}";
+    }
+</script>{% endblock %}{% block style %}
+<style>
+    #create_aisle_btn {
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 12px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+    
+    #create_aisle_btn {
+        background-color: #FF8A00E6;
+        ;
+    }
+</style>{% endblock %}

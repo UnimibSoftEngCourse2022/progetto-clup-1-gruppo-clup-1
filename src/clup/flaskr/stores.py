@@ -39,8 +39,8 @@ def init_stores():
 
     aau.execute(esselunga.id, 'pane', [Category.MEAT])
     aau.execute(esselunga.id, 'pesce', [Category.FISH])
-    aau.execute(conad.id, 'salumi', [Category.FRUIT])
-    aau.execute(conad.id, 'frutta', [Category.MEAT])
+    aau.execute(conad.id, 'salumi', [Category.MEAT, Category.BEVERAGE])
+    aau.execute(conad.id, 'frutta', [Category.FRUIT])
 
     e_aisle_ids = setup.aisle_provider.get_store_aisle_ids(esselunga.id)
     for aisle_id in e_aisle_ids:
