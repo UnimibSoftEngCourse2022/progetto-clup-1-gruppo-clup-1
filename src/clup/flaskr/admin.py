@@ -1,21 +1,31 @@
-from flask import Blueprint, render_template, request, abort
+from flask import Blueprint, render_template, request, abort, redirect, url_for, flash
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
-from src.clup.usecases.load_admin_store_info_usecase \
-    import LoadAdminStoreInfoUseCase
-from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
 from src.clup.usecases.free_reservation_usecase \
     import FreeReservationUseCase
+from src.clup.usecases.load_admin_store_info_usecase \
+    import LoadAdminStoreInfoUseCase
+from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
 
 bp = Blueprint('admin', __name__)
+
+
+def check_correct_account_type(requested_type):
+    if current_user.type != requested_type:
+        return False
+    else:
+        return True
 
 
 @bp.route('/admin/home')
 @login_required
 def home():
+    if not check_correct_account_type('admin'):
+        flash(f"unauthorized to visit this page, login as an admin", category='danger')
+        return redirect(url_for('auth.login'))
     a_id = current_user.get_id()
     admin_data = LoadAdminUseCase(setup.admin_provider).execute(a_id)
     lasiu = LoadAdminStoreInfoUseCase(setup.store_provider,
@@ -33,6 +43,9 @@ def home():
 @bp.route('/admin/reservations/consumed', methods=['POST', 'DELETE'])
 @login_required
 def consumed_reservations():
+    if not check_correct_account_type('admin'):
+        flash(f"unauthorized to visit this page, login as an admin", category='danger')
+        return redirect(url_for('auth.login'))
     store_id = request.values['store_id']
     reservation_id = request.values['reservation_id']
 

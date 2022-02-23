@@ -1,14 +1,13 @@
 import unittest
 
-from tests.usecases.mock_aisle_provider import MockAisleProvider
-from tests.usecases.mock_reservation_provider import MockReservationProvider
-from tests.usecases.mock_store_provider import MockStoreProvider
-
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.reservation import Reservation
 from src.clup.entities.store import Store
 from src.clup.usecases.load_user_reservations_data_usecase \
     import LoadUserReservationsDataUseCase
+from tests.usecases.mock_aisle_provider import MockAisleProvider
+from tests.usecases.mock_reservation_provider import MockReservationProvider
+from tests.usecases.mock_store_provider import MockStoreProvider
 
 
 class TestLoadUserReservationsDataUseCase(unittest.TestCase):

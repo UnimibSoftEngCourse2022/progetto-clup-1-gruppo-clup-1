@@ -1,12 +1,11 @@
 import unittest
 
-from tests.usecases.mock_store_provider import MockStoreProvider
-from tests.usecases.mock_aisle_provider import MockAisleProvider
-
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.store import Store
 from src.clup.usecases.load_store_info_usecase \
     import LoadStoreInfoUseCase
+from tests.usecases.mock_aisle_provider import MockAisleProvider
+from tests.usecases.mock_store_provider import MockStoreProvider
 
 
 class TestLoadStoreInfoUseCase(unittest.TestCase):

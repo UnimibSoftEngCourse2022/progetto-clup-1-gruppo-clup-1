@@ -1,9 +1,8 @@
 import unittest
 
-from tests.usecases.mock_store_provider import MockStoreProvider
-
 from src.clup.entities.store import Store
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
+from tests.usecases.mock_store_provider import MockStoreProvider
 
 
 class TestSearchStoreUsecase(unittest.TestCase):

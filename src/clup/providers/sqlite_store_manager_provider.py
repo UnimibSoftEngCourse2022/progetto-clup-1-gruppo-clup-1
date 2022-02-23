@@ -1,10 +1,10 @@
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
-from src.clup.providers.store_manager_provider_abc \
-    import StoreManagerProvider
 from src.clup.database import models
 from src.clup.entities.store_manager import StoreManager
+from src.clup.providers.store_manager_provider_abc \
+    import StoreManagerProvider
 
 
 class SqliteStoreManagerProvider(StoreManagerProvider):

@@ -1,15 +1,14 @@
 import unittest
 from unittest.mock import create_autospec
 
-from tests.usecases.mock_store_provider import MockStoreProvider
-from tests.usecases.mock_aisle_provider import MockAisleProvider
-from tests.usecases.mock_lane_provider import MockLaneProvider
-
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.store import Store
 from src.clup.providers.admin_provider_abc import AdminProvider
 from src.clup.usecases.load_admin_store_info_usecase \
     import LoadAdminStoreInfoUseCase
+from tests.usecases.mock_aisle_provider import MockAisleProvider
+from tests.usecases.mock_lane_provider import MockLaneProvider
+from tests.usecases.mock_store_provider import MockStoreProvider
 
 
 class TestLoadAdminStoreInfoUseCase(unittest.TestCase):

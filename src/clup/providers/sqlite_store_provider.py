@@ -96,7 +96,7 @@ class SqliteStoreProvider(StoreProvider):
 
     def get_stores_from_manager_id(self, manager_id):
         with Session(self.engine) as session, session.begin():
-            manager_stores_id = session.query(models.StoreStoreManager.store_uuid)\
+            manager_stores_id = session.query(models.StoreStoreManager.store_uuid) \
                 .filter(models.StoreStoreManager.store_manager_uuid == manager_id).all()
 
             manager_stores_id = [q[0] for q in manager_stores_id]
@@ -129,7 +129,7 @@ class SqliteStoreProvider(StoreProvider):
 
     def get_store_id_from_name_and_address(self, store_name, store_address):
         with Session(self.engine) as session, session.begin():
-            store = session.query(models.Store)\
+            store = session.query(models.Store) \
                 .filter(models.Store.name == store_name,
                         models.Store.address == store_address).all()
 

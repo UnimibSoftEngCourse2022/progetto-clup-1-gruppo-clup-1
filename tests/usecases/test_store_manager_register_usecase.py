@@ -3,9 +3,9 @@ from unittest.mock import Mock
 
 from werkzeug.security import check_password_hash
 
+from src.clup.entities.store_manager import StoreManager
 from src.clup.providers.store_manager_provider_abc \
     import StoreManagerProvider
-from src.clup.entities.store_manager import StoreManager
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 
 

@@ -8,9 +8,9 @@ from src.clup.entities.category import Category
 from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
 from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
-from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.load_user_reservations_data_usecase \
     import LoadUserReservationsDataUseCase
+from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 
