@@ -71,10 +71,17 @@
                 datetime:document.getElementById('datePicker').value,
             },
             success: function (result) {
-                $("#appointment").modal('show')
+                //$("#appointment").modal('show')
+
             },
             error: function (result) {
-                location.reload();
+
+                cats = "";
+                for (id in $cat_ids_list) {
+                    cats += id+",";
+                }
+                window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?datetime="+document.getElementById('datePicker').value + "&categories=" + cats
+
             },
         });
     });

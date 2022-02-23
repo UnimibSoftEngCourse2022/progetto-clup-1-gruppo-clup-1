@@ -7,7 +7,8 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup                                                                 
 from src.clup.entities.category import Category                                                              
 from src.clup.entities.exceptions import MaxCapacityReachedError                                             
-from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase              
+from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
+from src.clup.usecases.get_alternative_stores_usecase import GetAlternativeStoresUseCase
 from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase                                 
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase                                   
 from src.clup.usecases.load_user_usecase import LoadUserUseCase                                              
@@ -100,15 +101,15 @@ def reservations():
                            stores_with_aisles=stores_with_aisles)                                            
                                                                                                              
                                                                                                              
-@bp.route('/user/stores/<store_id>/appointment', methods=['GET', 'POST'])                                    
-@login_required                                                                                              
-def make_appointment(store_id):                                                                              
-    u_id = current_user.get_id()                                                                             
+@bp.route('/user/stores/<store_id>/appointment', methods=['GET', 'POST'])
+@login_required
+def make_appointment(store_id):
+    u_id = current_user.get_id()
     user_data = LoadUserUseCase(setup.user_provider).execute(u_id)                                           
     u = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)                                     
     info = u.execute(store_id)                                                                               
     gsc = GetStoreCategoriesUseCase(setup.aisle_provider)                                                    
-    categories = gsc.execute(store_id)                                                                       
+    categories_from_use_case = gsc.execute(store_id)
     if request.method == 'POST':                                                                             
         try:                                                                                                 
             categories = request.values['categories']                                                        
@@ -122,8 +123,8 @@ def make_appointment(store_id):
             hour = time.split(':')[0]                                                                        
             mauc = MakeAppointmentUseCase(setup.reservation_provider,                                        
                                           setup.appointment_provider,                                        
-                                          setup.aisle_provider)                                              
-                                                                                                                                                                                                            
+                                          setup.aisle_provider)
+            selected_date = datetime.datetime(int(year), int(month), int(day), int(hour))
         except json.JSONDecodeError:                                                                         
             abort(400)
 
@@ -135,13 +136,33 @@ def make_appointment(store_id):
             mauc.execute(                                                                                    
                     store_id=store_id,                                                                           
                     aisle_ids=aisle_ids_json,                                                                    
-                    date=datetime.datetime(int(year), int(month), int(day), int(hour)),                          
-                    user_id=u_id                                                                                 
+                    date=selected_date,
+                    user_id=u_id
                 )
-            return '',200
-        except MaxCapacityReachedError:                                                                                                                                              
-            flash("not enough space in this time slot, try with another", category='danger')  
-            #TODO reload doesn't work              
-            return '',400                                                          
+
+            return '', 200
+        except MaxCapacityReachedError:
+            flash("not enough space in this time slot, try with another", category='danger')
+            return "",  400
+
     return render_template('user/appointment.html', user=user_data, store_id=store_id, store=info['store'],  
-                           categories=categories) 
+                           categories=categories_from_use_case)
+
+
+@bp.route('/user/stores/appointment/alternative', methods=['GET', 'POST'])
+@login_required
+def alternative_appointment():
+    args = request.args
+    datetime_str = args['datetime']
+    categories_str = args['categories']
+    categories_list = categories_str.split(',')
+    categories_enum = [int(c) for c in categories_list[:-1]]
+    date, time = datetime_str.split('T')
+    year, month, day = date.split('-')
+
+    hour = time.split(':')[0]
+    date_time = datetime.datetime(int(year), int(month), int(day), int(hour))
+    gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider, setup.appointment_provider)
+    alt_stores = gasu.execute(categories_enum, date_time)
+    print(alt_stores)
+    return render_template("valid_stores.html")

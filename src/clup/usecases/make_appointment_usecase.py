@@ -22,7 +22,7 @@ class MakeAppointmentUseCase:
             raise ValueError("Not a correct date")
         date = datetime(year=date.year, month=date.month, day=date.day, hour=date.hour)
 
-        if not self._check_enough_spaces_in_aisles(aisle_ids, date):
+        if not self.check_enough_spaces_in_aisles(aisle_ids, date):
             raise MaxCapacityReachedError()
 
         appointment = Appointment(reservation_id, store_id, date)
@@ -34,7 +34,7 @@ class MakeAppointmentUseCase:
 
         return reservation_id
 
-    def _check_enough_spaces_in_aisles(self, aisle_ids, date):
+    def check_enough_spaces_in_aisles(self, aisle_ids, date):
         enough_space = True
         appointments_in_same_date = [a for a in self.appointment_provider.get_appointments() if a.date_time == date]
         res_same_date_same_aisles = []
