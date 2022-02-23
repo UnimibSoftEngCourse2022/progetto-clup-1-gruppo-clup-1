@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock
 
 from src.clup.entities.store_pool import StorePool
 
@@ -23,6 +24,16 @@ class TestStorePool(unittest.TestCase):
         self.assertTrue('a' in self.sap.enabled)
         self.assertTrue('b' in self.sap.enabled)
         self.assertTrue('c' not in self.sap.enabled)
+
+    def test_last_added_is_none_after_init(self):
+        self.assertEqual(self.sap.last_added, None)
+
+    def test_add_save_element_in_class_field(self):
+        self.sap.add('a')
+        self.assertEqual(self.sap.last_added, 'a')
+
+        self.sap.add('b')
+        self.assertEqual(self.sap.last_added, 'b')
 
     def test_consume_moves_element_from_pool_to_to_free(self):
         reservation_id = 1
@@ -67,3 +78,34 @@ class TestStorePool(unittest.TestCase):
         self.assertTrue('a' in to_free)
         self.assertTrue('b' in to_free)
         self.assertTrue('c' not in to_free)
+
+
+class TestStorePoolAsObject(unittest.TestCase):
+    def setUp(self):
+        self.sp = StorePool()
+
+    def test_empty_observers_by_default(self):
+        self.assertEqual(len(self.sp._observers), 0)
+
+    def test_attach_adds_the_element_to_observers(self):
+        self.sp.attach('observer')
+
+        self.assertTrue('observer' in self.sp._observers)
+
+    def test_detach_removes_the_element_from_observers(self):
+        self.sp._observers.append('observer')
+
+        self.sp.detach('observer')
+
+        self.assertTrue('observer' not in self.sp._observers)
+
+    def test_notify_calls_update_on_observers(self):
+        mock_observer_1 = Mock()
+        mock_observer_2 = Mock()
+        self.sp._observers.append(mock_observer_1)
+        self.sp._observers.append(mock_observer_2)
+
+        self.sp.notify()
+
+        mock_observer_1.update.assert_called_once_with(self.sp)
+        mock_observer_2.update.assert_called_once_with(self.sp)
