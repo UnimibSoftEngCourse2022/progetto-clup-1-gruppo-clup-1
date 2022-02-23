@@ -46,7 +46,7 @@ def user_register():
 @bp.route('/register/admin', methods=['GET', 'POST'])
 def admin_register():
     form = AdminRegisterForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         username = form.username.data
         password = form.password1.data
         store_name = form.store_name.data
@@ -61,14 +61,14 @@ def admin_register():
             return redirect(url_for('auth.admin_register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
-    return render_template('admin_register.html', form=form)
+    elif request.method == 'GET':
+        return render_template('admin_register.html', form=form)
 
 
-@bp.route('/register/store_manager',
-          methods=['GET', 'POST'])
+@bp.route('/register/store_manager', methods=['GET', 'POST'])
 def store_manager_register():
     form = StoreManagerRegisterForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         username = form.username.data
         password = form.password1.data
         secret_key = form.secret_key.data
@@ -81,13 +81,14 @@ def store_manager_register():
             return redirect(url_for('auth.store_manager_register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
-    return render_template('store_manager_register.html', form=form)
+    elif request.method == 'GET':
+        return render_template('store_manager_register.html', form=form)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = UserLoginForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         gl = GenericLoginUsecase(setup.admin_provider,
                                  setup.user_provider,
                                  setup.store_manager_provider)
@@ -109,7 +110,8 @@ def login():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('auth/login.html', form=form)
+    if request.method == 'GET':
+        return render_template('auth/login.html', form=form)
 
 
 @bp.route('/logout')
@@ -123,7 +125,7 @@ def logout():
 @login_required
 def change_password():
     form = ChangePasswordForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         old_password = form.old_password.data
         new_password = form.new_password.data
         # TODO considerare i diversi tipi di current_user
@@ -139,4 +141,5 @@ def change_password():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('auth/change_password.html', form=form)
+    if request.method == 'GET':
+        return render_template('auth/change_password.html', form=form)
