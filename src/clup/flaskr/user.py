@@ -130,8 +130,7 @@ def make_appointment(store_id):
 
         except ValueError:
             flash("insert a correct value", category='danger')
-            #TODO reload doesn't work
-            return '',400 
+            return '',402
         try:
             mauc.execute(                                                                                    
                     store_id=store_id,                                                                           
@@ -143,7 +142,7 @@ def make_appointment(store_id):
             return '', 200
         except MaxCapacityReachedError:
             flash("not enough space in this time slot, try with another", category='danger')
-            return "",  400
+            return "max_capacity",  401
 
     return render_template('user/appointment.html', user=user_data, store_id=store_id, store=info['store'],  
                            categories=categories_from_use_case)
@@ -153,16 +152,19 @@ def make_appointment(store_id):
 @login_required
 def alternative_appointment():
     args = request.args
-    datetime_str = args['datetime']
-    categories_str = args['categories']
-    categories_list = categories_str.split(',')
-    categories_enum = [int(c) for c in categories_list[:-1]]
-    date, time = datetime_str.split('T')
-    year, month, day = date.split('-')
-
-    hour = time.split(':')[0]
-    date_time = datetime.datetime(int(year), int(month), int(day), int(hour))
-    gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider, setup.appointment_provider)
-    alt_stores = gasu.execute(categories_enum, date_time)
-    print(alt_stores)
-    return render_template("valid_stores.html")
+    try:
+        datetime_str = args['datetime']
+        categories_str = args['categories']
+        categories_list = categories_str.split(',')
+        categories_enum = [int(c) for c in categories_list[:-1]]
+        date, time = datetime_str.split('T')
+        year, month, day = date.split('-')
+        hour = time.split(':')[0]
+        date_time = datetime.datetime(int(year), int(month), int(day), int(hour))
+        gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider, setup.appointment_provider)
+        alt_stores = gasu.execute(categories_enum, date_time)
+        print(alt_stores)
+        return render_template("valid_stores.html")
+    except ValueError:
+        flash("something went wrong", category='danger')
+        return redirect(url_for('user.home'))

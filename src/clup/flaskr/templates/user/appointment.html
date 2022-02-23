@@ -70,19 +70,23 @@
                 categories: JSON.stringify($cat_ids_list),
                 datetime:document.getElementById('datePicker').value,
             },
-            success: function (result) {
-                //$("#appointment").modal('show')
+            statusCode:{
+                200: function () {
+                    $("#appointment").modal('show')
 
-            },
-            error: function (result) {
+                },
+                402: function (){
+                    location.reload();
+                },
+                401: function () {
+                        cats = "";
+                        for (id in $cat_ids_list) {
+                            cats += id + ",";
+                        }
+                        window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?datetime=" + document.getElementById('datePicker').value + "&categories=" + cats
 
-                cats = "";
-                for (id in $cat_ids_list) {
-                    cats += id+",";
-                }
-                window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?datetime="+document.getElementById('datePicker').value + "&categories=" + cats
-
-            },
+                },
+            }
         });
     });
 </script>
