@@ -133,10 +133,11 @@ def make_appointment(store_id):
                     aisle_ids=aisle_ids_json,                                                                    
                     date=datetime.datetime(int(year), int(month), int(day), int(hour)),                          
                     user_id=u_id                                                                                 
-                ) 
-        except MaxCapacityReachedError:                                                                      
-            # TODO flash not working                                                                         
-            flash("not enough space in this time slot, try with another", category='danger')                 
-            return redirect(url_for("auth.login"))                                                           
+                )
+            return '',200
+        except MaxCapacityReachedError:                                                                                                                                              
+            flash("not enough space in this time slot, try with another", category='danger')  
+            print("MaxCapacity")               
+            return '',400                                                           
     return render_template('user/appointment.html', user=user_data, store_id=store_id, store=info['store'],  
                            categories=categories) 

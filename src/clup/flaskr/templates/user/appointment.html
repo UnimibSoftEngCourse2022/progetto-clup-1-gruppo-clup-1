@@ -6,10 +6,9 @@
 
 
 {% include 'user/navigation.html' %}
+{% include 'banner.html' %}
 
 <div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
-
-    {% include 'banner.html' %}
     <div class="container mt-4">
         <p class="h2 mb-4 text">{{ store.name }}</p>
         <div class="card mb-4">
@@ -41,6 +40,22 @@
         </div>
     </div>
 </div>
+<div class = "modal" tabindex = "-1" aria-hidden="true" id="appointment">
+    <div class = "modal-dialog" >
+    <div class = "modal-content" >
+    <div class = "modal-header" >
+    <h5 class = "modal-title" > Success </h5> 
+</div > 
+<div class = "modal-body" >
+    <p > All went smooth: appointment fixed </p> 
+    <p > See your appointments in Resevervation tab </p> 
+    </div >
+<div class = "modal-footer" >
+    <button type = "button" id="ok_btn" data-bs-dismiss = "modal" onclick = "location.reload()" > OK </button> 
+    </div> 
+</div> 
+</div>
+</div>
 
 <script>
     $("#make_appointment_btn").click(function () {
@@ -55,6 +70,12 @@
                 categories: JSON.stringify($cat_ids_list),
                 datetime:document.getElementById('datePicker').value,
             },
+            success: function (result) {
+                $("#appointment").modal('show')
+            },
+            failure: function (result) {
+                location.reload();
+            },
         });
     });
 </script>
@@ -63,7 +84,7 @@
 
 {% block style %}
 <style>
-    #cancel_reservation_btn, #make_reservation_btn, #scan_btn {
+    #make_appointment_btn, #ok_btn{
         color: white;
         z-index: 2;
         font: normal 300 25px/1 'Josefin Sans', sans-serif;
