@@ -127,6 +127,10 @@ def make_appointment(store_id):
         except json.JSONDecodeError:                                                                         
             abort(400)
 
+        except ValueError:
+            flash("insert a correct value", category='danger')
+            #TODO reload doesn't work
+            return '',400 
         try:
             mauc.execute(                                                                                    
                     store_id=store_id,                                                                           
@@ -137,7 +141,7 @@ def make_appointment(store_id):
             return '',200
         except MaxCapacityReachedError:                                                                                                                                              
             flash("not enough space in this time slot, try with another", category='danger')  
-            print("MaxCapacity")               
-            return '',400                                                           
+            #TODO reload doesn't work              
+            return '',400                                                          
     return render_template('user/appointment.html', user=user_data, store_id=store_id, store=info['store'],  
                            categories=categories) 

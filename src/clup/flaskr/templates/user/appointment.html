@@ -73,7 +73,7 @@
             success: function (result) {
                 $("#appointment").modal('show')
             },
-            failure: function (result) {
+            error: function (result) {
                 location.reload();
             },
         });
