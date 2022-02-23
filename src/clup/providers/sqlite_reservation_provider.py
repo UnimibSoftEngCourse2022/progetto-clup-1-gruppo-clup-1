@@ -18,9 +18,6 @@ class SqliteReservationProvider(ReservationProvider):
             return reservations
 
     def get_user_reservations(self, user_id):
-        # if user_id not in [res.user_id for res in self.get_reservations()]:
-        #     raise ValueError('user_id not present, unable to find his reservations')
-
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation). \
                 filter(models.Reservation.user_id == user_id)
@@ -28,6 +25,16 @@ class SqliteReservationProvider(ReservationProvider):
             reservations = [Reservation(mr.uuid, mr.aisle_id, mr.user_id)
                             for mr in model_reservations]
             return reservations
+    
+    def get_user_id(self, reservation_id):
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.Reservation). \
+                filter(models.Reservation.uuid == reservation_id)
+            model_reservations = query.all()
+            user_ids = set(mr.user_id for mr in model_reservations)
+            if len(user_ids) != 1:
+                raise ValueError('something really wrong went here')
+            return user_ids.pop()
 
     def get_reservations_with_id(self, reservation_id):
         with Session(self.engine) as session, session.begin():

@@ -15,6 +15,10 @@ class ReservationProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_user_id(self, reservation_id):
+        pass
+
+    @abc.abstractmethod
     def add_reservation(self, reservation):
         pass
 

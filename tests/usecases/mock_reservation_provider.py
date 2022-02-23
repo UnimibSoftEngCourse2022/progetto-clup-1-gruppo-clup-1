@@ -16,6 +16,9 @@ class MockReservationProvider(ReservationProvider):
     def get_user_reservations(self, user_id):
         return [r for r in self.reservations if r.user_id == user_id]
 
+    def get_user_id(self, reservation_id):
+        raise NotImplementedError()
+
     def add_reservation(self, reservation):
         if self.throws_on_add:
             raise ValueError()

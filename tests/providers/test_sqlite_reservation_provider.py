@@ -55,16 +55,18 @@ class TestSqliteReservationProvider(unittest.TestCase):
         self.assertEqual(len(reservations), 1)
         self.assertTrue(r in reservations)
 
-    @unittest.skip('user id may exist but made no reservations')
-    def test_value_error_with_unexistent_user_id(self):
+    def test_user_id_retrieved_from_reservation_id(self):
         mr1 = models.Reservation(uuid='10', aisle_id='100', user_id='1000')
         mr2 = models.Reservation(uuid='20', aisle_id='200', user_id='2000')
+        mr3 = models.Reservation(uuid='20', aisle_id='300', user_id='2000')
         with Session(self.engine) as session, session.begin():
             session.add(mr1)
             session.add(mr2)
+            session.add(mr3)
 
-        with self.assertRaises(ValueError):
-            self.rp.get_user_reservations('9000')
+        user_id = self.rp.get_user_id('20')
+
+        self.assertEqual(user_id, '2000')
 
     def test_only_reservations_with_given_uuid_id_are_returned(self):
         mr1 = models.Reservation(uuid='10', aisle_id='100', user_id='1000')

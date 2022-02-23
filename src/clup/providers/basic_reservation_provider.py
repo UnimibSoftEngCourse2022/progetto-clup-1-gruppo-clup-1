@@ -15,6 +15,9 @@ class BasicReservationProvider(ReservationProvider):
     def get_user_reservations(self, user_id):
         raise NotImplementedError()
 
+    def get_user_id(self, reservation_id):
+        raise NotImplementedError()
+
     def add_reservation(self, reservation):
         # if reservation.id in (r.id for r in self.reservations):
         #     raise ValueError('reservation id already present')
