@@ -82,7 +82,7 @@ def add_store():
     store_manager = lsm.execute(current_user.id)
 
     form = AddStoreForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         store_name = form.name.data
         store_address = form.address.data
         asu = AddStoreUseCase(setup.store_provider)
@@ -96,7 +96,8 @@ def add_store():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('store_manager/add_store.html', sm=store_manager, form=form)
+    if request.method == 'GET':
+        return render_template('store_manager/add_store.html', sm=store_manager, form=form)
 
 
 @bp.route('/storemanager/<store_id>/set_aisles', methods=['GET', 'POST'])
@@ -108,7 +109,7 @@ def set_aisles(store_id):
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.method == 'POST':
         name = request.values['name']
         capacity = int(request.values['capacity'])
         categories = request.values['categories']
