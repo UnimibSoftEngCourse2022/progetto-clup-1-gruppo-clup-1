@@ -1,6 +1,6 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
-{% block title %} Home {% endblock %} 
+{% block title %} Home {% endblock %}
 
 {% block head %}
 <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
@@ -13,7 +13,7 @@
     <div class="container mt-4">
         <p class="h2 mb-4 text">{{ store.name }}</p>
         <div class="card mb-4">
-            <div class="card-body p-4">
+            <div class="card-body p-4 scroll">
                 <div class="row">
                     <div class="col-6">
                         <p class="h2 mb-4 text" style="color: darkorange;">Store Information</p>
@@ -22,7 +22,8 @@
                                 <label for="staticStoreAddress" class="col-form-label">Address:</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress" value="{{ store.address }}">
+                                <input type="text" readonly class="form-control-plaintext" id="staticStoreaddress"
+                                       value="{{ store.address }}">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -30,7 +31,8 @@
                                 <label for="capacity" class="col-form-label">Capacity:</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" readonly class="form-control-plaintext" id="capacity" value="{{ capacity }}">
+                                <input type="text" readonly class="form-control-plaintext" id="capacity"
+                                       value="{{ capacity }}">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -38,7 +40,8 @@
                                 <label for="enabled" class="col-form-label">Enabled Reservations:</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" readonly class="form-control-plaintext" id="enabled" value="{{ enabled }}">
+                                <input type="text" readonly class="form-control-plaintext" id="enabled"
+                                       value="{{ enabled }}">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -46,7 +49,8 @@
                                 <label for="current_people" class="col-form-label">Current People Inside:</label>
                             </div>
                             <div class="col-6">
-                                <input type="text" readonly class="form-control-plaintext" id="current_people" value="{{ current_people }}">
+                                <input type="text" readonly class="form-control-plaintext" id="current_people"
+                                       value="{{ current_people }}">
                             </div>
                         </div>
                     </div>
@@ -56,163 +60,244 @@
                     <ul>
                         {% for aisle in aisles %}
                         <li>
-                        <p><b>{{ aisle.name }}</b> | capacity: {{ aisle.capacity }}</p>
+                            <p><b>{{ aisle.name }}</b> | capacity: {{ aisle.capacity }}</p>
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="row my-2">
-                   <div class="card">
-                       <div class="card-body py-4 px-2">
-                           <div class="input-group">
-                               <input type="text" id="r_id" class="form-control mr-2" placeholder="Reservation id..">
-                               <div class="input-group-append ml-2">
-                                   <button type="button" id="start_scan_btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                       Scan QR
-                                   </button>
-                               </div>
-                           </div>
-                           <div class="d-flex flex-row justify-content-between mt-4">
-                              <button id="consume_btn" type="submit">
-                                  Consume Reservation
-                              </button>
-                              <button id="free_btn" type="submit">
-                                  Free Reservation
-                              </button>
-                           </div>
-                       </div>
-                   </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Scan the Reservation QRCode
-                </h5>
-                <button id="stop_scan_btn" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="d-flex flex-row">
-                    <div class="flex-fill"></div>
-                    <div id="qr-reader" class="d-flex"></div>
-                    <div class="flex-fill"></div>
-                </div>
-                <div class="row px-4 mt-4">
-                    <div id="success_alert" class="alert alert-success" role="alert">
-                        Scan was successful!
+                    <div class="card">
+                        <div class="card-body py-4 px-2">
+                            <div class="input-group">
+                                <input type="text" id="r_id" class="form-control mr-2" placeholder="Reservation id..">
+                                <div class="input-group-append ml-2">
+                                    <button type="button" id="start_scan_btn" class="btn btn-primary"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Scan QR
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between mt-4">
+                                <button id="consume_btn" type="submit">
+                                    Consume Reservation
+                                </button>
+                                <button type="button" id="make_reservation_btn" data-bs-toggle="modal"
+                                        data-bs-target="#makeReservationModal">
+                                    Make reservation
+                                </button>
+                                <button id="free_btn" type="submit">
+                                    Free Reservation
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!--Modal make reservation-->
+<div class="modal fade" id="makeReservationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="makeReservationModalLabel">Make reservation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="aisle_checkboxes">
+                    {% for aisle in aisles %}
+                    <li>
+                        <input id="{{ aisle.name }}" type="checkbox" checked>
+                        <label for="{{ aisle.name }}">{{ aisle.name }}</label>
+                    </li>
+                    {% endfor %}
+                </div>
 
-<script>
-    html5Qrcode = null;
-    reservation_id = '';
-    $('#success_alert').hide();
+                <div class="modal-footer">
+                    <button type="button" id="make_reservation_modal" >Make Reservation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function triggerScan() {
-        Html5Qrcode.getCameras().then(devices => {
-            console.log('searching cams');
-            console.log(devices);
-            if (devices && devices.length > 0) {
-                console.log('cam found');
-                var cameraId = devices[0].id;
-                // Start Scan
-                console.log(cameraId);
-                html5Qrcode = new Html5Qrcode("qr-reader");
-                html5Qrcode.start(
-                    cameraId,
-                    {
-                        fps: 10,
-                    },
-                    (decodedText, decodedResult) => {
-                        // Do something with read code
-                        console.log(decodedText);
-                        reservation_id = decodedText;
-                        $('#r_id').val(reservation_id);
-                        $('#success_alert').show();
-                    },
-                    (errorMessage) => {
-                        // Do something with error
-                    },
-                ).catch((err) => {
-                    // Handle error
-                });
-            }
-        }).catch((err) => {
-            // Handle error
+    <!-- Modal QR -->
+    <div class="modal fade" id="showQR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="showQRLabel">QR</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Scan the Reservation QRCode
+                    </h5>
+                    <button id="stop_scan_btn" type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-row">
+                        <div class="flex-fill"></div>
+                        <div id="qr-reader" class="d-flex"></div>
+                        <div class="flex-fill"></div>
+                    </div>
+                    <div class="row px-4 mt-4">
+                        <div id="success_alert" class="alert alert-success" role="alert">
+                            Scan was successful!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ <!--#TODO
+    <script>
+        $("#make_reservation_modal").click(function () {
+            $cat_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
+                return $(this).attr("id");
+            }).get();
+            $.ajax({
+                url: "{{ url_for('admin.make_reservation', store_id=store.id) }}",
+                type: "POST",
+                data: {
+                    csrf_token: "{{ csrf_token() }}",
+                    categories: JSON.stringify($cat_ids_list),
+                },
+                success:function (result){
+                    $("#showQR").modal('show')
+                },
+            });
         });
-    }
+    </script>-->
 
-    function stopScan() {
-        if (html5Qrcode) {
-            html5Qrcode.stop().then((ignore) => {
-                // Handel stop
-                console.log('scan stopped');
-                $('#success_alert').hide();
+    {<script>
+        html5Qrcode = null;
+        reservation_id = '';
+        $('#success_alert').hide();
+
+        function triggerScan() {
+            Html5Qrcode.getCameras().then(devices => {
+                console.log('searching cams');
+                console.log(devices);
+                if (devices && devices.length > 0) {
+                    console.log('cam found');
+                    var cameraId = devices[0].id;
+                    // Start Scan
+                    console.log(cameraId);
+                    html5Qrcode = new Html5Qrcode("qr-reader");
+                    html5Qrcode.start(
+                        cameraId,
+                        {
+                            fps: 10,
+                        },
+                        (decodedText, decodedResult) => {
+                            // Do something with read code
+                            console.log(decodedText);
+                            reservation_id = decodedText;
+                            $('#r_id').val(reservation_id);
+                            $('#success_alert').show();
+                        },
+                        (errorMessage) => {
+                            // Do something with error
+                        },
+                    ).catch((err) => {
+                        // Handle error
+                    });
+                }
             }).catch((err) => {
-                // Handle err
+                // Handle error
             });
         }
-    }
-    
-    $('#start_scan_btn').click(triggerScan);
-    $('#stop_scan_btn').click(stopScan);
 
-    $("#consume_btn").click(function () {
-        $.ajax({
-            url: "{{ url_for('admin.consumed_reservations') }}",
-            type: "POST",
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-                reservation_id: $('#r_id').val(),
-                store_id: '{{ store.id }}',
-            },
-            success: function (result) {
-                location.reload();
-            },
+        function stopScan() {
+            if (html5Qrcode) {
+                html5Qrcode.stop().then((ignore) => {
+                    // Handel stop
+                    console.log('scan stopped');
+                    $('#success_alert').hide();
+                }).catch((err) => {
+                    // Handle err
+                });
+            }
+        }
+
+        $('#start_scan_btn').click(triggerScan);
+        $('#stop_scan_btn').click(stopScan);
+
+        $("#consume_btn").click(function () {
+            $.ajax({
+                url: "{{ url_for('admin.consumed_reservations') }}",
+                type: "POST",
+                data: {
+                    csrf_token: '{{ csrf_token() }}',
+                    reservation_id: $('#r_id').val(),
+                    store_id: '{{ store.id }}',
+                },
+                success: function (result) {
+                    location.reload();
+                },
+            });
         });
-    });
 
-    $("#free_btn").click(function () {
-        $.ajax({
-            url: "{{ url_for('admin.consumed_reservations') }}",
-            type: "DELETE",
-            data: {
-                csrf_token: '{{ csrf_token() }}',
-                reservation_id: $('#r_id').val(),
-                store_id: '{{ store.id }}',
-            },
-            success: function (result) {
-                location.reload();
-            },
+        $("#free_btn").click(function () {
+            $.ajax({
+                url: "{{ url_for('admin.consumed_reservations') }}",
+                type: "DELETE",
+                data: {
+                    csrf_token: '{{ csrf_token() }}',
+                    reservation_id: $('#r_id').val(),
+                    store_id: '{{ store.id }}',
+                },
+                success: function (result) {
+                    location.reload();
+                },
+            });
         });
-    });
-</script>
-{% endblock %}
 
-{% block style %}
-<style>
-    #free_btn, #consume_btn, #start_scan_btn, #stop_scan_btn {
-        color: white;
-        z-index: 2;
-        font: normal 300 25px/1 'Josefin Sans', sans-serif;
-        text-align: center;
-        white-space: nowrap;
-        padding: 12px;
-        background-color: #FF8A00E6;
-        border: none;
-        border-radius: 8px;
-    }
-</style>
-{% endblock %}
+    </script>
+    {% endblock %}
+
+    {% block style %}
+    <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        #free_btn, #consume_btn, #start_scan_btn, #stop_scan_btn, #make_reservation_btn, #make_reservation_modal {
+            color: white;
+            z-index: 2;
+            font: normal 300 25px/1 'Josefin Sans', sans-serif;
+            text-align: center;
+            white-space: nowrap;
+            padding: 12px;
+            background-color: #FF8A00E6;
+            border: none;
+            border-radius: 8px;
+        }
+
+        div.scroll {
+            margin: 4px;
+            padding: 4px;
+            /*width: 100vh;*/
+            height: 70vh;
+            /*overflow-x: hidden;*/
+            overflow-y: auto;
+            text-align: justify;
+        }
+    </style>
+    {% endblock %}
