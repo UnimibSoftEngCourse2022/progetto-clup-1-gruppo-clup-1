@@ -3,6 +3,10 @@ import abc
 
 class StoreManagerProvider(abc.ABC):
     @abc.abstractmethod
+    def get_manager(self, manager_id):
+        pass
+
+    @abc.abstractmethod
     def get_store_managers(self):
         pass
 
@@ -23,5 +27,5 @@ class StoreManagerProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_manager(self, manager_id):
+    def update(self, manager_id):
         pass

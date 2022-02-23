@@ -17,6 +17,16 @@ class SqliteAdminProvider(AdminProvider):
                       for ma in model_admins]
             return admins
 
+    def get_admin(self, admin_id):
+        with Session(self.engine) as session, session.begin():
+            ma = session.query(models.Account) \
+                .filter(models.Account.type == 'admin',
+                        models.Account.uuid == admin_id).first()
+            if not ma:
+                raise ValueError('unexistent admin id')
+            admin = Admin(ma.uuid, ma.username, ma.password_hash)
+            return admin
+
     def add_admin(self, admin):
         if admin.username in [a.username for a in self.get_admins()]:
             raise ValueError('admin username already used')
@@ -55,7 +65,7 @@ class SqliteAdminProvider(AdminProvider):
             session.query(models.StoreAdmin). \
                 filter(models.StoreAdmin.admin_uuid == admin_id).delete()
 
-    def update_admin(self, admin):
+    def update(self, admin):
         if admin.id not in [a.id for a in self.get_admins()]:
             raise ValueError("unexistent admin id")
 

@@ -3,9 +3,10 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.user import User
+from src.clup.providers.user_provider_abc import UserProvider
 
 
-class SqliteUserProvider:
+class SqliteUserProvider(UserProvider):
     def __init__(self, engine):
         self.engine = engine
 
@@ -46,7 +47,7 @@ class SqliteUserProvider:
                 filter(models.Account.uuid == user_id,
                        models.Account.type == 'user').delete()
 
-    def update_user(self, user):
+    def update(self, user):
         with Session(self.engine) as session, session.begin():
             if user.id not in [u.id for u in self.get_users()]:
                 raise ValueError("user_id already present")

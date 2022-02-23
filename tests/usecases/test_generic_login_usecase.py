@@ -55,6 +55,9 @@ class MockStoreManagerProvider(StoreManagerProvider):
     def get_manager(self, sm_id, secret):
         raise NotImplementedError()
 
+    def update(self, manager):
+        raise NotImplementedError()
+
 
 class TestGenericLoginUsecase(unittest.TestCase):
     def setUp(self):

@@ -68,14 +68,13 @@ class TestSqliteStoreManagerProvider(unittest.TestCase):
 
             self.assertEqual(len(store_managers), 0)
 
-    @unittest.skip('update not implemented')
     def test_store_manager_is_updated(self):
         ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='store_manager')
         with Session(self.engine) as session, session.begin():
             session.add(ma1)
         updated_store_manager = StoreManager('10', 'newu1', 'newp1')
 
-        self.smp.update_store_manager(updated_store_manager)
+        self.smp.update(updated_store_manager)
 
         with Session(self.engine) as session, session.begin():
             store_managers = session.query(models.Account).filter(models.Account.type == 'store_manager').all()

@@ -8,3 +8,7 @@ class EmptyPoolError(Exception):
 
 class EmptyQueueError(Exception):
     pass
+
+
+class AuthError(Exception):
+    pass

@@ -65,6 +65,19 @@ class SqliteStoreManagerProvider(StoreManagerProvider):
                 .filter(models.StoreManagerSecretKey.store_manager_uuid == manager_id) \
                 .delete()
 
+    def update(self, store_manager):
+        if store_manager.id not in [m.id for m in self.get_store_managers()]:
+            raise ValueError('Unexistent manager id')
+
+        with Session(self.engine) as session, session.begin():
+            query = session.query(models.Account) \
+                .filter(models.Account.uuid == store_manager.id,
+                        models.Account.type == 'store_manager')
+            query.update({
+                models.Account.username: store_manager.username,
+                models.Account.password_hash: store_manager.password_hash,
+            })
+
     def get_manager(self, manager_id):
         with Session(self.engine) as session, session.begin():
             manager_model = session.query(models.Account) \

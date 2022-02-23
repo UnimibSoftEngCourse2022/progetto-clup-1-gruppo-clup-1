@@ -3,6 +3,10 @@ import abc
 
 class AdminProvider(abc.ABC):
     @abc.abstractmethod
+    def get_admin(self, admin_id):
+        pass
+
+    @abc.abstractmethod
     def get_admins(self):
         pass
 
@@ -19,7 +23,7 @@ class AdminProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def update_admin(self, admin):
+    def update(self, admin):
         pass
 
     @abc.abstractmethod

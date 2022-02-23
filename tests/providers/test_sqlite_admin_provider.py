@@ -42,6 +42,16 @@ class TestSqliteAdminProvider(unittest.TestCase):
         self.assertTrue(a1 in admins)
         self.assertTrue(a2 in admins)
 
+    def test_admin_returned_by_id(self):
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
+        with Session(self.engine) as session, session.begin():
+            session.add(ma1)
+
+        admin = self.ap.get_admin('10')
+        a1 = Admin('10', 'u1', 'p1')
+
+        self.assertEqual(admin, a1)
+
     def test_admin_is_added_to_db(self):
         a = Admin('10', 'u1', 'p1')
 
@@ -74,7 +84,7 @@ class TestSqliteAdminProvider(unittest.TestCase):
             session.add(ma1)
         updated_admin = Admin('10', 'newu1', 'newp1')
 
-        self.ap.update_admin(updated_admin)
+        self.ap.update(updated_admin)
 
         with Session(self.engine) as session, session.begin():
             admins = session.query(models.Account).filter(models.Account.type == 'admin').all()
@@ -120,6 +130,14 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
     def tearDown(self):
         self.db_file.unlink()
 
+    def test_get_on_unexistent_id_throws(self):
+        ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
+        with Session(self.engine) as session, session.begin():
+            session.add(ma1)
+
+        with self.assertRaises(ValueError):
+            self.ap.get_admin('20')
+
     def test_duplicate_id_throws(self):
         ma1 = models.Account(uuid='10', username='u1', password_hash='p1', type='admin')
         with Session(self.engine) as session, session.begin():
@@ -153,7 +171,7 @@ class TestSqliteAdminProviderIdValidation(unittest.TestCase):
         a = Admin('100', 'u1', 'pwd')
 
         with self.assertRaises(ValueError):
-            self.ap.update_admin(a)
+            self.ap.update(a)
 
     def test_get_store_id_on_unexistent_id_throws(self):
         with self.assertRaises(ValueError):

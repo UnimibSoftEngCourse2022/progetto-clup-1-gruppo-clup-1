@@ -79,9 +79,9 @@ class TestSqliteUserProvider(unittest.TestCase):
         updated_user = User('10', 'newu1', 'newp1')
 
         with self.assertRaises(ValueError):
-            self.up.update_user(User('wrong_id', 'newu2', 'newp2'))
+            self.up.update(User('wrong_id', 'newu2', 'newp2'))
 
-        self.up.update_user(updated_user)
+        self.up.update(updated_user)
 
         with Session(self.engine) as session, session.begin():
             users = session.query(models.Account).all()
