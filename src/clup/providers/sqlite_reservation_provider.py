@@ -25,7 +25,7 @@ class SqliteReservationProvider(ReservationProvider):
             reservations = [Reservation(mr.uuid, mr.aisle_id, mr.user_id)
                             for mr in model_reservations]
             return reservations
-    
+
     def get_user_id(self, reservation_id):
         with Session(self.engine) as session, session.begin():
             query = session.query(models.Reservation). \

@@ -11,6 +11,7 @@ class StorePool(Subject):
     def add(self, element):
         self.enabled.append(element)
         self.last_added = element
+        self.notify()
 
     def consume(self, element):
         self.enabled.remove(element)

@@ -109,3 +109,11 @@ class TestStorePoolAsObject(unittest.TestCase):
 
         mock_observer_1.update.assert_called_once_with(self.sp)
         mock_observer_2.update.assert_called_once_with(self.sp)
+
+    def test_notify_called_after_add(self):
+        mock_observer = Mock()
+        self.sp._observers.append(mock_observer)
+
+        self.sp.add('a')
+
+        mock_observer.update.assert_called_once_with(self.sp)

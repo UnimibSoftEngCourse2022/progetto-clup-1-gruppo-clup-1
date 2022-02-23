@@ -6,8 +6,7 @@ from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
-from src.clup.usecases.user_change_password_usecase \
-    import UserChangePasswordUseCase
+from src.clup.usecases.change_password import ChangePassword
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
 from .flask_user import FlaskUser
 from .forms.admin_register_form import AdminRegisterForm
@@ -129,11 +128,13 @@ def change_password():
         old_password = form.old_password.data
         new_password = form.new_password.data
         # TODO considerare i diversi tipi di current_user
-        ucp = UserChangePasswordUseCase(setup.user_provider)
+        ucp = ChangePassword(setup.user_provider,
+                             setup.admin_provider,
+                             setup.store_manager_provider)
         try:
             ludu = LoadUserUseCase(setup.user_provider)
             username = ludu.execute(current_user.get_id()).username
-            ucp.execute(username, old_password, new_password)
+            ucp.execute(current_user.id, old_password, new_password)
             return redirect(url_for('auth.logout'))
         except ValueError:
             flash('Something went wrong', category='danger')

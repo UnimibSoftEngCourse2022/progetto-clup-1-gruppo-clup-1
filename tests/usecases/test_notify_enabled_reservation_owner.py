@@ -1,10 +1,8 @@
 import unittest
-from unittest.mock import create_autospec, call
+from unittest.mock import create_autospec
 
 from src.clup.entities.store_pool import StorePool
 from src.clup.entities.user import User
-from src.clup.entities.admin import Admin
-from src.clup.entities.store_manager import StoreManager
 from src.clup.providers.user_provider_abc import UserProvider
 from src.clup.providers.reservation_provider_abc \
     import ReservationProvider
