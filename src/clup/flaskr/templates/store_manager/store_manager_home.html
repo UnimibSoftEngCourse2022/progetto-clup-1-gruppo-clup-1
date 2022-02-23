@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content%}
-
+{% include 'store_manager/navigation.html' %}
 <h1 class="text-center">Your stores:</h1>
 {% if stores|length == 0 %}
 <p class="text-center">non sono presenti store</p>

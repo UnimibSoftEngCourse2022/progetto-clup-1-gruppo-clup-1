@@ -64,14 +64,18 @@ def home():
 @bp.route('/storemanager/stores/<store_id>')
 @login_required
 def store_info(store_id):
+    lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
+    store_manager = lsm.execute(current_user.id)
     store_info = liu.execute(store_id)
     print(store_info)
-    return render_template('store_manager/store_view_manager.html',  store_info=store_info)
+    return render_template('store_manager/store_view_manager.html', sm=store_manager ,store_info=store_info)
 
 
 @bp.route('/storemanager/add_store', methods=['GET','POST'])
 @login_required
 def add_store():
+    lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
+    store_manager = lsm.execute(current_user.id)
     if not check_correct_account_type('store_manager'):
         flash(f"unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
@@ -90,11 +94,14 @@ def add_store():
     else:
         if form.is_submitted():
             flash('form not valid', category='danger')
-    return render_template('store_manager/add_store.html', form=form)
+    return render_template('store_manager/add_store.html', sm=store_manager, form=form)
+
 
 @bp.route('/storemanager/<store_id>/set_aisles', methods=['GET','POST'])
 @login_required
 def set_aisles(store_id):
+    lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
+    store_manager = lsm.execute(current_user.id)
     if not check_correct_account_type('store_manager'):
         flash(f"unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
@@ -115,4 +122,4 @@ def set_aisles(store_id):
             abort(400)
     
     base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH, Category.BEVERAGE, Category.FRUIT, Category.OTHER]
-    return render_template('store_manager/set_aisle.html', store_id=store_id, categories = base_categories) 
+    return render_template('store_manager/set_aisle.html', store_id=store_id, categories=base_categories, sm=store_manager,)
