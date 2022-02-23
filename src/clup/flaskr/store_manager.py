@@ -51,7 +51,7 @@ def data_init():
 @login_required
 def home():
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
@@ -63,7 +63,7 @@ def home():
 @login_required
 def store_info(store_id):
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
@@ -76,13 +76,11 @@ def store_info(store_id):
 @login_required
 def add_store():
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
-    if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
-        return redirect(url_for('auth.login'))
+
     form = AddStoreForm()
     if form.validate_on_submit():
         store_name = form.name.data
@@ -105,13 +103,10 @@ def add_store():
 @login_required
 def set_aisles(store_id):
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
-    if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
-        return redirect(url_for('auth.login'))
 
     if request.method == 'POST':
         name = request.values['name']

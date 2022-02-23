@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, current_user
 
 import src.clup.flaskr.global_setup as setup
@@ -21,13 +21,13 @@ bp = Blueprint('auth', __name__)
 
 @bp.route('/register', methods=['GET'])  # conterrà solo i tre link alle tre diverse register per tipo
 def register():
-    return render_template('register.html')
+    return render_template('auth/register.html')
 
 
 @bp.route('/register/user', methods=['GET', 'POST'])
 def user_register():
     form = UserRegisterForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         username = form.username.data
         password = form.password1.data
         ur = UserRegisterUsecase(setup.user_provider)
@@ -39,7 +39,8 @@ def user_register():
             return redirect(url_for('auth.user_register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
-    return render_template('auth/register.html', form=form)
+    elif request.method == 'GET':
+        return render_template('user_register.html', form=form)
 
 
 @bp.route('/register/admin', methods=['GET', 'POST'])
@@ -64,7 +65,7 @@ def admin_register():
 
 
 @bp.route('/register/store_manager',
-          methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+          methods=['GET', 'POST'])
 def store_manager_register():
     form = StoreManagerRegisterForm()
     if form.validate_on_submit():
