@@ -4,10 +4,10 @@ from flask_login import login_user, login_required, logout_user, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
-from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 from src.clup.usecases.change_password import ChangePassword
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.validate_email import ValidateEmail
 from .flask_user import FlaskUser
 from .forms.admin_register_form import AdminRegisterForm
 from .forms.change_password import ChangePasswordForm
@@ -29,6 +29,10 @@ def user_register():
     if form.validate_on_submit() and request.method == 'POST':
         username = form.username.data
         password = form.password1.data
+        ve = ValidateEmail()
+        if not ve.execute(username):
+            flash('username is not a valid email', category='danger')
+            return redirect(url_for('auth.user_register'))
         ur = UserRegisterUsecase(setup.user_provider)
         try:
             ur.execute(username, password)
@@ -38,6 +42,7 @@ def user_register():
             return redirect(url_for('auth.user_register'))
     elif form.is_submitted():
         flash("check all fields", category='danger')
+        return redirect(url_for('auth.user_register'))
     elif request.method == 'GET':
         return render_template('user_register.html', form=form)
 
@@ -48,6 +53,10 @@ def admin_register():
     if form.validate_on_submit() and request.method == 'POST':
         username = form.username.data
         password = form.password1.data
+        ve = ValidateEmail()
+        if not ve.execute(username):
+            flash('username is not a valid email', category='danger')
+            return redirect(url_for('auth.admin_register'))
         store_name = form.store_name.data
         store_address = form.store_address.data
         store_sk = form.store_sk.data
@@ -69,6 +78,10 @@ def store_manager_register():
     form = StoreManagerRegisterForm()
     if form.validate_on_submit() and request.method == 'POST':
         username = form.username.data
+        ve = ValidateEmail()
+        if not ve.execute(username):
+            flash('username is not a valid email', category='danger')
+            return redirect(url_for('auth.store_manager_register'))
         password = form.password1.data
         secret_key = form.secret_key.data
         smr = StoreManagerRegisterUseCase(setup.store_manager_provider)
@@ -132,8 +145,6 @@ def change_password():
                              setup.admin_provider,
                              setup.store_manager_provider)
         try:
-            ludu = LoadUserUseCase(setup.user_provider)
-            username = ludu.execute(current_user.get_id()).username
             ucp.execute(current_user.id, old_password, new_password)
             return redirect(url_for('auth.logout'))
         except ValueError:
