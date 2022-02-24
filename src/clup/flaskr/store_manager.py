@@ -91,7 +91,7 @@ def set_aisles(store_id):
         flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
 
-    if request.method == 'POST' and request.method == 'POST':
+    if request.method == 'POST':
         name = request.values['name']
         capacity = int(request.values['capacity'])
         categories = request.values['categories']

@@ -61,7 +61,7 @@
                     <ul>
                         {% for aisle in aisles %}
                         <li>
-                            <p><b>{{ aisle.name }}</b> | capacity: {{ aisle.capacity }}</p>
+                            <p><strong>{{ aisle.name }}</strong> | capacity: {{ aisle.capacity }}</p>
                         </li>
                         {% endfor %}
                     </ul>
@@ -109,10 +109,9 @@
                 <div id="aisle_checkboxes">
                     {% for aisle in aisles %}
                     {% for cat in aisle.categories %}
-                    <li>
                         <input id="{{ cat.value }}" type="checkbox" checked>
                         <label for="{{ cat.value }}">{{cat.name}}</label>
-                    </li>
+                    <br>
                     {% endfor %}
                     {% endfor %}
                 </div>
