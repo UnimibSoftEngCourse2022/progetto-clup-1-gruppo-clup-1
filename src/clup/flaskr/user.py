@@ -121,9 +121,9 @@ def make_appointment(store_id):
             date, time = datetime_from_req.split('T')
             year, month, day = date.split('-')
             hour = time.split(':')[0]
-            mauc = MakeAppointmentUseCase(setup.reservation_provider,
-                                          setup.appointment_provider,
-                                          setup.aisle_provider)
+            mauc = MakeAppointmentUseCase(reservation_provider=setup.reservation_provider,
+                                          appointment_provider=setup.appointment_provider,
+                                          aisle_provider=setup.aisle_provider)
             selected_date = datetime.datetime(int(year), int(month), int(day), int(hour), 0, 0)
         except json.JSONDecodeError:
             abort(400)
@@ -138,7 +138,6 @@ def make_appointment(store_id):
                 date=selected_date,
                 user_id=u_id
             )
-
             return '', 200
         except MaxCapacityReachedError:
             flash("not enough space in this time slot, try with another", category='danger')
@@ -157,7 +156,6 @@ def alternative_appointment():
         categories_str = args['categories']
         categories_list = categories_str.split(',')
         categories_enum = [Category(int(c)) for c in categories_list[:-1]]
-        print(categories_enum)
         date, time = datetime_str.split('T')
         year, month, day = date.split('-')
         hour = time.split(':')[0]

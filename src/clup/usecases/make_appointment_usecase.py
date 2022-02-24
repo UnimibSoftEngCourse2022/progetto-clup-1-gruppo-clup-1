@@ -14,7 +14,11 @@ class MakeAppointmentUseCase:
         self.aisle_provider = aisle_provider
 
     def execute(self, user_id, aisle_ids, store_id, date):
-        self.reservation_provider.reservation_for_aisles_of_same_store(store_id, aisle_ids)
+        try:
+            self.reservation_provider.reservation_for_aisles_of_same_store(store_id, aisle_ids)
+        except ValueError:
+            print("INCOHERENT AISLE")
+            raise
 
         reservation_id = str(uuid.uuid1())
 
@@ -41,12 +45,14 @@ class MakeAppointmentUseCase:
                                      a.date_time.month == date.month and
                                      a.date_time.day == date.day and
                                      a.date_time.hour == date.hour]
+
         res_same_date_same_aisles = []
         for appointment in appointments_in_same_date:
-            aisle_ids = [r.aisle_id for r in
-                         self.reservation_provider.get_reservations_with_id(appointment.reservation_id)
-                         if r.aisle_id in aisle_ids]
-            res_same_date_same_aisles.extend(aisle_ids)
+            aisle_ids_filtered = [r.aisle_id for r in
+                                    self.reservation_provider.get_reservations_with_id(appointment.reservation_id)
+                                    if r.aisle_id in aisle_ids]
+
+            res_same_date_same_aisles.extend(aisle_ids_filtered)
         count_people_in_aisle = Counter(res_same_date_same_aisles)
         for aisle_id in aisle_ids:
             capacity = self.aisle_provider.get_aisle(aisle_id).capacity
