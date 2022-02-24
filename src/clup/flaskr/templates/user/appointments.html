@@ -5,7 +5,7 @@
 {% block content%}
 {% include 'user/navigation.html' %}
 <div class="container overflow-auto vh-100">
-    {% for r_id, store, aisles in stores_with_aisles %}
+    {% for appointment, store in appointments_with_stores %}
     <div class="card my-4 p-2">
         <div class="d-flex flex-row">
             <div class="d-flex flex-column flex-grow-1">
@@ -13,15 +13,13 @@
                     <div class="card-header">
                         {{ store.name }}
                     </div>
-                    <ul class="list-group list-group-flush">
-                        {% for aisle in aisles %}
-                        <li class="list-group-item">{{ aisle.name }}</li>
-                        {% endfor %}
-                    </ul>
+                    <div class="card-footer">
+                        {{ appointment.date_time }}
+                    </div>
                 </div>
             </div>
             <div class="d-inline-flex flex-column">
-                <div id="qr-{{ r_id }}" class="m-2">
+                <div id="qr-{{ appointment.reservation_id }}" class="m-2">
                 </div>
             </div>
         </div>
@@ -35,9 +33,9 @@
 
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script type="text/javascript">
-{% for r_id, _, _ in stores_with_aisles %}
-    new QRCode(document.getElementById("qr-{{ r_id }}"), {
-        text: "{{ r_id }}",
+{% for a, _ in appointments_with_stores %}
+    new QRCode(document.getElementById("qr-{{ a.reservation_id }}"), {
+        text: "{{ a.reservation_id }}",
         width: 128,
         height: 128,
     });

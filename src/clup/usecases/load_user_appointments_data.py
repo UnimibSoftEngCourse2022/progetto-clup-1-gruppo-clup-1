@@ -14,6 +14,6 @@ class LoadUserAppointmentsData:
                   for a in appointments]
 
         data = []
-        for appointment, store in zip(appointments, stores)
+        for appointment, store in zip(appointments, stores):
             data.append((appointment, store))
         return data

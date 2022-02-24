@@ -13,6 +13,7 @@ from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.load_user_reservations_data_usecase import LoadUserReservationsDataUseCase
+from src.clup.usecases.load_user_appointments_data import LoadUserAppointmentsData
 from src.clup.usecases.make_appointment_usecase import MakeAppointmentUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
@@ -106,13 +107,12 @@ def reservations():
 def appointments():
     u_id = current_user.get_id()
     user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
-    lurdu = LoadUserReservationsDataUseCase(setup.reservation_provider,
-                                            setup.store_provider,
-                                            setup.aisle_provider,
-                                            setup.appointment_provider)
-    stores_with_aisles = lurdu.execute(u_id)
+    luad = LoadUserAppointmentsData(
+                                   setup.store_provider,
+                                   setup.appointment_provider)
+    appointments_with_stores = luad.execute(u_id)
     return render_template('user/appointments.html', user=user_data,
-                           stores_with_aisles=stores_with_aisles)
+                           appointments_with_stores=appointments_with_stores)
 
 
 @bp.route('/user/stores/<store_id>/appointment', methods=['GET', 'POST'])
