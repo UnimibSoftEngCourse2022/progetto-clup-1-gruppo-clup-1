@@ -3,7 +3,7 @@
 {% block title %}Appointments{% endblock %}
 
 {% block content%}
-{% include 'user/navigation.html' %}
+
 
 <script>
     {%for appointment, _ in appointments_with_stores%}
@@ -12,7 +12,8 @@
     }
     {% endfor %}
 </script>
-<div class="container overflow-auto vh-100">
+<div class="container overflow-auto vh-100 pb-16">
+    {% include 'user/navigation.html' %}
     {% for appointment, store in appointments_with_stores %}
     <div class="card my-4 p-2">
         <div class="d-flex flex-row">

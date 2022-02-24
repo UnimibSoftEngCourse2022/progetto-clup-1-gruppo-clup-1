@@ -3,8 +3,9 @@
 {% block title %}Reservations{% endblock %}
 
 {% block content%}
-{% include 'user/navigation.html' %}
-<div class="container overflow-auto vh-100">
+
+<div class="container-fluid overflow-auto vh-100 pb-16">
+    {% include 'user/navigation.html' %}
     {% for r_id, store, aisles in stores_with_aisles %}
     <div class="card my-4 p-2">
         <div class="d-flex flex-row">
@@ -25,7 +26,6 @@
                 </div>
             </div>
         </div>
-        
     </div>
     {% endfor %}
 </div>
