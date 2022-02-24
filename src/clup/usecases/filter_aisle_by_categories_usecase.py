@@ -18,7 +18,7 @@ class FilterAisleByCategoriesUseCase:
                 if category in aisle.categories:
                     filtered_aisle_ids.append(aisle.id)
                     found = True
-            
+
             if not found:
                 raise ValueError(f"couldn't find {category} for this store")
 

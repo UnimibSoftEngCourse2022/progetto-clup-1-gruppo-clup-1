@@ -163,8 +163,10 @@ def alternative_appointment():
         gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider,
                                            setup.appointment_provider)
         alt_stores = gasu.execute(categories_enum, date_time)
-
-        return render_template("valid_stores.html", stores=alt_stores)
+        if len(alt_stores) == 0:
+            return render_template("no_alternative_stores.html")
+        else:
+            return render_template("valid_stores.html", stores=alt_stores)
     except ValueError:
         flash("something went wrong", category='danger')
         return redirect(url_for('user.home'))
