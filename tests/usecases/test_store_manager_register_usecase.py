@@ -4,9 +4,9 @@ from unittest.mock import Mock
 from werkzeug.security import check_password_hash
 
 from src.clup.entities.store_manager import StoreManager
-from src.clup.providers.abc.store_manager_provider_abc \
+from src.clup.providers.abc.store_manager_provider \
     import StoreManagerProvider
-from src.clup.usecases.auth.store_manager_register_usecase import StoreManagerRegisterUseCase
+from src.clup.usecases.auth.store_manager_register import StoreManagerRegister
 
 
 class MockStoreManagerProvider(StoreManagerProvider):
@@ -39,7 +39,7 @@ class MockStoreManagerProvider(StoreManagerProvider):
 class TestStoreManagerRegisterUsecase(unittest.TestCase):
     def setUp(self):
         self.store_manager_pvd = MockStoreManagerProvider()
-        self.u = StoreManagerRegisterUseCase(self.store_manager_pvd)
+        self.u = StoreManagerRegister(self.store_manager_pvd)
 
     def test_add_store_manager_updates_store_managers(self):
         self.store_manager_pvd.add_manager = Mock()

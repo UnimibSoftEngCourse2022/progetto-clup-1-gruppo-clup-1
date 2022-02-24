@@ -1,14 +1,14 @@
 import unittest
 
 from src.clup.entities.store import Store
-from src.clup.usecases.search_store_usecase import SearchStoreUseCase
+from src.clup.usecases.search_store import SearchStore
 from tests.usecases.mock_store_provider import MockStoreProvider
 
 
 class TestSearchStoreUsecase(unittest.TestCase):
     def setUp(self):
         self.store_provider = MockStoreProvider()
-        self.u = SearchStoreUseCase(self.store_provider)
+        self.u = SearchStore(self.store_provider)
 
     def test_stores_with_name_is_found_in_stores(self):
         stores = self.store_provider.get_stores()

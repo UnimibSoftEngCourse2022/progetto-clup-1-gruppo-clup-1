@@ -1,6 +1,3 @@
-from collections import defaultdict
-
-
 class LoadUserAppointmentsData:
     def __init__(self, store_provider, appointment_provider):
         self.store_provider = store_provider

@@ -3,9 +3,9 @@ from unittest.mock import create_autospec
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.store import Store
-from src.clup.providers.abc.admin_provider_abc import AdminProvider
-from src.clup.usecases.admin.load_admin_store_info_usecase \
-    import LoadAdminStoreInfoUseCase
+from src.clup.providers.abc.admin_provider import AdminProvider
+from src.clup.usecases.admin.load_admin_store_info \
+    import LoadAdminStoreInfo
 from tests.usecases.mock_aisle_provider import MockAisleProvider
 from tests.usecases.mock_lane_provider import MockLaneProvider
 from tests.usecases.mock_store_provider import MockStoreProvider
@@ -17,10 +17,10 @@ class TestLoadAdminStoreInfoUseCase(unittest.TestCase):
         self.store_provider = MockStoreProvider()
         self.aisle_provider = MockAisleProvider()
         self.lane_provider = MockLaneProvider()
-        self.u = LoadAdminStoreInfoUseCase(self.store_provider,
-                                           self.aisle_provider,
-                                           self.lane_provider,
-                                           self.admin_provider)
+        self.u = LoadAdminStoreInfo(self.store_provider,
+                                    self.aisle_provider,
+                                    self.lane_provider,
+                                    self.admin_provider)
 
     def test_correct_store_is_loaded(self):
         store = Store('store_id', 'name', 'address')

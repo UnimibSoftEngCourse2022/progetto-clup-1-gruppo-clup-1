@@ -2,8 +2,8 @@ import unittest
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.store import Store
-from src.clup.usecases.load_store_info_usecase \
-    import LoadStoreInfoUseCase
+from src.clup.usecases.load_store_info \
+    import LoadStoreInfo
 from tests.usecases.mock_aisle_provider import MockAisleProvider
 from tests.usecases.mock_store_provider import MockStoreProvider
 
@@ -12,7 +12,7 @@ class TestLoadStoreInfoUseCase(unittest.TestCase):
     def setUp(self):
         self.store_provider = MockStoreProvider()
         self.aisle_provider = MockAisleProvider()
-        self.u = LoadStoreInfoUseCase(self.store_provider, self.aisle_provider)
+        self.u = LoadStoreInfo(self.store_provider, self.aisle_provider)
 
     def test_should_throw_on_uexistent_store_id(self):
         with self.assertRaises(ValueError):

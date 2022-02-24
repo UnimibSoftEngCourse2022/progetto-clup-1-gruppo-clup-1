@@ -3,7 +3,7 @@ import unittest
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.appointment import Appointment
-from src.clup.usecases.user.make_appointment_usecase import MakeAppointmentUseCase
+from src.clup.usecases.user.make_appointment import MakeAppointment
 
 
 class MockAppointmentProvider:
@@ -65,7 +65,7 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
     def test_appointment_correctly_added(self):
         mrp = MockReservationProvider()
         mapp = MockAppointmentProvider()
-        mau = MakeAppointmentUseCase(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=self.maip)
+        mau = MakeAppointment(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=self.maip)
         user_id = 1
         aisle_ids = [1, 2, 3]
         date = datetime.datetime(2022, 2, 14, 10, 30)
@@ -78,7 +78,7 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
     def test_appointment_with_wrong_date_raise(self):
         mrp = MockReservationProvider()
         mapp = MockAppointmentProvider()
-        mau = MakeAppointmentUseCase(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=self.maip)
+        mau = MakeAppointment(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=self.maip)
         user_id = 1
         aisle_ids = [1, 2, 3]
         date = 5
@@ -89,7 +89,7 @@ class TestMakeAppointmentUsecase(unittest.TestCase):
     def test_add_appointment_has_correct_info_added(self):
         mrp = MockReservationProvider()
         mapp = MockAppointmentProvider()
-        mau = MakeAppointmentUseCase(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=self.maip)
+        mau = MakeAppointment(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=self.maip)
         user_id = 1
         aisle_ids = [1, 2, 3]
         date = datetime.datetime(2022, 2, 14, 10, 30)

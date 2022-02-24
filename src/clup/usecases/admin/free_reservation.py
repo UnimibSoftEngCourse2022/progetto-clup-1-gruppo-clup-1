@@ -1,4 +1,4 @@
-class FreeReservationUseCase:
+class FreeReservation:
     def __init__(self, lane_provider, reservation_provider):
         self.lane_provider = lane_provider
         self.reservation_provider = reservation_provider

@@ -7,17 +7,17 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.entities.exceptions import MaxCapacityReachedError
-from src.clup.usecases.user.cancel_appointment_usecase import CancelAppointmentUseCase
-from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
-from src.clup.usecases.user.get_alternative_stores_usecase import GetAlternativeStoresUseCase
-from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
-from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
-from src.clup.usecases.user.load_user_usecase import LoadUserUseCase
-from src.clup.usecases.user.load_user_reservations_data_usecase import LoadUserReservationsDataUseCase
+from src.clup.usecases.user.cancel_appointment import CancelAppointment
+from src.clup.usecases.filter_aisle_by_categories import FilterAisleByCategories
+from src.clup.usecases.user.get_alternative_stores import GetAlternativeStores
+from src.clup.usecases.get_store_categories import GetStoreCategories
+from src.clup.usecases.load_store_info import LoadStoreInfo
+from src.clup.usecases.user.load_user_usecase import LoadUser
+from src.clup.usecases.user.load_user_reservations_data import LoadUserReservationsData
 from src.clup.usecases.user.load_user_appointments_data import LoadUserAppointmentsData
-from src.clup.usecases.user.make_appointment_usecase import MakeAppointmentUseCase
-from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
-from src.clup.usecases.search_store_usecase import SearchStoreUseCase
+from src.clup.usecases.user.make_appointment import MakeAppointment
+from src.clup.usecases.make_reservation import MakeReservation
+from src.clup.usecases.search_store import SearchStore
 
 bp = Blueprint('user', __name__)
 
@@ -26,7 +26,7 @@ bp = Blueprint('user', __name__)
 @login_required
 def home():
     u_id = current_user.get_id()
-    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
+    user_data = LoadUser(setup.user_provider).execute(u_id)
     return render_template('user/home.html', user=user_data)
 
 
@@ -41,7 +41,7 @@ def account():
 def search_stores():
     args = request.args
     name = args.get('name', default='', type=str)
-    u = SearchStoreUseCase(setup.store_provider)
+    u = SearchStore(setup.store_provider)
     store_list = u.execute(name)
     return jsonify(store_list)
 
@@ -50,10 +50,10 @@ def search_stores():
 @login_required
 def store_info(store_id):
     u_id = current_user.get_id()
-    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
-    u = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)
+    user_data = LoadUser(setup.user_provider).execute(u_id)
+    u = LoadStoreInfo(setup.store_provider, setup.aisle_provider)
     info = u.execute(store_id)
-    gsc = GetStoreCategoriesUseCase(setup.aisle_provider)
+    gsc = GetStoreCategories(setup.aisle_provider)
     categories = gsc.execute(store_id)
     return render_template('user/store.html', user=user_data,
                            store=info['store'], aisles=info['aisles'], categories=categories)
@@ -73,13 +73,13 @@ def make_reservation(store_id):
     try:
         categories_json = json.loads(categories)
         categories_enum = [Category(int(c)) for c in categories_json]
-        fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
+        fabc = FilterAisleByCategories(setup.aisle_provider)
         aisle_ids_json = fabc.execute(store_id, categories_enum)
     except json.JSONDecodeError:
         abort(400)
 
-    mru = MakeReservationUseCase(setup.lane_provider,
-                                 setup.reservation_provider)
+    mru = MakeReservation(setup.lane_provider,
+                          setup.reservation_provider)
     mru.execute(user_id, store_id, aisle_ids_json)
     for aisle_id in aisle_ids_json:
         pool = setup.lane_provider.get_aisle_pool(aisle_id)
@@ -94,11 +94,11 @@ def make_reservation(store_id):
 @login_required
 def reservations():
     u_id = current_user.get_id()
-    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
-    lurdu = LoadUserReservationsDataUseCase(setup.reservation_provider,
-                                            setup.store_provider,
-                                            setup.aisle_provider,
-                                            setup.appointment_provider)
+    user_data = LoadUser(setup.user_provider).execute(u_id)
+    lurdu = LoadUserReservationsData(setup.reservation_provider,
+                                     setup.store_provider,
+                                     setup.aisle_provider,
+                                     setup.appointment_provider)
     stores_with_aisles = lurdu.execute(u_id)
     return render_template('user/reservations.html', user=user_data,
                            stores_with_aisles=stores_with_aisles)
@@ -108,7 +108,7 @@ def reservations():
 @login_required
 def appointments():
     u_id = current_user.get_id()
-    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
+    user_data = LoadUser(setup.user_provider).execute(u_id)
     luad = LoadUserAppointmentsData(
         setup.store_provider,
         setup.appointment_provider)
@@ -121,24 +121,24 @@ def appointments():
 @login_required
 def make_appointment(store_id):
     u_id = current_user.get_id()
-    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
-    u = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)
+    user_data = LoadUser(setup.user_provider).execute(u_id)
+    u = LoadStoreInfo(setup.store_provider, setup.aisle_provider)
     info = u.execute(store_id)
-    gsc = GetStoreCategoriesUseCase(setup.aisle_provider)
+    gsc = GetStoreCategories(setup.aisle_provider)
     categories_from_use_case = gsc.execute(store_id)
     if request.method == 'POST':
         try:
             categories = request.values['categories']
             categories_json = json.loads(categories)
             categories_enum = [Category(int(c)) for c in categories_json]
-            fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
+            fabc = FilterAisleByCategories(setup.aisle_provider)
             aisle_ids_json = fabc.execute(store_id, categories_enum)
             date_str = request.values['date']
             hour = request.values['hour']
             year, month, day = date_str.split('-')
-            mauc = MakeAppointmentUseCase(reservation_provider=setup.reservation_provider,
-                                          appointment_provider=setup.appointment_provider,
-                                          aisle_provider=setup.aisle_provider)
+            mauc = MakeAppointment(reservation_provider=setup.reservation_provider,
+                                   appointment_provider=setup.appointment_provider,
+                                   aisle_provider=setup.aisle_provider)
             now = datetime.datetime.now()
             selected_date = datetime.datetime(int(year), int(month), int(day), int(hour), 0, 0)
             if selected_date < now:
@@ -177,8 +177,8 @@ def alternative_appointment():
         hour = request.values['hour']
         year, month, day = date_str.split('-')
         date_time = datetime.datetime(int(year), int(month), int(day), int(hour))
-        gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider,
-                                           setup.appointment_provider)
+        gasu = GetAlternativeStores(setup.store_provider, setup.aisle_provider, setup.reservation_provider,
+                                    setup.appointment_provider)
         alt_stores = gasu.execute(categories_enum, date_time)
         if len(alt_stores) == 0:
             return render_template("no_alternative_stores.html")
@@ -194,7 +194,7 @@ def alternative_appointment():
 @bp.route('/user/stores/appointment/<appointment_id>/delete')
 @login_required
 def cancel_appointment(appointment_id):
-    cauc = CancelAppointmentUseCase(
+    cauc = CancelAppointment(
         appointment_provider=setup.appointment_provider,
         reservation_provider=setup.reservation_provider
     )

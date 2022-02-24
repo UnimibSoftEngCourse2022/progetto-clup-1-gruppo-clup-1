@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from src.clup.providers.abc.aisle_provider_abc import AisleProvider
+from src.clup.providers.abc.aisle_provider import AisleProvider
 
 
 class MockAisleProvider(AisleProvider):

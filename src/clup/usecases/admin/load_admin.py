@@ -1,4 +1,4 @@
-class LoadAdminUseCase:
+class LoadAdmin:
     def __init__(self, admin_provider):
         self.admin_provider = admin_provider
 

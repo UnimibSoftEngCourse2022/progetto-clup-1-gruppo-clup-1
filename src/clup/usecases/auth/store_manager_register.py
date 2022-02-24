@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from src.clup.entities.store_manager import StoreManager
 
 
-class StoreManagerRegisterUseCase:
+class StoreManagerRegister:
     def __init__(self, store_manager_provider):
         self.store_manager_provider = store_manager_provider
 

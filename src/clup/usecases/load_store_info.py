@@ -1,4 +1,4 @@
-class LoadStoreInfoUseCase:
+class LoadStoreInfo:
     def __init__(self, store_provider, aisle_provider):
         self.store_provider = store_provider
         self.aisle_provider = aisle_provider

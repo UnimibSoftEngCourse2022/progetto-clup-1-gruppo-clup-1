@@ -2,7 +2,7 @@ import unittest
 
 from src.clup.entities.appointment import Appointment
 from src.clup.entities.reservation import Reservation
-from src.clup.usecases.user.cancel_appointment_usecase import CancelAppointmentUseCase
+from src.clup.usecases.user.cancel_appointment import CancelAppointment
 
 
 class MockAppointmentProvider:
@@ -54,7 +54,7 @@ class TestCancelAppointmentUseCase(unittest.TestCase):
         self.mrp.reservations = [self.r11, self.r12, self.r21, self.r22]
 
     def test_correct_reservations_removed(self):
-        cau = CancelAppointmentUseCase(self.maip, self.mrp)
+        cau = CancelAppointment(self.maip, self.mrp)
         cau.execute('user1', 'reservation1')
         self.assertTrue(self.a1 not in self.maip.appointments)
         self.assertTrue(self.a2 in self.maip.appointments)

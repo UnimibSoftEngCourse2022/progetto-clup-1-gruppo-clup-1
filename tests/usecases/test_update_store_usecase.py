@@ -2,7 +2,7 @@ import dataclasses
 import unittest
 
 from src.clup.entities.store import Store
-from src.clup.usecases.store_manager.update_store_usecase import UpdateStoreUseCase
+from src.clup.usecases.store_manager.update_store import UpdateStore
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
@@ -24,7 +24,7 @@ class TestUpdateStoreUseCase(unittest.TestCase):
     def setUp(self):
         self.store_provider = MockStoreProvider()
         self.queue_provider = MockLaneProvider()
-        self.u = UpdateStoreUseCase(self.store_provider, self.queue_provider)
+        self.u = UpdateStore(self.store_provider, self.queue_provider)
         self.store = Store(1, 'name', 'address')
         self.store_provider.stores.append(self.store)
 

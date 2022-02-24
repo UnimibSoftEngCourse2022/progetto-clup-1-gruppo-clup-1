@@ -1,8 +1,8 @@
 import unittest
 
 from src.clup.entities.reservation import Reservation
-from src.clup.usecases.admin.consume_reservation_usecase \
-    import ConsumeReservationUseCase
+from src.clup.usecases.admin.consume_reservation \
+    import ConsumeReservation
 from tests.usecases.mock_lane_provider import MockLaneProvider
 from tests.usecases.mock_reservation_provider import MockReservationProvider
 
@@ -11,7 +11,7 @@ class TestConsumeReservationUseCase(unittest.TestCase):
     def setUp(self):
         self.lane_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = ConsumeReservationUseCase(
+        self.u = ConsumeReservation(
             self.lane_provider, self.reservation_provider)
 
     def test_reservation_removed_from_aisle_pool_and_moved_to_to_free(self):

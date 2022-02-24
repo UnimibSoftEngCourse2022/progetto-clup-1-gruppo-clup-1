@@ -1,7 +1,7 @@
 from werkzeug.security import check_password_hash
 
 
-class GenericLoginUsecase:
+class GenericLogin:
     def __init__(self, admin_provider, user_provider, store_manager_provider):
         self.admin_provider = admin_provider
         self.user_provider = user_provider

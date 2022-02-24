@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.user import User
-from src.clup.usecases.auth.user_login_usecase import UserLoginUseCase
+from src.clup.usecases.auth.user_login import UserLogin
 
 
 class MockUserProvider:
@@ -23,7 +23,7 @@ class TestUserLoginUsecase(unittest.TestCase):
         mock_user_provider = MockUserProvider()
         user = User(0, 1, 10)
         mock_user_provider.users = (user,)
-        ul = UserLoginUseCase(mock_user_provider)
+        ul = UserLogin(mock_user_provider)
 
         is_login_ok = ul.execute(user.username, user.password) is not None
 
@@ -33,7 +33,7 @@ class TestUserLoginUsecase(unittest.TestCase):
         mock_user_provider = MockUserProvider()
         user = User(0, 1, 10)
         mock_user_provider.users = (user,)
-        ul = UserLoginUseCase(mock_user_provider)
+        ul = UserLogin(mock_user_provider)
 
         with self.assertRaises(ValueError):
             ul.execute(1, 11)
@@ -45,7 +45,7 @@ class TestUserLoginUsecase(unittest.TestCase):
         user1 = User(0, 1, 10)
         user2 = User(5, 2, 20)
         mock_user_provider.users = (user1, user2)
-        ul = UserLoginUseCase(mock_user_provider)
+        ul = UserLogin(mock_user_provider)
 
         is_user1_logged = ul.execute(user1.username, user1.password) == user1.id
         is_user2_logged = ul.execute(user2.username, user2.password) == user2.id

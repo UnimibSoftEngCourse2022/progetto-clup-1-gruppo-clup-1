@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.reservation import Reservation
-from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
+from src.clup.usecases.make_reservation import MakeReservation
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
@@ -34,7 +34,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
         self.user2_id = 22
         self.queue_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = MakeReservationUseCase(
+        self.u = MakeReservation(
             self.queue_provider, self.reservation_provider)
         self.reservation_provider.store_aisle.append([self.store1_id, 10])
         self.reservation_provider.store_aisle.append([self.store2_id, 20])
@@ -130,7 +130,7 @@ class TestMakeReservationUseCase(unittest.TestCase):
 
     def test_should_throw_if_add_reservation_throws(self):
         reservation_provider = MockReservationProvider(throws_on_add=True)
-        u = MakeReservationUseCase(self.queue_provider, reservation_provider)
+        u = MakeReservation(self.queue_provider, reservation_provider)
 
         with self.assertRaises(ValueError):
             u.execute(None, None, ['a'])
@@ -140,7 +140,7 @@ class TestMakeReservationUseCaseMultipleAisles(unittest.TestCase):
     def setUp(self):
         self.queue_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = MakeReservationUseCase(
+        self.u = MakeReservation(
             self.queue_provider, self.reservation_provider)
 
     def test_reservation_id_in_pools_if_aisle_pools_are_not_full(self):

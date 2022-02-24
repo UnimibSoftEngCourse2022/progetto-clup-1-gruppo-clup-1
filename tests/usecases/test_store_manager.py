@@ -2,27 +2,27 @@ import unittest
 
 from src.clup.database import engine
 from src.clup.providers.sqlite.sqlite_store_manager_provider import SqliteStoreManagerProvider
-from src.clup.usecases.system.create_store_manager import CreateStoreManagerUseCase
-from src.clup.usecases.auth.store_manager_register_usecase import StoreManagerRegisterUseCase
+from src.clup.usecases.system.create_store_manager import CreateStoreManager
+from src.clup.usecases.auth.store_manager_register import StoreManagerRegister
 
 
 @unittest.skip('davide')
 class TestStoreManagerCreateAndRegister(unittest.TestCase):
     def test_everything_works(self):
         ssmp = SqliteStoreManagerProvider(engine)
-        csm = CreateStoreManagerUseCase(ssmp)
+        csm = CreateStoreManager(ssmp)
         secret_key = 'secret'
         manager_id = csm.execute(secret_key)
-        rsm = StoreManagerRegisterUseCase(ssmp)
+        rsm = StoreManagerRegister(ssmp)
         rsm.execute(secret_key, 'username', 'password')
         ssmp.delete_store_manager(manager_id)
 
     def test_correct_parameters_set(self):
         ssmp = SqliteStoreManagerProvider(engine)
-        csm = CreateStoreManagerUseCase(ssmp)
+        csm = CreateStoreManager(ssmp)
         secret_key = 'secret'
         manager_id = csm.execute(secret_key)
-        rsm = StoreManagerRegisterUseCase(ssmp)
+        rsm = StoreManagerRegister(ssmp)
         rsm.execute(secret_key, 'username', 'password')
         manager = ssmp.get_manager(manager_id)
         ssmp.delete_store_manager(manager_id)

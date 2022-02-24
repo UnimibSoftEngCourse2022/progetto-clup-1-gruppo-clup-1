@@ -2,7 +2,7 @@ import unittest
 
 from src.clup.entities.exceptions import EmptyPoolError
 from src.clup.entities.reservation import Reservation
-from src.clup.usecases.admin.free_reservation_usecase import FreeReservationUseCase
+from src.clup.usecases.admin.free_reservation import FreeReservation
 from tests.usecases.mock_lane_provider import MockLaneProvider
 from tests.usecases.mock_reservation_provider import MockReservationProvider
 
@@ -24,7 +24,7 @@ class TestFreeReservationUseCase(unittest.TestCase):
     def setUp(self):
         self.lane_provider = MockLaneProvider()
         self.reservation_provider = MockReservationProvider()
-        self.u = FreeReservationUseCase(
+        self.u = FreeReservation(
             self.lane_provider, self.reservation_provider)
 
     def test_aisle_pool_current_quantity_is_decremented(self):

@@ -2,7 +2,7 @@ import unittest
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.store import Store
-from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
+from src.clup.usecases.get_store_categories import GetStoreCategories
 
 
 class MockAisleProvider:
@@ -52,13 +52,13 @@ class TestGetStoreCategoriesUseCase(unittest.TestCase):
                                         categories=[5, 6, 7]))
 
     def test_return_category_list(self):
-        gsc = GetStoreCategoriesUseCase(self.maip)
+        gsc = GetStoreCategories(self.maip)
         cat_list = gsc.execute('store1_id')
 
         self.assertTrue(type(cat_list) == list)
 
     def test_correct_categories_added(self):
-        gsc = GetStoreCategoriesUseCase(self.maip)
+        gsc = GetStoreCategories(self.maip)
 
         cat_list = gsc.execute('store1_id')
 
@@ -68,14 +68,14 @@ class TestGetStoreCategoriesUseCase(unittest.TestCase):
         self.assertTrue(5 not in cat_list)
 
     def test_not_repeated_element(self):
-        gsc = GetStoreCategoriesUseCase(self.maip)
+        gsc = GetStoreCategories(self.maip)
 
         cat_list = gsc.execute('store2_id')
 
         self.assertTrue(len(cat_list) == 4)
 
     def test_raised_err_if_cannot_find_aisles(self):
-        gsc = GetStoreCategoriesUseCase(self.maip)
+        gsc = GetStoreCategories(self.maip)
 
         with self.assertRaises(ValueError):
             gsc.execute('wrong_store_id')

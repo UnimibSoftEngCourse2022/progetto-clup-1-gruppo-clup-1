@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.admin import Admin
-from src.clup.usecases.admin.load_admin_usecase import LoadAdminUseCase
+from src.clup.usecases.admin.load_admin import LoadAdmin
 
 
 class MockAdminProvider:
@@ -15,7 +15,7 @@ class MockAdminProvider:
 class TestLoadAdminUsecase(unittest.TestCase):
     def setUp(self):
         self.admin_provider = MockAdminProvider()
-        self.u = LoadAdminUseCase(self.admin_provider)
+        self.u = LoadAdmin(self.admin_provider)
 
     def test_admin_is_returned(self):
         u = Admin('1', 'tizio', 'caio')

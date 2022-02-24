@@ -3,33 +3,33 @@ from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
-from src.clup.usecases.store_manager.add_aisle_usecase import AddAisleUseCase
-from src.clup.usecases.store_manager.add_store_usecase import AddStoreUseCase
-from src.clup.usecases.auth.admin_register_usecase import AdminRegisterUseCase
-from src.clup.usecases.admin.consume_reservation_usecase \
-    import ConsumeReservationUseCase
-from src.clup.usecases.system.create_store_manager import CreateStoreManagerUseCase
-from src.clup.usecases.admin.free_reservation_usecase import FreeReservationUseCase
-from src.clup.usecases.admin.load_admin_usecase import LoadAdminUseCase
-from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
-from src.clup.usecases.search_store_usecase import SearchStoreUseCase
-from src.clup.usecases.store_list_usecase import StoreListUseCase
-from src.clup.usecases.store_manager.update_store_usecase import UpdateStoreUseCase
-from src.clup.usecases.auth.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.store_manager.add_aisle import AddAisle
+from src.clup.usecases.store_manager.add_store import AddStore
+from src.clup.usecases.auth.admin_register import AdminRegister
+from src.clup.usecases.admin.consume_reservation \
+    import ConsumeReservation
+from src.clup.usecases.system.create_store_manager import CreateStoreManager
+from src.clup.usecases.admin.free_reservation import FreeReservation
+from src.clup.usecases.admin.load_admin import LoadAdmin
+from src.clup.usecases.make_reservation import MakeReservation
+from src.clup.usecases.search_store import SearchStore
+from src.clup.usecases.store_list import StoreList
+from src.clup.usecases.store_manager.update_store import UpdateStore
+from src.clup.usecases.auth.user_register import UserRegister
 
 bp = Blueprint('stores', __name__)
 
-slu = StoreListUseCase(setup.store_provider)
-asu = AddStoreUseCase(setup.store_provider)
-aau = AddAisleUseCase(setup.aisle_provider, setup.lane_provider)
-mru = MakeReservationUseCase(setup.lane_provider, setup.reservation_provider)
-fru = FreeReservationUseCase(setup.lane_provider, setup.reservation_provider)
-cru = ConsumeReservationUseCase(
+slu = StoreList(setup.store_provider)
+asu = AddStore(setup.store_provider)
+aau = AddAisle(setup.aisle_provider, setup.lane_provider)
+mru = MakeReservation(setup.lane_provider, setup.reservation_provider)
+fru = FreeReservation(setup.lane_provider, setup.reservation_provider)
+cru = ConsumeReservation(
     setup.lane_provider, setup.reservation_provider
 )
-usu = UpdateStoreUseCase(setup.store_provider, setup.lane_provider)
-ssu = SearchStoreUseCase(setup.store_provider)
-luau = LoadAdminUseCase(setup.admin_provider)
+usu = UpdateStore(setup.store_provider, setup.lane_provider)
+ssu = SearchStore(setup.store_provider)
+luau = LoadAdmin(setup.admin_provider)
 
 
 @bp.route('/data/init')
@@ -49,14 +49,14 @@ def init_stores():
     for aisle_id in c_aisle_ids:
         setup.lane_provider.get_aisle_pool(aisle_id).capacity = 5
 
-    uru = UserRegisterUsecase(setup.user_provider)
+    uru = UserRegister(setup.user_provider)
     uru.execute('davide', 'prova')
 
-    aru = AdminRegisterUseCase(setup.admin_provider, setup.store_provider)
+    aru = AdminRegister(setup.admin_provider, setup.store_provider)
     aru.execute('admin1', 'password', esselunga.name, esselunga.address, esselunga.secret)
     aru.execute('admin2', 'password', conad.name, conad.address, conad.secret)
 
-    csm = CreateStoreManagerUseCase(setup.store_manager_provider)
+    csm = CreateStoreManager(setup.store_manager_provider)
     csm.execute('secret_key')
 
     return redirect(url_for('stores.stores'))

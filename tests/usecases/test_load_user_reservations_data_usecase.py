@@ -5,9 +5,9 @@ from src.clup.entities.aisle import Aisle
 from src.clup.entities.appointment import Appointment
 from src.clup.entities.reservation import Reservation
 from src.clup.entities.store import Store
-from src.clup.providers.abc.appointment_provider_abc import AppointmentProvider
-from src.clup.usecases.user.load_user_reservations_data_usecase \
-    import LoadUserReservationsDataUseCase
+from src.clup.providers.abc.appointment_provider import AppointmentProvider
+from src.clup.usecases.user.load_user_reservations_data \
+    import LoadUserReservationsData
 from tests.usecases.mock_aisle_provider import MockAisleProvider
 from tests.usecases.mock_reservation_provider import MockReservationProvider
 from tests.usecases.mock_store_provider import MockStoreProvider
@@ -20,10 +20,10 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         self.aisle_provider = MockAisleProvider()
         self.appointment_provider = create_autospec(AppointmentProvider)
         self.appointment_provider.get_user_appointments.return_value = []
-        self.u = LoadUserReservationsDataUseCase(self.reservation_provider,
-                                                 self.store_provider,
-                                                 self.aisle_provider,
-                                                 self.appointment_provider)
+        self.u = LoadUserReservationsData(self.reservation_provider,
+                                          self.store_provider,
+                                          self.aisle_provider,
+                                          self.appointment_provider)
 
     def test_empty_sequence_returned_on_no_reservations(self):
         reservations_data = self.u.execute('user_id')

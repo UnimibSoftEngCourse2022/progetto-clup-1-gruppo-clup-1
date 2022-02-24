@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.appointment import Appointment
-from src.clup.providers.abc.appointment_provider_abc import AppointmentProvider
+from src.clup.providers.abc.appointment_provider import AppointmentProvider
 
 
 class SqliteAppointmentProvider(AppointmentProvider):

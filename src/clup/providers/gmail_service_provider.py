@@ -1,7 +1,7 @@
 import smtplib
 import ssl
 
-from src.clup.providers.abc.email_service_provider_abc import EmailServiceProvider
+from src.clup.providers.abc.email_service_provider import EmailServiceProvider
 
 
 class GmailServiceProvider(EmailServiceProvider):

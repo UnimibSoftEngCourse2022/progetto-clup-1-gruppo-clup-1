@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash
 from src.clup.entities.user import User
 
 
-class UserRegisterUsecase:
+class UserRegister:
     def __init__(self, user_provider):
         self.user_provider = user_provider
 

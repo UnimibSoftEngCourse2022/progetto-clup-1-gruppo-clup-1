@@ -2,8 +2,8 @@ import datetime
 import unittest
 
 from src.clup.entities.aisle import Aisle
-from src.clup.usecases.user.make_appointment_usecase import MakeAppointmentUseCase
-from src.clup.usecases.system.scheduler_usecase import SchedulerUseCase
+from src.clup.usecases.user.make_appointment import MakeAppointment
+from src.clup.usecases.system.enable_scheduled_appointments import Scheduler
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
@@ -69,8 +69,8 @@ class TestSchedulerUsecase(unittest.TestCase):
         maip.add_aisle(aisle2)
         maip.add_aisle(aisle3)
 
-        su = SchedulerUseCase(mapp, mrp, mlp)
-        mau = MakeAppointmentUseCase(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=maip)
+        su = Scheduler(mapp, mrp, mlp)
+        mau = MakeAppointment(reservation_provider=mrp, appointment_provider=mapp, aisle_provider=maip)
         user_id = 'user'
         aisles_ids = [1, 2, 3]
         store_id = 'store'

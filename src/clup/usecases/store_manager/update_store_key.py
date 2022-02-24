@@ -1,7 +1,7 @@
 from src.clup.entities.store import Store
 
 
-class UpdateStoreKeyUseCase:
+class UpdateStoreKey:
     def __init__(self, store_provider):
         self.store_provider = store_provider
 

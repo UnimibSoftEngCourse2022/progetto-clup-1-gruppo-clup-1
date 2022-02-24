@@ -1,7 +1,7 @@
 from src.clup.entities.exceptions import MaxCapacityReachedError
 
 
-class SchedulerUseCase:
+class Scheduler:
     def __init__(self, appointment_provider, reservation_provider, lane_provider):
         self.appointment_provider = appointment_provider
         self.reservation_provider = reservation_provider

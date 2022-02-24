@@ -6,15 +6,15 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 
-from src.clup.usecases.admin.consume_reservation_usecase \
-    import ConsumeReservationUseCase
-from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
-from src.clup.usecases.admin.free_reservation_usecase \
-    import FreeReservationUseCase
-from src.clup.usecases.admin.load_admin_store_info_usecase \
-    import LoadAdminStoreInfoUseCase
-from src.clup.usecases.admin.load_admin_usecase import LoadAdminUseCase
-from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
+from src.clup.usecases.admin.consume_reservation \
+    import ConsumeReservation
+from src.clup.usecases.filter_aisle_by_categories import FilterAisleByCategories
+from src.clup.usecases.admin.free_reservation \
+    import FreeReservation
+from src.clup.usecases.admin.load_admin_store_info \
+    import LoadAdminStoreInfo
+from src.clup.usecases.admin.load_admin import LoadAdmin
+from src.clup.usecases.make_reservation import MakeReservation
 
 bp = Blueprint('admin', __name__)
 
@@ -33,11 +33,11 @@ def home():
         flash("unauthorized to visit this page, login as an admin", category='danger')
         return redirect(url_for('auth.login'))
     a_id = current_user.get_id()
-    admin_data = LoadAdminUseCase(setup.admin_provider).execute(a_id)
-    lasiu = LoadAdminStoreInfoUseCase(setup.store_provider,
-                                      setup.aisle_provider,
-                                      setup.lane_provider,
-                                      setup.admin_provider)
+    admin_data = LoadAdmin(setup.admin_provider).execute(a_id)
+    lasiu = LoadAdminStoreInfo(setup.store_provider,
+                               setup.aisle_provider,
+                               setup.lane_provider,
+                               setup.admin_provider)
     info = lasiu.execute(a_id)
     return render_template('admin/home.html', admin=admin_data,
                            store=info['store'], aisles=info['aisles'],
@@ -55,17 +55,17 @@ def consumed_reservations():
     reservation_id = request.values['reservation_id']
 
     a_id = current_user.get_id()
-    lasiu = LoadAdminStoreInfoUseCase(setup.store_provider,
-                                      setup.aisle_provider,
-                                      setup.lane_provider,
-                                      setup.admin_provider)
+    lasiu = LoadAdminStoreInfo(setup.store_provider,
+                               setup.aisle_provider,
+                               setup.lane_provider,
+                               setup.admin_provider)
     info = lasiu.execute(a_id)
     if info['store'].id != store_id:
         abort(400)
 
     if request.method == 'POST':
         try:
-            cru = ConsumeReservationUseCase(
+            cru = ConsumeReservation(
                 setup.lane_provider, setup.reservation_provider)
             cru.execute(store_id, reservation_id)
             return '', 200
@@ -74,7 +74,7 @@ def consumed_reservations():
             abort(400)
     else:
         try:
-            fru = FreeReservationUseCase(
+            fru = FreeReservation(
                 setup.lane_provider, setup.reservation_provider)
             fru.execute(store_id, reservation_id)
             return '', 200
@@ -92,13 +92,13 @@ def make_reservation(store_id):
         categories_json = json.loads(categories)
 
         categories_enum = [Category(int(c)) for c in categories_json]
-        fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
+        fabc = FilterAisleByCategories(setup.aisle_provider)
         aisle_ids_json = fabc.execute(store_id, categories_enum)
     except json.JSONDecodeError:
         abort(400)
 
-    mru = MakeReservationUseCase(setup.lane_provider,
-                                 setup.reservation_provider)
+    mru = MakeReservation(setup.lane_provider,
+                          setup.reservation_provider)
     r_id = mru.execute(a_id, store_id, aisle_ids_json)
 
     for aisle_id in aisle_ids_json:

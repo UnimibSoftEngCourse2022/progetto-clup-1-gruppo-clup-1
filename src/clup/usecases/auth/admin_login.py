@@ -1,4 +1,4 @@
-class AdminLoginUseCase:
+class AdminLogin:
     def __init__(self, admin_provider):
         self.admin_provider = admin_provider
 

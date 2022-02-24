@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.reservation import Reservation
-from src.clup.providers.abc.reservation_provider_abc \
+from src.clup.providers.abc.reservation_provider \
     import ReservationProvider
 
 

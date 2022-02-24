@@ -3,7 +3,7 @@ import uuid
 from src.clup.entities.store import Store
 
 
-class AddStoreUseCase:
+class AddStore:
     def __init__(self, store_provider):
         self.store_provider = store_provider
 

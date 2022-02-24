@@ -3,14 +3,14 @@ import unittest
 from src.clup.entities.category import Category
 from src.clup.providers.basic.basic_aisle_provider import BasicAisleProvider
 from src.clup.providers.basic.basic_lane_provider import BasicLaneProvider
-from src.clup.usecases.store_manager.add_aisle_usecase import AddAisleUseCase
+from src.clup.usecases.store_manager.add_aisle import AddAisle
 
 
 class TestAddAisleUseCase(unittest.TestCase):
     def test_correct_aisle_is_added(self):
         bap = BasicAisleProvider()
         blp = BasicLaneProvider()
-        aa = AddAisleUseCase(bap, blp)
+        aa = AddAisle(bap, blp)
         store_id = 'my_store'
         aisle_name = 'my_aisle'
         categories = [Category.FISH, Category.MEAT]
@@ -23,7 +23,7 @@ class TestAddAisleUseCase(unittest.TestCase):
     def test_raise_except_if_not_category(self):
         bap = BasicAisleProvider()
         blp = BasicLaneProvider()
-        aa = AddAisleUseCase(bap, blp)
+        aa = AddAisle(bap, blp)
         store_id = 'my_store'
         aisle_name = 'my_aisle'
         categories = [Category.FISH, Category.MEAT, 'not a category']
@@ -34,7 +34,7 @@ class TestAddAisleUseCase(unittest.TestCase):
     def test_aisle_aisle_added_to_correct_store(self):
         bap = BasicAisleProvider()
         blp = BasicLaneProvider()
-        aa = AddAisleUseCase(bap, blp)
+        aa = AddAisle(bap, blp)
         store1_id = 'my_store'
         aisle1_name = 'my_aisle'
         categories1 = [Category.FISH, Category.MEAT]
@@ -57,7 +57,7 @@ class TestAddAisleUseCase(unittest.TestCase):
     def test_aisle_set_with_correct_capacity(self):
         bap = BasicAisleProvider()
         blp = BasicLaneProvider()
-        aa = AddAisleUseCase(bap, blp)
+        aa = AddAisle(bap, blp)
         store1_id = 'my_store'
         aisle1_name = 'my_aisle'
         categories1 = [Category.FISH, Category.MEAT]
@@ -77,7 +77,7 @@ class TestAddAisleUseCase(unittest.TestCase):
     def test_negative_capacity_raise_err(self):
         bap = BasicAisleProvider()
         blp = BasicLaneProvider()
-        aa = AddAisleUseCase(bap, blp)
+        aa = AddAisle(bap, blp)
         store1_id = 'my_store'
         aisle1_name = 'my_aisle'
         categories1 = [Category.FISH, Category.MEAT]

@@ -1,4 +1,4 @@
-class LoadAdminStoreInfoUseCase:
+class LoadAdminStoreInfo:
     def __init__(self, store_provider, aisle_provider,
                  lane_provider, admin_provider):
         self.store_provider = store_provider

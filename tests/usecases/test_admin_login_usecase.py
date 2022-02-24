@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.admin import Admin
-from src.clup.usecases.auth.admin_login_usecase import AdminLoginUseCase
+from src.clup.usecases.auth.admin_login import AdminLogin
 
 
 class MockAdminProvider:
@@ -24,7 +24,7 @@ class TestAdminLoginUsecase(unittest.TestCase):
         m_a_p = MockAdminProvider()
         admin1 = Admin(0, 1, 10)
         m_a_p.admins[admin1.id] = admin1
-        al = AdminLoginUseCase(m_a_p)
+        al = AdminLogin(m_a_p)
 
         is_admin1_logged_in = al.execute(admin1.username, admin1.password) == admin1.id
 
@@ -34,7 +34,7 @@ class TestAdminLoginUsecase(unittest.TestCase):
         m_a_p = MockAdminProvider()
         admin1 = Admin(0, 1, 10)
         m_a_p.admins[admin1.id] = admin1
-        al = AdminLoginUseCase(m_a_p)
+        al = AdminLogin(m_a_p)
 
         with self.assertRaises(ValueError):
             al.execute(admin1.username, 20)
@@ -43,7 +43,7 @@ class TestAdminLoginUsecase(unittest.TestCase):
         m_a_p = MockAdminProvider()
         admin1 = Admin(0, 1, 10)
         m_a_p.admins[admin1.id] = admin1
-        al = AdminLoginUseCase(m_a_p)
+        al = AdminLogin(m_a_p)
 
         with self.assertRaises(ValueError):
             al.execute(2, admin1.password)

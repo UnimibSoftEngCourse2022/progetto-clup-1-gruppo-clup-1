@@ -1,4 +1,4 @@
-class GetStoreCategoriesUseCase:
+class GetStoreCategories:
     def __init__(self, aisle_provider):
         self.aisle_provider = aisle_provider
 

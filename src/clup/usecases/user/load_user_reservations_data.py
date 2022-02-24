@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-class LoadUserReservationsDataUseCase:
+class LoadUserReservationsData:
     def __init__(self, reservation_provider, store_provider,
                  aisle_provider, appointment_provider):
         self.reservation_provider = reservation_provider

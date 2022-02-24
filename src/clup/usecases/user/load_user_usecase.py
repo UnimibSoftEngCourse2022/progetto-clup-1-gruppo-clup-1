@@ -1,4 +1,4 @@
-class LoadUserUseCase:
+class LoadUser:
     def __init__(self, user_provider):
         self.user_provider = user_provider
 

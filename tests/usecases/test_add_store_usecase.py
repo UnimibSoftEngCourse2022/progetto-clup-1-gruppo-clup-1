@@ -1,6 +1,6 @@
 import unittest
 
-from src.clup.usecases.store_manager.add_store_usecase import AddStoreUseCase
+from src.clup.usecases.store_manager.add_store import AddStore
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
@@ -23,7 +23,7 @@ class TestAddStoreUseCase(unittest.TestCase):
     def setUp(self):
         self.queue_provider = MockLaneProvider()
         self.store_provider = MockStoreProvider()
-        self.u = AddStoreUseCase(self.store_provider)
+        self.u = AddStore(self.store_provider)
 
     def test_store_is_added_to_stores(self):
         name = 'store'

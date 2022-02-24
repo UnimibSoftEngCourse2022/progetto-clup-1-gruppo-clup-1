@@ -2,8 +2,8 @@ import unittest
 
 from src.clup.entities.exceptions \
     import MaxCapacityReachedError, EmptyQueueError
-from src.clup.usecases.enable_reservation_usecase \
-    import EnableReservationUseCase
+from src.clup.usecases.enable_reservation \
+    import EnableReservation
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 
@@ -12,7 +12,7 @@ class TestEnableReservationUseCase(unittest.TestCase):
         store_id = 1
         self.queue_provider = MockLaneProvider()
         self.queue_provider.get_aisle_pool(store_id).capacity = 5
-        self.u = EnableReservationUseCase(self.queue_provider)
+        self.u = EnableReservation(self.queue_provider)
 
     def test_enable_takes_element_from_queue_and_add_to_pool(self):
         store_id = 1

@@ -1,4 +1,4 @@
-class FilterAisleByCategoriesUseCase:
+class FilterAisleByCategories:
     def __init__(self, aisle_provider):
         self.aisle_provider = aisle_provider
 

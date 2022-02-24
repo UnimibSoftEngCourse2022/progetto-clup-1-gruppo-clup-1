@@ -3,8 +3,8 @@ from collections import defaultdict
 
 from src.clup.entities.aisle_pool import AislePool
 from src.clup.entities.store import Store
-from src.clup.providers.abc.lane_provider_abc import LaneProvider
-from src.clup.usecases.store_manager.delete_store_usecase import DeleteStoreUseCase
+from src.clup.providers.abc.lane_provider import LaneProvider
+from src.clup.usecases.store_manager.delete_store import DeleteStore
 
 
 class MockStoreProvider:
@@ -35,7 +35,7 @@ class MockQueueProvider(LaneProvider):
 class TestDeleteStoreUseCase(unittest.TestCase):
     def test_store_is_deleted_to_stores(self):
         store_provider = MockStoreProvider()
-        u = DeleteStoreUseCase(store_provider)
+        u = DeleteStore(store_provider)
         store = Store(1, 'name', 'address')
         store_provider.stores.append(store)
 
@@ -46,7 +46,7 @@ class TestDeleteStoreUseCase(unittest.TestCase):
 
     def test_delete_on_unexisting_id_throws(self):
         store_provider = MockStoreProvider()
-        u = DeleteStoreUseCase(store_provider)
+        u = DeleteStore(store_provider)
         store = Store(1, 'name', 'address')
 
         with self.assertRaises(ValueError):

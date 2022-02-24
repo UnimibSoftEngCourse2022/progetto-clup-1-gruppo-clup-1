@@ -4,7 +4,7 @@ from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
 
 
-class AddAisleUseCase:
+class AddAisle:
     def __init__(self, aisle_provider, queue_provider):
         self.aisle_provider = aisle_provider
         self.queue_provider = queue_provider

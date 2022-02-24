@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from src.clup.database import models
 from src.clup.entities.store_manager import StoreManager
-from src.clup.providers.abc.store_manager_provider_abc \
+from src.clup.providers.abc.store_manager_provider \
     import StoreManagerProvider
 
 

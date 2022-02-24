@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.user import User
-from src.clup.providers.abc.user_provider_abc import UserProvider
+from src.clup.providers.abc.user_provider import UserProvider
 
 
 class SqliteUserProvider(UserProvider):

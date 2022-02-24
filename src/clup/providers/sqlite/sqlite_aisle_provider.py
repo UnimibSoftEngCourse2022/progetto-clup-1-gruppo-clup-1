@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import src.clup.database.models as models
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
-from src.clup.providers.abc.aisle_provider_abc \
+from src.clup.providers.abc.aisle_provider \
     import AisleProvider
 
 

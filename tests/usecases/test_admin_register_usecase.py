@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash
 
 from src.clup.entities.admin import Admin
 from src.clup.entities.store import Store
-from src.clup.usecases.auth.admin_register_usecase import AdminRegisterUseCase
+from src.clup.usecases.auth.admin_register import AdminRegister
 
 
 class MockAdminProvider:
@@ -48,7 +48,7 @@ class TestAdminRegisterUsecase(unittest.TestCase):
         self.msp.add_store(s1)
         self.msp.add_store(s2)
 
-        self.u = AdminRegisterUseCase(self.admin_pvd, self.msp)
+        self.u = AdminRegister(self.admin_pvd, self.msp)
 
     def test_add_admin_updates_admins(self):
         self.admin_pvd.add_admin = Mock()

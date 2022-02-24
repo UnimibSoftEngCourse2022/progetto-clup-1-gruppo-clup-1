@@ -39,7 +39,7 @@ def unauthorized_callback():
 
 
 def activate_appointment():
-    from src.clup.usecases.system.scheduler_usecase import SchedulerUseCase
+    from src.clup.usecases.system.enable_scheduled_appointments import Scheduler
     from src.clup.flaskr.global_setup import appointment_provider, lane_provider, reservation_provider
 
     date_time = datetime.datetime.now()
@@ -49,7 +49,7 @@ def activate_appointment():
         day=date_time.day,
         hour=date_time.hour
     )
-    suc = SchedulerUseCase(
+    suc = Scheduler(
         appointment_provider=appointment_provider,
         reservation_provider=reservation_provider,
         lane_provider=lane_provider

@@ -1,4 +1,4 @@
-from src.clup.providers.abc.store_provider_abc import StoreProvider
+from src.clup.providers.abc.store_provider import StoreProvider
 
 
 class MockStoreProvider(StoreProvider):

@@ -7,9 +7,9 @@ from src.clup.entities.exceptions import AuthError
 from src.clup.entities.user import User
 from src.clup.entities.admin import Admin
 from src.clup.entities.store_manager import StoreManager
-from src.clup.providers.abc.user_provider_abc import UserProvider
-from src.clup.providers.abc.admin_provider_abc import AdminProvider
-from src.clup.providers.abc.store_manager_provider_abc import StoreManagerProvider
+from src.clup.providers.abc.user_provider import UserProvider
+from src.clup.providers.abc.admin_provider import AdminProvider
+from src.clup.providers.abc.store_manager_provider import StoreManagerProvider
 from src.clup.usecases.auth.change_password import ChangePassword
 
 

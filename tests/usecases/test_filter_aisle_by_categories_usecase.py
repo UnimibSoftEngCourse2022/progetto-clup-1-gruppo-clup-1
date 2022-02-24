@@ -3,7 +3,7 @@ import unittest
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
 from src.clup.providers.basic.basic_aisle_provider import BasicAisleProvider
-from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
+from src.clup.usecases.filter_aisle_by_categories import FilterAisleByCategories
 
 
 class TestFilterAisleByCategories(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestFilterAisleByCategories(unittest.TestCase):
         bap = BasicAisleProvider()
         store_id = 'store'
         categories_wanted = [Category.FISH, Category.BEAUTY]
-        fauc = FilterAisleByCategoriesUseCase(bap)
+        fauc = FilterAisleByCategories(bap)
         aisle1 = Aisle(id='aisle1', name='aisle1_name', capacity=10, categories=[Category.FISH, Category.MEAT])
         aisle2 = Aisle(id='aisle2', name='aisle2_name', capacity=10, categories=[Category.VEGETABLE, Category.FRUIT])
         aisle3 = Aisle(id='aisle3', name='aisle3_name', capacity=10, categories=[Category.BEVERAGE, Category.BEAUTY])
@@ -33,7 +33,7 @@ class TestFilterAisleByCategories(unittest.TestCase):
         bap = BasicAisleProvider()
         store_id = 'store'
         categories_wanted = [Category.FISH, Category.MEAT]
-        fauc = FilterAisleByCategoriesUseCase(bap)
+        fauc = FilterAisleByCategories(bap)
         aisle1 = Aisle(id='aisle1', name='aisle1_name', capacity=10, categories=[Category.FISH, Category.MEAT])
         aisle2 = Aisle(id='aisle2', name='aisle2_name', capacity=10, categories=[Category.VEGETABLE, Category.FRUIT])
         aisle3 = Aisle(id='aisle3', name='aisle3_name', capacity=10, categories=[Category.BEVERAGE, Category.BEAUTY])
@@ -55,7 +55,7 @@ class TestFilterAisleByCategories(unittest.TestCase):
         bap = BasicAisleProvider()
         store_id = 'store'
         categories_wanted = [Category.FISH, Category.MEAT]
-        fauc = FilterAisleByCategoriesUseCase(bap)
+        fauc = FilterAisleByCategories(bap)
         aisle1 = Aisle(id='aisle1', name='aisle1_name', capacity=10, categories=[Category.FISH, Category.MEAT])
         aisle2 = Aisle(id='aisle2', name='aisle2_name', capacity=10, categories=[Category.VEGETABLE, Category.FRUIT])
         aisle3 = Aisle(id='aisle3', name='aisle3_name', capacity=10, categories=[Category.BEVERAGE, Category.BEAUTY])

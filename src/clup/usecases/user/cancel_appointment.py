@@ -1,4 +1,4 @@
-class CancelAppointmentUseCase:
+class CancelAppointment:
     def __init__(self, appointment_provider, reservation_provider):
         self.appointment_provider = appointment_provider
         self.reservation_provider = reservation_provider

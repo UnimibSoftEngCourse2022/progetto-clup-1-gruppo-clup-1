@@ -7,7 +7,7 @@ from src.clup.entities.exceptions import MaxCapacityReachedError
 from src.clup.entities.reservation import Reservation
 
 
-class MakeAppointmentUseCase:
+class MakeAppointment:
     def __init__(self, reservation_provider, appointment_provider, aisle_provider):
         self.reservation_provider = reservation_provider
         self.appointment_provider = appointment_provider

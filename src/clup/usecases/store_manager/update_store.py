@@ -1,4 +1,4 @@
-class UpdateStoreUseCase:
+class UpdateStore:
     def __init__(self, store_provider, queue_provider):
         self.store_provider = store_provider
         self.queue_provider = queue_provider

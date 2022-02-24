@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.user import User
-from src.clup.usecases.user.load_user_usecase import LoadUserUseCase
+from src.clup.usecases.user.load_user_usecase import LoadUser
 
 
 class MockUserProvider:
@@ -15,7 +15,7 @@ class MockUserProvider:
 class TestLoadUserDataUsecase(unittest.TestCase):
     def setUp(self):
         self.user_provider = MockUserProvider()
-        self.u = LoadUserUseCase(self.user_provider)
+        self.u = LoadUser(self.user_provider)
 
     def test_user_is_returned(self):
         u = User('1', 'tizio', 'caio')
