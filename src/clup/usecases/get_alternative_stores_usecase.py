@@ -21,7 +21,7 @@ class GetAlternativeStoresUseCase:
                 mauc = MakeAppointmentUseCase(
                     reservation_provider=self.reservation_provider,
                     appointment_provider=self.appointment_provider,
-                    aisle_provider=self.aisle_provider,)
+                    aisle_provider=self.aisle_provider, )
                 if mauc.check_enough_spaces_in_aisles(aisle_ids, date):
                     valid_stores.append(store)
 

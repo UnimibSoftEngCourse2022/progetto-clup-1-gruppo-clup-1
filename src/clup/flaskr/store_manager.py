@@ -68,10 +68,10 @@ def store_info(store_id):
     store_manager = lsm.execute(current_user.id)
     store_info = liu.execute(store_id)
     print(store_info)
-    return render_template('store_manager/store_view_manager.html', sm=store_manager ,store_info=store_info)
+    return render_template('store_manager/store_view_manager.html', sm=store_manager, store_info=store_info)
 
 
-@bp.route('/storemanager/add_store', methods=['GET','POST'])
+@bp.route('/storemanager/add_store', methods=['GET', 'POST'])
 @login_required
 def add_store():
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
@@ -87,7 +87,7 @@ def add_store():
         id = current_user.id
         try:
             store = asu.execute(store_name, store_address, id)
-            return redirect(url_for('store_manager.set_aisles', store_id=store.id)) 
+            return redirect(url_for('store_manager.set_aisles', store_id=store.id))
         except ValueError:
             flash('Unable to add store')
             return redirect(url_for('store_manager.home'))
@@ -97,7 +97,7 @@ def add_store():
     return render_template('store_manager/add_store.html', sm=store_manager, form=form)
 
 
-@bp.route('/storemanager/<store_id>/set_aisles', methods=['GET','POST'])
+@bp.route('/storemanager/<store_id>/set_aisles', methods=['GET', 'POST'])
 @login_required
 def set_aisles(store_id):
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
@@ -120,6 +120,8 @@ def set_aisles(store_id):
             return redirect(url_for('store_manager.set_aisles', store_id=store_id))
         except json.JSONDecodeError:
             abort(400)
-    
-    base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH, Category.BEVERAGE, Category.FRUIT, Category.OTHER]
-    return render_template('store_manager/set_aisle.html', store_id=store_id, categories=base_categories, sm=store_manager,)
+
+    base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH,
+                       Category.BEVERAGE, Category.FRUIT, Category.OTHER]
+    return render_template('store_manager/set_aisle.html', store_id=store_id, categories=base_categories,
+                           sm=store_manager, )

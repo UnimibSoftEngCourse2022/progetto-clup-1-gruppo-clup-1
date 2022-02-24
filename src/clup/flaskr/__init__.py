@@ -105,7 +105,7 @@ def create_app(test_config=None):
             "func": "src.clup.flaskr:activate_appointment",
             "args": (),
             "trigger": "interval",
-            "seconds": 10,
+            "seconds": 1800,
         },
         {
             "id": "job2",
