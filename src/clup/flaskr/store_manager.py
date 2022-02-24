@@ -12,6 +12,7 @@ from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_store_manager_usecase import LoadStoreManagerUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 from src.clup.entities.category import Category
+
 bp = Blueprint('store_manager', __name__)
 liu = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)
 
@@ -21,28 +22,6 @@ def check_correct_account_type(requested_type):
         return False
     else:
         return True
-
-
-@bp.route('/manager/data/init')
-def data_init():
-    csm = CreateStoreManagerUseCase(setup.store_manager_provider)
-    id = csm.execute('secret_key')
-    rsm = StoreManagerRegisterUseCase(setup.store_manager_provider)
-    asu = AddStoreUseCase(setup.store_provider)
-    tigros = asu.execute('Tigros', 'Solbiate Arno', id)
-    asu.execute('Carrefour', 'Jerago', id)
-    aau = AddAisleUseCase(setup.aisle_provider, setup.lane_provider)
-    aau.execute(tigros.id, 'aisle1', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle2', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle3', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle4', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle5', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle6', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle7', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle8', [Category.FISH, Category.MEAT])
-    aau.execute(tigros.id, 'aisle9', [Category.FISH, Category.MEAT])
-
-    return redirect(url_for('store_manager.home'))
 
 
 @bp.route('/storemanager/home')

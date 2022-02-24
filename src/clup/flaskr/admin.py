@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, render_template, request, abort, jsonify
+from flask import Blueprint, render_template, request, abort, jsonify, flash, redirect, url_for
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
@@ -110,5 +110,3 @@ def make_reservation(store_id):
         print(list(queue))
         print(list(pool))
     return jsonify(r_id), 200
-
-

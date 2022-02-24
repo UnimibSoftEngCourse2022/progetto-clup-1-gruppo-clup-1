@@ -35,14 +35,14 @@ class SqliteAppointmentProvider(AppointmentProvider):
     def get_user_appointments(self, user_id):
         with Session(self.engine) as session, session.begin():
             query = session.query(
-                        models.Appointment
-                    ).join(
-                        models.Reservation,
-                    ).filter(
-                        models.Appointment.reservation_uuid == models.Reservation.uuid
-                    ).filter(
-                        models.Reservation.user_id == user_id
-                    )
+                models.Appointment
+            ).join(
+                models.Reservation,
+            ).filter(
+                models.Appointment.reservation_uuid == models.Reservation.uuid
+            ).filter(
+                models.Reservation.user_id == user_id
+            )
             model_appointments = query.all()
             appointments = []
             for am in model_appointments:

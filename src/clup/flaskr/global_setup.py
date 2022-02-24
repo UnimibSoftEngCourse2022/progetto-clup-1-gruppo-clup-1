@@ -16,7 +16,6 @@ from src.clup.usecases.notify_enabled_reservation_owner \
     import NotifyEnabledReservationOwner
 from src.clup.usecases.init_lanes import InitLanes
 
-
 user_provider = SqliteUserProvider(engine)
 admin_provider = SqliteAdminProvider(engine)
 store_manager_provider = SqliteStoreManagerProvider(engine)

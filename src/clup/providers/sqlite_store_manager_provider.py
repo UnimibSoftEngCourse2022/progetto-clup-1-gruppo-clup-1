@@ -32,7 +32,7 @@ class SqliteStoreManagerProvider(StoreManagerProvider):
             managers = session.query(models.StoreManagerSecretKey) \
                 .filter(models.StoreManagerSecretKey.secret_key == secret,
                         models.StoreManagerSecretKey.active == 0).all()
-            if len(managers) != 1:
+            if len(managers) < 1:
                 raise ValueError("wrong secret key")
 
             return managers[0].store_manager_uuid

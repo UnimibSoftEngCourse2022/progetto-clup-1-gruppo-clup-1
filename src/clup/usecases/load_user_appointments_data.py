@@ -10,7 +10,7 @@ class LoadUserAppointmentsData:
         appointments = \
             self.appointment_provider.get_user_appointments(user_id)
 
-        stores = [self.store_provider.get_store(a.store_id) 
+        stores = [self.store_provider.get_store(a.store_id)
                   for a in appointments]
 
         data = []

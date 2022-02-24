@@ -2,7 +2,7 @@ from collections import defaultdict
 
 
 class LoadUserReservationsDataUseCase:
-    def __init__(self, reservation_provider, store_provider, 
+    def __init__(self, reservation_provider, store_provider,
                  aisle_provider, appointment_provider):
         self.reservation_provider = reservation_provider
         self.store_provider = store_provider
@@ -17,8 +17,8 @@ class LoadUserReservationsDataUseCase:
             self.appointment_provider.get_user_appointments(user_id)
 
         appointment_ids = [a.reservation_id for a in user_appointments]
-        user_reservations = [r 
-                             for r in user_reservations 
+        user_reservations = [r
+                             for r in user_reservations
                              if r.id not in appointment_ids]
 
         reservation_with_aisle_ids = defaultdict(list)

@@ -103,14 +103,15 @@ def reservations():
     return render_template('user/reservations.html', user=user_data,
                            stores_with_aisles=stores_with_aisles)
 
+
 @bp.route('/user/appointments')
 @login_required
 def appointments():
     u_id = current_user.get_id()
     user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
     luad = LoadUserAppointmentsData(
-                                   setup.store_provider,
-                                   setup.appointment_provider)
+        setup.store_provider,
+        setup.appointment_provider)
     appointments_with_stores = luad.execute(u_id)
     return render_template('user/appointments.html', user=user_data,
                            appointments_with_stores=appointments_with_stores)
@@ -183,7 +184,8 @@ def alternative_appointment():
             return render_template("no_alternative_stores.html")
         else:
             return render_template("valid_stores.html", stores=alt_stores, date=date_str,
-             hour=hour, categories_enum = categories_enum, date_time = date_str, categories = categories_str[:-1])
+                                   hour=hour, categories_enum=categories_enum, date_time=date_str,
+                                   categories=categories_str[:-1])
     except ValueError:
         flash("something went wrong", category='danger')
         return redirect(url_for('user.home'))
