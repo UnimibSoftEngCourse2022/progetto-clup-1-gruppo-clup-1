@@ -88,16 +88,30 @@ def make_reservation(store_id):
     return '', 200
 
 
-@bp.route('/user/reservations', methods=['GET', 'POST'])
+@bp.route('/user/reservations')
 @login_required
 def reservations():
     u_id = current_user.get_id()
     user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
     lurdu = LoadUserReservationsDataUseCase(setup.reservation_provider,
                                             setup.store_provider,
-                                            setup.aisle_provider)
+                                            setup.aisle_provider,
+                                            setup.appointment_provider)
     stores_with_aisles = lurdu.execute(u_id)
     return render_template('user/reservations.html', user=user_data,
+                           stores_with_aisles=stores_with_aisles)
+
+@bp.route('/user/appointments')
+@login_required
+def appointments():
+    u_id = current_user.get_id()
+    user_data = LoadUserUseCase(setup.user_provider).execute(u_id)
+    lurdu = LoadUserReservationsDataUseCase(setup.reservation_provider,
+                                            setup.store_provider,
+                                            setup.aisle_provider,
+                                            setup.appointment_provider)
+    stores_with_aisles = lurdu.execute(u_id)
+    return render_template('user/appointments.html', user=user_data,
                            stores_with_aisles=stores_with_aisles)
 
 

@@ -2,9 +2,10 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.appointment import Appointment
+from src.clup.providers.appointment_provider_abc import AppointmentProvider
 
 
-class SqliteAppointmentProvider:
+class SqliteAppointmentProvider(AppointmentProvider):
     def __init__(self, engine):
         self.engine = engine
 
@@ -28,6 +29,26 @@ class SqliteAppointmentProvider:
                     store_id=app_m.store_id,
                     date_time=app_m.date_time
                 )
+                appointments.append(appointment)
+            return appointments
+
+    def get_user_appointments(self, user_id):
+        with Session(self.engine) as session, session.begin():
+            query = session.query(
+                        models.Appointment
+                    ).join(
+                        models.Reservation,
+                    ).filter(
+                        models.Appointment.reservation_uuid == models.Reservation.uuid
+                    ).filter(
+                        models.Reservation.user_id == user_id
+                    )
+            model_appointments = query.all()
+            appointments = []
+            for am in model_appointments:
+                appointment = Appointment(am.reservation_uuid,
+                                          am.store_id,
+                                          am.date_time)
                 appointments.append(appointment)
             return appointments
 
