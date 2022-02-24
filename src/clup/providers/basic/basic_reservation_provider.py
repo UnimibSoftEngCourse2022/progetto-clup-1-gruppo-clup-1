@@ -1,4 +1,4 @@
-from src.clup.providers.reservation_provider_abc \
+from src.clup.providers.abc.reservation_provider_abc \
     import ReservationProvider
 
 

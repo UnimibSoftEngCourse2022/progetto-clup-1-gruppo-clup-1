@@ -3,19 +3,19 @@ from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
-from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
-from src.clup.usecases.add_store_usecase import AddStoreUseCase
-from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
-from src.clup.usecases.consume_reservation_usecase \
+from src.clup.usecases.store_manager.add_aisle_usecase import AddAisleUseCase
+from src.clup.usecases.store_manager.add_store_usecase import AddStoreUseCase
+from src.clup.usecases.auth.admin_register_usecase import AdminRegisterUseCase
+from src.clup.usecases.admin.consume_reservation_usecase \
     import ConsumeReservationUseCase
-from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
-from src.clup.usecases.free_reservation_usecase import FreeReservationUseCase
-from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
+from src.clup.usecases.system.create_store_manager import CreateStoreManagerUseCase
+from src.clup.usecases.admin.free_reservation_usecase import FreeReservationUseCase
+from src.clup.usecases.admin.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from src.clup.usecases.store_list_usecase import StoreListUseCase
-from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
-from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.store_manager.update_store_usecase import UpdateStoreUseCase
+from src.clup.usecases.auth.user_register_usecase import UserRegisterUsecase
 
 bp = Blueprint('stores', __name__)
 

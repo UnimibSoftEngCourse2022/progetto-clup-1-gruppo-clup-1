@@ -2,7 +2,7 @@ import unittest
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
-from src.clup.providers.basic_aisle_provider import BasicAisleProvider
+from src.clup.providers.basic.basic_aisle_provider import BasicAisleProvider
 from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
 
 

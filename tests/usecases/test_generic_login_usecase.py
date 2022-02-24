@@ -5,9 +5,9 @@ from werkzeug.security import generate_password_hash
 from src.clup.entities.admin import Admin
 from src.clup.entities.store_manager import StoreManager
 from src.clup.entities.user import User
-from src.clup.providers.store_manager_provider_abc \
+from src.clup.providers.abc.store_manager_provider_abc \
     import StoreManagerProvider
-from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
+from src.clup.usecases.auth.generic_login_usecase import GenericLoginUsecase
 
 
 class MockUserProvider:

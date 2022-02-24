@@ -1,15 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, current_user
 
-import src.clup.flaskr.global_setup as setup
-from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
+from src.clup.usecases.auth.admin_register_usecase import AdminRegisterUseCase
 
 import src.clup.flaskr.global_setup as setup
-from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
-from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
-from src.clup.usecases.change_password import ChangePassword
-from src.clup.usecases.user_register_usecase import UserRegisterUsecase
-from src.clup.usecases.validate_email import ValidateEmail
+from src.clup.usecases.auth.generic_login_usecase import GenericLoginUsecase
+from src.clup.usecases.auth.store_manager_register_usecase import StoreManagerRegisterUseCase
+from src.clup.usecases.auth.change_password import ChangePassword
+from src.clup.usecases.auth.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.auth.validate_email import ValidateEmail
 from .flask_user import FlaskUser
 from .forms.admin_register_form import AdminRegisterForm
 from .forms.change_password import ChangePasswordForm

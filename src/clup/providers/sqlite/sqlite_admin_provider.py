@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.admin import Admin
-from src.clup.providers.admin_provider_abc import AdminProvider
+from src.clup.providers.abc.admin_provider_abc import AdminProvider
 
 
 class SqliteAdminProvider(AdminProvider):

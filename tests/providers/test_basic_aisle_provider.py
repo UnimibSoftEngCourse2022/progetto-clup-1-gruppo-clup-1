@@ -2,9 +2,9 @@ import unittest
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.category import Category
-from src.clup.providers.basic_aisle_provider import BasicAisleProvider
-from src.clup.providers.basic_lane_provider import BasicLaneProvider
-from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
+from src.clup.providers.basic.basic_aisle_provider import BasicAisleProvider
+from src.clup.providers.basic.basic_lane_provider import BasicLaneProvider
+from src.clup.usecases.store_manager.add_aisle_usecase import AddAisleUseCase
 
 
 class TestBasicAisleProvider(unittest.TestCase):

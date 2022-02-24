@@ -1,9 +1,9 @@
 import unittest
 
 from src.clup.database import engine
-from src.clup.providers.sqlite_store_manager_provider import SqliteStoreManagerProvider
-from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
-from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
+from src.clup.providers.sqlite.sqlite_store_manager_provider import SqliteStoreManagerProvider
+from src.clup.usecases.system.create_store_manager import CreateStoreManagerUseCase
+from src.clup.usecases.auth.store_manager_register_usecase import StoreManagerRegisterUseCase
 
 
 @unittest.skip('davide')

@@ -1,20 +1,20 @@
 from src.clup.database import engine
-from src.clup.providers.basic_lane_provider import BasicLaneProvider
-from src.clup.providers.sqlite_admin_provider import SqliteAdminProvider
-from src.clup.providers.sqlite_aisle_provider import SqliteAisleProvider
-from src.clup.providers.sqlite_appointment_provider \
+from src.clup.providers.basic.basic_lane_provider import BasicLaneProvider
+from src.clup.providers.sqlite.sqlite_admin_provider import SqliteAdminProvider
+from src.clup.providers.sqlite.sqlite_aisle_provider import SqliteAisleProvider
+from src.clup.providers.sqlite.sqlite_appointment_provider \
     import SqliteAppointmentProvider
-from src.clup.providers.sqlite_reservation_provider \
+from src.clup.providers.sqlite.sqlite_reservation_provider \
     import SqliteReservationProvider
-from src.clup.providers.sqlite_store_manager_provider \
+from src.clup.providers.sqlite.sqlite_store_manager_provider \
     import SqliteStoreManagerProvider
-from src.clup.providers.sqlite_store_provider import SqliteStoreProvider
-from src.clup.providers.sqlite_user_provider import SqliteUserProvider
+from src.clup.providers.sqlite.sqlite_store_provider import SqliteStoreProvider
+from src.clup.providers.sqlite.sqlite_user_provider import SqliteUserProvider
 from src.clup.providers.gmail_service_provider import GmailServiceProvider
 
-from src.clup.usecases.notify_enabled_reservation_owner \
+from src.clup.usecases.system.notify_enabled_reservation_owner \
     import NotifyEnabledReservationOwner
-from src.clup.usecases.init_lanes import InitLanes
+from src.clup.usecases.system.init_lanes import InitLanes
 
 user_provider = SqliteUserProvider(engine)
 admin_provider = SqliteAdminProvider(engine)

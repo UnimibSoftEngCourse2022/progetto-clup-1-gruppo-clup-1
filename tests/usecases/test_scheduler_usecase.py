@@ -2,8 +2,8 @@ import datetime
 import unittest
 
 from src.clup.entities.aisle import Aisle
-from src.clup.usecases.make_appointment_usecase import MakeAppointmentUseCase
-from src.clup.usecases.scheduler_usecase import SchedulerUseCase
+from src.clup.usecases.user.make_appointment_usecase import MakeAppointmentUseCase
+from src.clup.usecases.system.scheduler_usecase import SchedulerUseCase
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 

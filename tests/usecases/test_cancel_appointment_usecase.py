@@ -2,7 +2,7 @@ import unittest
 
 from src.clup.entities.appointment import Appointment
 from src.clup.entities.reservation import Reservation
-from src.clup.usecases.cancel_appointment_usecase import CancelAppointmentUseCase
+from src.clup.usecases.user.cancel_appointment_usecase import CancelAppointmentUseCase
 
 
 class MockAppointmentProvider:

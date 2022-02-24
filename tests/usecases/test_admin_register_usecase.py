@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash
 
 from src.clup.entities.admin import Admin
 from src.clup.entities.store import Store
-from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
+from src.clup.usecases.auth.admin_register_usecase import AdminRegisterUseCase
 
 
 class MockAdminProvider:

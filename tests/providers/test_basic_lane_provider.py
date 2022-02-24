@@ -1,6 +1,6 @@
 import unittest
 
-from src.clup.providers.basic_lane_provider import BasicLaneProvider
+from src.clup.providers.basic.basic_lane_provider import BasicLaneProvider
 
 
 class TestBasicLaneProvider(unittest.TestCase):

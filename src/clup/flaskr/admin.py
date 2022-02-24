@@ -6,16 +6,14 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 
-from src.clup.usecases.consume_reservation_usecase \
+from src.clup.usecases.admin.consume_reservation_usecase \
     import ConsumeReservationUseCase
 from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
-from src.clup.usecases.free_reservation_usecase \
+from src.clup.usecases.admin.free_reservation_usecase \
     import FreeReservationUseCase
-from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
-from src.clup.usecases.load_admin_store_info_usecase \
+from src.clup.usecases.admin.load_admin_store_info_usecase \
     import LoadAdminStoreInfoUseCase
-from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
-from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
+from src.clup.usecases.admin.load_admin_usecase import LoadAdminUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 
 bp = Blueprint('admin', __name__)

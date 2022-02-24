@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.reservation import Reservation
-from src.clup.usecases.consume_reservation_usecase \
+from src.clup.usecases.admin.consume_reservation_usecase \
     import ConsumeReservationUseCase
 from tests.usecases.mock_lane_provider import MockLaneProvider
 from tests.usecases.mock_reservation_provider import MockReservationProvider

@@ -39,7 +39,7 @@ def unauthorized_callback():
 
 
 def activate_appointment():
-    from src.clup.usecases.scheduler_usecase import SchedulerUseCase
+    from src.clup.usecases.system.scheduler_usecase import SchedulerUseCase
     from src.clup.flaskr.global_setup import appointment_provider, lane_provider, reservation_provider
 
     date_time = datetime.datetime.now()
@@ -58,7 +58,7 @@ def activate_appointment():
 
 
 def remove_unused_reservation_scheduler():
-    from src.clup.usecases.remove_unused_reservation import RemoveUnusedReservation
+    from src.clup.usecases.system.remove_unused_reservation import RemoveUnusedReservation
     from src.clup.flaskr.global_setup import store_provider, lane_provider, reservation_provider
 
     rur = RemoveUnusedReservation(

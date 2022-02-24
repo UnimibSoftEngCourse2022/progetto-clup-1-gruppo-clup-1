@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.store import Store
-from src.clup.providers.sqlite_store_provider \
+from src.clup.providers.sqlite.sqlite_store_provider \
     import SqliteStoreProvider
 
 

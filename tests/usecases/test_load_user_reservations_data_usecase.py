@@ -5,8 +5,8 @@ from src.clup.entities.aisle import Aisle
 from src.clup.entities.appointment import Appointment
 from src.clup.entities.reservation import Reservation
 from src.clup.entities.store import Store
-from src.clup.providers.appointment_provider_abc import AppointmentProvider
-from src.clup.usecases.load_user_reservations_data_usecase \
+from src.clup.providers.abc.appointment_provider_abc import AppointmentProvider
+from src.clup.usecases.user.load_user_reservations_data_usecase \
     import LoadUserReservationsDataUseCase
 from tests.usecases.mock_aisle_provider import MockAisleProvider
 from tests.usecases.mock_reservation_provider import MockReservationProvider

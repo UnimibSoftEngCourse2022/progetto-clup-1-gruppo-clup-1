@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.user import User
-from src.clup.usecases.user_login_usecase import UserLoginUseCase
+from src.clup.usecases.auth.user_login_usecase import UserLoginUseCase
 
 
 class MockUserProvider:

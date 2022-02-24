@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.reservation import Reservation
-from src.clup.providers.basic_reservation_provider \
+from src.clup.providers.basic.basic_reservation_provider \
     import BasicReservationProvider
 
 

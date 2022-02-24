@@ -2,7 +2,7 @@ import dataclasses
 import unittest
 
 from src.clup.entities.store import Store
-from src.clup.usecases.update_store_usecase import UpdateStoreUseCase
+from src.clup.usecases.store_manager.update_store_usecase import UpdateStoreUseCase
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 

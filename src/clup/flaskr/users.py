@@ -7,8 +7,8 @@ from flask import (
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
-from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
-from src.clup.usecases.load_user_usecase import LoadUserUseCase
+from src.clup.usecases.admin.load_admin_usecase import LoadAdminUseCase
+from src.clup.usecases.user.load_user_usecase import LoadUserUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 from .forms.user_reservation_form import UserReservationForm

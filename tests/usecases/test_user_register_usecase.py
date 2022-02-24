@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 from werkzeug.security import check_password_hash
 
-from src.clup.usecases.user_register_usecase import UserRegisterUsecase
+from src.clup.usecases.auth.user_register_usecase import UserRegisterUsecase
 
 
 class MockUserProvider:

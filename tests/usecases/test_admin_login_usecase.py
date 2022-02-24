@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.admin import Admin
-from src.clup.usecases.admin_login_usecase import AdminLoginUseCase
+from src.clup.usecases.auth.admin_login_usecase import AdminLoginUseCase
 
 
 class MockAdminProvider:

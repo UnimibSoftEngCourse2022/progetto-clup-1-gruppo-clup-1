@@ -1,5 +1,5 @@
 from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
-from src.clup.usecases.make_appointment_usecase import MakeAppointmentUseCase
+from src.clup.usecases.user.make_appointment_usecase import MakeAppointmentUseCase
 
 
 class GetAlternativeStoresUseCase:

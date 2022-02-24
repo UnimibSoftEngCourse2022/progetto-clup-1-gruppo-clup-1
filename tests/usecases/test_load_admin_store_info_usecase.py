@@ -3,8 +3,8 @@ from unittest.mock import create_autospec
 
 from src.clup.entities.aisle import Aisle
 from src.clup.entities.store import Store
-from src.clup.providers.admin_provider_abc import AdminProvider
-from src.clup.usecases.load_admin_store_info_usecase \
+from src.clup.providers.abc.admin_provider_abc import AdminProvider
+from src.clup.usecases.admin.load_admin_store_info_usecase \
     import LoadAdminStoreInfoUseCase
 from tests.usecases.mock_aisle_provider import MockAisleProvider
 from tests.usecases.mock_lane_provider import MockLaneProvider

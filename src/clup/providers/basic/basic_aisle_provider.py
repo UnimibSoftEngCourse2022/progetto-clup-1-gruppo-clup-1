@@ -1,4 +1,4 @@
-from src.clup.providers.aisle_provider_abc import AisleProvider
+from src.clup.providers.abc.aisle_provider_abc import AisleProvider
 
 
 class BasicAisleProvider(AisleProvider):

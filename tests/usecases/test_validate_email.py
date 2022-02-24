@@ -1,6 +1,6 @@
 import unittest
 
-from src.clup.usecases.validate_email import ValidateEmail
+from src.clup.usecases.auth.validate_email import ValidateEmail
 
 
 class TestValidateEmail(unittest.TestCase):

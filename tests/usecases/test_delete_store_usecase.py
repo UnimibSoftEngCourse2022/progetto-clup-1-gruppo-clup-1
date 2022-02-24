@@ -3,8 +3,8 @@ from collections import defaultdict
 
 from src.clup.entities.aisle_pool import AislePool
 from src.clup.entities.store import Store
-from src.clup.providers.lane_provider_abc import LaneProvider
-from src.clup.usecases.delete_store_usecase import DeleteStoreUseCase
+from src.clup.providers.abc.lane_provider_abc import LaneProvider
+from src.clup.usecases.store_manager.delete_store_usecase import DeleteStoreUseCase
 
 
 class MockStoreProvider:

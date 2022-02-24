@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 import src.clup.database.models as models
 from src.clup.entities.admin import Admin
-from src.clup.providers.sqlite_admin_provider \
+from src.clup.providers.sqlite.sqlite_admin_provider \
     import SqliteAdminProvider
 
 

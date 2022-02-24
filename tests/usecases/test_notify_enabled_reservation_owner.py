@@ -3,11 +3,11 @@ from unittest.mock import create_autospec
 
 from src.clup.entities.store_pool import StorePool
 from src.clup.entities.user import User
-from src.clup.providers.user_provider_abc import UserProvider
-from src.clup.providers.reservation_provider_abc \
+from src.clup.providers.abc.user_provider_abc import UserProvider
+from src.clup.providers.abc.reservation_provider_abc \
     import ReservationProvider
-from src.clup.providers.email_service_provider_abc import EmailServiceProvider
-from src.clup.usecases.notify_enabled_reservation_owner \
+from src.clup.providers.abc.email_service_provider_abc import EmailServiceProvider
+from src.clup.usecases.system.notify_enabled_reservation_owner \
     import NotifyEnabledReservationOwner
 
 

@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.user import User
-from src.clup.providers.basic_user_provider import BasicUserProvider
+from src.clup.providers.basic.basic_user_provider import BasicUserProvider
 
 
 class TestBasicStoreProvider(unittest.TestCase):

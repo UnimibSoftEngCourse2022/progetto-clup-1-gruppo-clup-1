@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import create_autospec
 
 from src.clup.entities.store import Store
-from src.clup.providers.store_provider_abc import StoreProvider
-from src.clup.usecases.update_store_key_usecase import UpdateStoreKeyUseCase
+from src.clup.providers.abc.store_provider_abc import StoreProvider
+from src.clup.usecases.store_manager.update_store_key_usecase import UpdateStoreKeyUseCase
 
 
 class TestUpdateStoreKey(unittest.TestCase):

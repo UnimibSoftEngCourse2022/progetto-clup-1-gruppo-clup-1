@@ -1,6 +1,6 @@
 import unittest
 
-from src.clup.usecases.add_store_usecase import AddStoreUseCase
+from src.clup.usecases.store_manager.add_store_usecase import AddStoreUseCase
 from tests.usecases.mock_lane_provider import MockLaneProvider
 
 

@@ -5,7 +5,7 @@ from src.clup.entities.aisle_pool import AislePool
 from src.clup.entities.reservation import Reservation
 from src.clup.entities.store import Store
 from src.clup.entities.store_pool import StorePool
-from src.clup.usecases.remove_unused_reservation import RemoveUnusedReservation
+from src.clup.usecases.system.remove_unused_reservation import RemoveUnusedReservation
 
 
 class MockStoreProvider:

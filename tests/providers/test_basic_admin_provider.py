@@ -1,7 +1,7 @@
 import unittest
 
 from src.clup.entities.admin import Admin
-from src.clup.providers.basic_admin_provider import BasicAdminProvider
+from src.clup.providers.basic.basic_admin_provider import BasicAdminProvider
 
 
 class TestBasicStoreProvider(unittest.TestCase):

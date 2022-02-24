@@ -7,15 +7,15 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.entities.exceptions import MaxCapacityReachedError
-from src.clup.usecases.cancel_appointment_usecase import CancelAppointmentUseCase
+from src.clup.usecases.user.cancel_appointment_usecase import CancelAppointmentUseCase
 from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
-from src.clup.usecases.get_alternative_stores_usecase import GetAlternativeStoresUseCase
+from src.clup.usecases.user.get_alternative_stores_usecase import GetAlternativeStoresUseCase
 from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
-from src.clup.usecases.load_user_usecase import LoadUserUseCase
-from src.clup.usecases.load_user_reservations_data_usecase import LoadUserReservationsDataUseCase
-from src.clup.usecases.load_user_appointments_data import LoadUserAppointmentsData
-from src.clup.usecases.make_appointment_usecase import MakeAppointmentUseCase
+from src.clup.usecases.user.load_user_usecase import LoadUserUseCase
+from src.clup.usecases.user.load_user_reservations_data_usecase import LoadUserReservationsDataUseCase
+from src.clup.usecases.user.load_user_appointments_data import LoadUserAppointmentsData
+from src.clup.usecases.user.make_appointment_usecase import MakeAppointmentUseCase
 from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 from src.clup.usecases.search_store_usecase import SearchStoreUseCase
 
