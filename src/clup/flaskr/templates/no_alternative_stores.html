@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Store{% endblock %}
+
+{% block content%}
+
+<script>
+    function performHomeUser() {
+        window.location.href = "{{ url_for('user.home') }}";
+    }
+</script>
+
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <p class="h1 mb-4 text" style="color: darkorange;">Sorry no stores for you!!!</p>
+                <p class="h5 mb-4 text" style="color: darkorange;">Press here for going back to home</p>
+                <div class="d-flex flex-row justify-content-around">
+                <button id="click_here_btn" onclick="performHomeUser()">Click Here</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div>
+
+{% endblock %}
+{% block style %}
+<style>
+    #click_here_btn{
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 8px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

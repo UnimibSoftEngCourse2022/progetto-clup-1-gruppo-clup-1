@@ -1,3 +1,116 @@
-{% for store in stores %}
-    {{ store.name }}
-{% endfor %}
+{% extends 'base.html' %}
+
+{% block title %}Store{% endblock %}
+
+{% block content%}
+<script>
+    function performGoHome(){
+        window.location.href = "{{ url_for('user.home') }}"
+    }
+</script>
+
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">Alternative Store selected for you</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+        <p class="h4 mb-4 text">For the day {{ date_time }} at the {{ hour }}th</p>
+        <p class="h4 mb-4 text">And the categories:</p>
+        <div id="categories">
+            <ul>
+                <div class="d-flex flex-row flex-wrap">
+                    {% for cat in categories_enum %}
+                    <div class="d-flex flex-column" style="margin-left: 10px; color: darkorange; font: normal 300 25px/1 'Josefin Sans', sans-serif;">{{ cat.name }}</div>
+                    {% endfor %}
+            </div>
+            </ul>
+        </div>
+        </div></div>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="h2 mb-4 text" style="color: darkorange;">Store avaiable</p>
+                    </div>
+                </div>
+                <div id="aisle_checkboxes">
+
+                    <ul>
+                        {% for store in stores %}
+                        <li>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" value="{{ store.name }}" readonly>
+                                <div class="input-group-append">
+                                    <button id='appointment_btn_{{ store.id }}' class ='button'>Make Appointment</button>
+                                </div>
+                              </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "modal" tabindex = "-1" aria-hidden="true" id="appointment">
+    <div class = "modal-dialog" >
+    <div class = "modal-content" >
+    <div class = "modal-header" >
+    <h5 class = "modal-title" > Success </h5> 
+</div > 
+<div class = "modal-body" >
+    <p > All went smooth: appointment fixed </p> 
+    <p > See your appointments in Resevervation tab </p> 
+    </div >
+<div class = "modal-footer" >
+    <button type = "button" id="ok_btn" data-bs-dismiss = "modal" onclick = "performGoHome()" > Go to home </button> 
+    </div> 
+</div> 
+</div>
+</div>
+<script>
+    {% for store in stores %}
+    $("#appointment_btn_{{ store.id }}").click(function () {
+        $.ajax({
+            url: "/user/stores/{{ store.id }}/appointment",
+            type: "POST",
+            data: {
+                csrf_token: "{{ csrf_token() }}",
+                categories: JSON.stringify("{{ categories }}"),
+                date: "{{ date }}",
+                hour: "{{ hour }}",
+            },
+            statusCode: {
+                200: function (result) {
+                    console.log('BUTTON');
+                    $("#appointment").modal('show');
+
+                },
+                402: function (result){
+                    location.reload();
+                },
+            },
+        });
+    });
+    {% endfor %}
+</script>
+{% endblock %}
+{% block style %}
+<style>
+    .button, #ok_btn{
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 8px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+    ul {
+  list-style-type: none;
+}
+</style>
+{% endblock %}

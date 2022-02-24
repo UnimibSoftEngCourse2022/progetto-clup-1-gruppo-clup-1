@@ -143,14 +143,13 @@ def make_appointment(store_id):
             )
             return '', 200
         except MaxCapacityReachedError:
-            flash("not enough space in this time slot, try with another", category='danger')
             return "max_capacity", 401
 
     return render_template('user/appointment.html', user=user_data, store_id=store_id, store=info['store'],
                            categories=categories_from_use_case)
 
 
-@bp.route('/user/stores/appointment/alternative', methods=['GET', 'POST'])
+@bp.route('/user/stores/appointment/alternative')
 @login_required
 def alternative_appointment():
     args = request.args
@@ -168,7 +167,8 @@ def alternative_appointment():
         if len(alt_stores) == 0:
             return render_template("no_alternative_stores.html")
         else:
-            return render_template("valid_stores.html", stores=alt_stores)
-    except ValueError as e:
-        flash(f"something went wrong: {e}", category='danger')
+            return render_template("valid_stores.html", stores=alt_stores, date=date_str,
+             hour=hour, categories_enum = categories_enum, date_time = date_str, categories = categories_str[:-1])
+    except ValueError:
+        flash("something went wrong", category='danger')
         return redirect(url_for('user.home'))
