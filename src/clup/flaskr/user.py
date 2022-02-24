@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 import src.clup.flaskr.global_setup as setup
 from src.clup.entities.category import Category
 from src.clup.entities.exceptions import MaxCapacityReachedError
+from src.clup.usecases.cancel_appointment_usecase import CancelAppointmentUseCase
 from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
 from src.clup.usecases.get_alternative_stores_usecase import GetAlternativeStoresUseCase
 from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
@@ -186,3 +187,14 @@ def alternative_appointment():
     except ValueError:
         flash("something went wrong", category='danger')
         return redirect(url_for('user.home'))
+
+
+@bp.route('/user/stores/appointment/<appointment_id>/delete')
+@login_required
+def cancel_appointment(appointment_id):
+    cauc = CancelAppointmentUseCase(
+        appointment_provider=setup.appointment_provider,
+        reservation_provider=setup.reservation_provider
+    )
+    cauc.execute(current_user.get_id(), appointment_id)
+    return redirect(url_for("user.appointments"))
