@@ -3,6 +3,9 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
+
+
+import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
 from src.clup.usecases.change_password import ChangePassword
@@ -73,7 +76,7 @@ def admin_register():
         return render_template('admin_register.html', form=form)
 
 
-@bp.route('/register/store_manager', methods=['GET', 'POST'])
+@bp.route('/register/store_manager', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def store_manager_register():
     form = StoreManagerRegisterForm()
     if form.validate_on_submit() and request.method == 'POST':

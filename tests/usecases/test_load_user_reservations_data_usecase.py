@@ -1,8 +1,11 @@
 import unittest
+from unittest.mock import create_autospec
 
 from src.clup.entities.aisle import Aisle
+from src.clup.entities.appointment import Appointment
 from src.clup.entities.reservation import Reservation
 from src.clup.entities.store import Store
+from src.clup.providers.appointment_provider_abc import AppointmentProvider
 from src.clup.usecases.load_user_reservations_data_usecase \
     import LoadUserReservationsDataUseCase
 from tests.usecases.mock_aisle_provider import MockAisleProvider
@@ -15,9 +18,12 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         self.reservation_provider = MockReservationProvider()
         self.store_provider = MockStoreProvider()
         self.aisle_provider = MockAisleProvider()
+        self.appointment_provider = create_autospec(AppointmentProvider)
+        self.appointment_provider.get_user_appointments.return_value = []
         self.u = LoadUserReservationsDataUseCase(self.reservation_provider,
                                                  self.store_provider,
-                                                 self.aisle_provider)
+                                                 self.aisle_provider,
+                                                 self.appointment_provider)
 
     def test_empty_sequence_returned_on_no_reservations(self):
         reservations_data = self.u.execute('user_id')
@@ -80,3 +86,19 @@ class TestLoadUserReservationsDataUseCase(unittest.TestCase):
         reservations_data = self.u.execute('user_id')
 
         self.assertEqual(len(reservations_data), 2)
+
+    def test_reservations_id_also_in_appointments_are_not_returned(self):
+        store = Store('store_id', 'name', 'address')
+        aisle1 = Aisle('aisle1_id', 'a1', 'cat1')
+        aisle2 = Aisle('aisle2_id', 'a2', 'cat2')
+        r1 = Reservation('r1', 'aisle1_id', 'user_id')
+        r2 = Reservation('r1', 'aisle2_id', 'user_id')
+        self.store_provider.stores.append(store)
+        self.aisle_provider.aisles['store_id'] = [aisle1, aisle2]
+        self.reservation_provider.reservations.extend([r1, r2])
+        app = Appointment('r1', 'user_id', 'datetime')
+        self.appointment_provider.get_user_appointments.return_value = [app]
+
+        reservations_data = self.u.execute('user_id')
+
+        self.assertEqual(len(reservations_data), 0)

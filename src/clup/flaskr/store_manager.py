@@ -2,12 +2,11 @@ import json
 
 from flask import Blueprint, abort, flash, redirect, url_for, render_template, request
 from flask_login import login_required, current_user
+from src.clup.flaskr.forms.add_store_form import AddStoreForm
 
-from src.clup.entities.category import Category
 from src.clup.flaskr import global_setup as setup
 from src.clup.flaskr.forms.add_store_form import AddStoreForm
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
-from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_store_manager_usecase import LoadStoreManagerUseCase
@@ -80,7 +79,9 @@ def add_store():
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
-
+    if not check_correct_account_type('store_manager'):
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
+        return redirect(url_for('auth.login'))
     form = AddStoreForm()
     if form.validate_on_submit() and request.method == 'POST':
         store_name = form.name.data
@@ -108,6 +109,9 @@ def set_aisles(store_id):
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
+    if not check_correct_account_type('store_manager'):
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
+        return redirect(url_for('auth.login'))
 
     if request.method == 'POST' and request.method == 'POST':
         name = request.values['name']

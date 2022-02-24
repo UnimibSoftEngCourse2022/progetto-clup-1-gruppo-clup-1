@@ -8,6 +8,9 @@ class MockStoreProvider(StoreProvider):
     def get_stores(self):
         return self.stores
 
+    def get_store(self, store_id):
+        raise NotImplementedError()
+
     def add_store(self, store):
         raise NotImplementedError()
 

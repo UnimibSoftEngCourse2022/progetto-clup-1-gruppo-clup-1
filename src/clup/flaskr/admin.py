@@ -1,14 +1,22 @@
-from flask import Blueprint, render_template, request, abort, redirect, url_for, flash
+import json
+
+from flask import Blueprint, render_template, request, abort, jsonify
 from flask_login import login_required, current_user
 
 import src.clup.flaskr.global_setup as setup
+from src.clup.entities.category import Category
+
 from src.clup.usecases.consume_reservation_usecase \
     import ConsumeReservationUseCase
+from src.clup.usecases.filter_aisle_by_categories_usecase import FilterAisleByCategoriesUseCase
 from src.clup.usecases.free_reservation_usecase \
     import FreeReservationUseCase
+from src.clup.usecases.get_store_categories import GetStoreCategoriesUseCase
 from src.clup.usecases.load_admin_store_info_usecase \
     import LoadAdminStoreInfoUseCase
 from src.clup.usecases.load_admin_usecase import LoadAdminUseCase
+from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
+from src.clup.usecases.make_reservation_usecase import MakeReservationUseCase
 
 bp = Blueprint('admin', __name__)
 
@@ -33,7 +41,6 @@ def home():
                                       setup.lane_provider,
                                       setup.admin_provider)
     info = lasiu.execute(a_id)
-    print(info)
     return render_template('admin/home.html', admin=admin_data,
                            store=info['store'], aisles=info['aisles'],
                            capacity=info['capacity'], current_people=info['current_people'],
@@ -76,3 +83,32 @@ def consumed_reservations():
         except Exception as e:
             print(e)
             abort(400)
+
+
+@bp.route('/admin/reservations/<store_id>', methods=['POST'])
+@login_required
+def make_reservation(store_id):
+    a_id = current_user.get_id()
+    categories = request.values['categories']
+    try:
+        categories_json = json.loads(categories)
+
+        categories_enum = [Category(int(c)) for c in categories_json]
+        fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
+        aisle_ids_json = fabc.execute(store_id, categories_enum)
+    except json.JSONDecodeError:
+        abort(400)
+
+    mru = MakeReservationUseCase(setup.lane_provider,
+                                 setup.reservation_provider)
+    r_id = mru.execute(a_id, store_id, aisle_ids_json)
+
+    for aisle_id in aisle_ids_json:
+        pool = setup.lane_provider.get_aisle_pool(aisle_id)
+        queue = setup.lane_provider.get_waiting_queue(aisle_id)
+        print(f'{aisle_id} - {pool.capacity} - {pool.current_quantity}')
+        print(list(queue))
+        print(list(pool))
+    return jsonify(r_id), 200
+
+

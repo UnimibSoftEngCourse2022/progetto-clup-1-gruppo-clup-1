@@ -7,6 +7,10 @@ class StoreProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_store(self, store_id):
+        pass
+
+    @abc.abstractmethod
     def add_store(self, store):
         pass
 

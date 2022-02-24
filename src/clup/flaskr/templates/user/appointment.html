@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Store{% endblock %}
+
+{% block content%}
+{% include 'user/navigation.html' %}
+{% include 'banner.html' %}
+
+<div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
+    <div class="container mt-4">
+        <p class="h2 mb-4 text">{{ store.name }}</p>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex flex-row my-2">
+                        <label for="appointment_date" class="col-2 form-col-label">Date:</label>
+                    <div class="col-10">
+                        <input id="appointment_date" type="date" class="form-control"></input>
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-2">
+                        <label for="appointment_hour" class="col-2 form-col-label">Hour (24h):</label>
+                    <div class="col-10">
+                        <input id="appointment_hour" placeholder=15 type="number" min=0 max=23 class="form-control"></input>
+                    </div>
+                </div>
+
+                <div id="aisle_checkboxes">
+                    <ul>
+                        {% for cat in categories %}
+                        <li>
+                            <input id="{{ cat.value }}" type="checkbox" checked>
+                            <label for="{{ cat.value }}">{{ cat.name }}</label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="d-flex flex-row justify-content-around">
+                    <input id="make_appointment_btn" type="button" value="Make Appointment">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "modal" tabindex = "-1" aria-hidden="true" id="appointment">
+    <div class = "modal-dialog" >
+    <div class = "modal-content" >
+    <div class = "modal-header" >
+    <h5 class = "modal-title" > Success </h5> 
+</div > 
+<div class = "modal-body" >
+    <p > All went smooth: appointment fixed </p> 
+    <p > See your appointments in Resevervation tab </p> 
+    </div >
+<div class = "modal-footer" >
+    <button type = "button" id="ok_btn" data-bs-dismiss = "modal" onclick = "location.reload()" > OK </button> 
+    </div> 
+</div> 
+</div>
+</div>
+
+<script>
+    $( document ).ready(function() {
+        var today = new Date();
+        var dd = today.getDate()
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear()
+        var hour = today.getHours()
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = yyyy + '-' + mm + '-' + dd;
+
+        $('#appointment_date').attr({min: today});
+        $('#appointment_time').attr({min: hour});
+    });
+
+    $("#make_appointment_btn").click(function () {
+        $cat_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
+            return $(this).attr("id");
+        }).get();
+        $.ajax({
+            url: "{{ url_for('user.make_appointment', store_id=store.id) }}",
+            type: "POST",
+            data: {
+                csrf_token: "{{ csrf_token() }}",
+                categories: JSON.stringify($cat_ids_list),
+                date: $("#appointment_date").val(),
+                hour: $("#appointment_hour").val(),
+            },
+            statusCode:{
+                200: function () {
+                    $("#appointment").modal('show');
+
+                },
+                402: function (){
+                    location.reload();
+                },
+                401: function () {
+                        cats = "";
+                        for (id of $cat_ids_list) {
+                            cats += id + ",";
+                        }
+                        window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?date=" + $("#appointment_date").val() + "&hour=" + $("#appointment_hour").val() + "&categories=" + cats;
+
+                },
+            }
+        });
+    });
+</script>
+
+{% endblock %}
+
+{% block style %}
+<style>
+    #make_appointment_btn, #ok_btn{
+        color: white;
+        z-index: 2;
+        font: normal 300 25px/1 'Josefin Sans', sans-serif;
+        text-align: center;
+        white-space: nowrap;
+        padding: 8px;
+        background-color: #FF8A00E6;
+        border: none;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

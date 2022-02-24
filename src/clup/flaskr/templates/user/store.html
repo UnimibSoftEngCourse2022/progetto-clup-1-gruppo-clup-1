@@ -8,9 +8,14 @@
         window.location.href = "{{ url_for('stores.qrcode') }}";
     }
 </script>
+<script>
+    function performMakeAppointment() {
+        window.location.href = "{{ url_for('user.make_appointment', store_id=store.id) }}";
+    }
+</script>
 
 {% include 'user/navigation.html' %}
-
+{% include 'banner.html' %}
 <div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
     <div class="container mt-4">
         <p class="h2 mb-4 text">{{ store.name }}</p>
@@ -38,13 +43,31 @@
                     </ul>
                 </div>
                 <div class="d-flex flex-row justify-content-around">
-                   <input id="make_reservation_btn" type="button" value="Make Reservation">
-                   <button id="cancel_reservation_btn" type="submit">Cancel Reservation</button>
-                   <!--<button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>-->
+                    <input id="make_reservation_btn" type="button" value="Make Reservation">
+                    <input id="make_appointment_btn" type="button" value="Make Appointment"
+                           onclick="performMakeAppointment()">
+                    <button id="cancel_reservation_btn" type="submit">Cancel Reservation</button>
+                    <!--<button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>-->
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class = "modal" tabindex = "-1" aria-hidden="true" id="make_reservation">
+    <div class = "modal-dialog" >
+    <div class = "modal-content" >
+    <div class = "modal-header" >
+    <h5 class = "modal-title" > Success </h5> 
+</div > 
+<div class = "modal-body" >
+    <p > All went smooth: reservation fixed </p> 
+    <p > See your reservation in Resevervation tab </p> 
+    </div >
+<div class = "modal-footer" >
+    <button type = "button" id="ok_btn" data-bs-dismiss = "modal" onclick = "location.reload()" > OK </button> 
+    </div> 
+</div> 
+</div>
 </div>
 
 <script>
@@ -59,6 +82,9 @@
                 csrf_token: "{{ csrf_token() }}",
                 categories: JSON.stringify($cat_ids_list),
             },
+            success: function (result) {
+                $("#make_reservation").modal('show')
+            },
         });
     });
 </script>
@@ -66,7 +92,7 @@
 
 {% block style %}
 <style>
-    #cancel_reservation_btn, #make_reservation_btn, #scan_btn {
+    #cancel_reservation_btn, #make_reservation_btn, #scan_btn, #make_appointment_btn, #ok_btn {
         color: white;
         z-index: 2;
         font: normal 300 25px/1 'Josefin Sans', sans-serif;

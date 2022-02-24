@@ -2,14 +2,24 @@ from collections import defaultdict
 
 
 class LoadUserReservationsDataUseCase:
-    def __init__(self, reservation_provider, store_provider, aisle_provider):
+    def __init__(self, reservation_provider, store_provider, 
+                 aisle_provider, appointment_provider):
         self.reservation_provider = reservation_provider
         self.store_provider = store_provider
         self.aisle_provider = aisle_provider
+        self.appointment_provider = appointment_provider
 
     def execute(self, user_id):
         user_reservations = \
             self.reservation_provider.get_user_reservations(user_id)
+
+        user_appointments = \
+            self.appointment_provider.get_user_appointments(user_id)
+
+        appointment_ids = [a.reservation_id for a in user_appointments]
+        user_reservations = [r 
+                             for r in user_reservations 
+                             if r.id not in appointment_ids]
 
         reservation_with_aisle_ids = defaultdict(list)
         for r in user_reservations:

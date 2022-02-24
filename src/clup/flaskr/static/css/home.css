@@ -46,7 +46,7 @@ section h1 {
     content: none;
 }
 
-#section02 div {
+/*#section02 div {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -54,29 +54,24 @@ section h1 {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
-}
-
-#section02 h2 {
-    margin-bottom: 60px;
-    color: #333;
-    font: normal 300 64px/1 'Josefin Sans', sans-serif;
-    text-align: center;
-    white-space: nowrap;
-}
+}*/
 
 #section02 p {
     color: #333;
-    font: normal 400 20px/1 'Josefin Sans', sans-serif;
+    font: normal 400 64px/1 'Josefin Sans', sans-serif;
+    text-align: center;
+    padding-bottom: 50px;
 }
 
-#section02 p a {
-    color: #333;
-    text-decoration: none;
-    transition: color .3s;
-}
-
-#section02 p a:hover {
+#section02 .card-body{
+    font: italic 25px/2 'Josefin Sans', sans-serif;
+    text-align: center;
     color: #888;
+}
+
+#section02 .card{
+    padding: 50px;
+    border-radius: 5rem;
 }
 
 .demo a {

@@ -60,6 +60,18 @@ class TestSqliteStoreProvider(unittest.TestCase):
             self.assertEqual(store.address, 'via1')
             self.assertEqual(store.secret, 'key1')
 
+    def test_store_is_retrieved_by_id(self):
+        ms1 = models.Store(uuid='10', name='s1', address='via1', secret='key1')
+        with Session(self.engine) as session, session.begin():
+            session.add(ms1)
+
+        store = self.sp.get_store('10')
+
+        self.assertEqual(store.id, '10')
+        self.assertEqual(store.name, 's1')
+        self.assertEqual(store.address, 'via1')
+        self.assertEqual(store.secret, 'key1')
+
     def test_store_is_updated(self):
         ms1 = models.Store(uuid='10', name='s1', address='via1', secret='key1')
         with Session(self.engine) as session, session.begin():
