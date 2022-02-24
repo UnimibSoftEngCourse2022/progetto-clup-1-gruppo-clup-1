@@ -10,9 +10,12 @@ class NotifyEnabledReservationOwner(Observer):
         self.content = 'You can go shopping now!'
 
     def execute(self, reservation_id):
-        user_id = self.reservation_provider.get_user_id(reservation_id)
-        user = self.user_provider.get_user(user_id)
-        self.email_service_provider.send(user.username, self.subject, self.content)
+        try:
+            user_id = self.reservation_provider.get_user_id(reservation_id)
+            user = self.user_provider.get_user(user_id)
+            self.email_service_provider.send(user.username, self.subject, self.content)
+        except ValueError:
+            pass
 
     def update(self, store_pool):
         reservation_id = store_pool.last_added

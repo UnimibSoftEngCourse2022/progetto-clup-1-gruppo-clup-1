@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, abort, flash, redirect, url_for, render_template, request
 from flask_login import login_required, current_user
 from src.clup.flaskr.forms.add_store_form import AddStoreForm
-
+from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.flaskr import global_setup as setup
 from src.clup.flaskr.forms.add_store_form import AddStoreForm
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
@@ -11,7 +11,7 @@ from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_store_manager_usecase import LoadStoreManagerUseCase
 from src.clup.usecases.store_manager_register_usecase import StoreManagerRegisterUseCase
-
+from src.clup.entities.category import Category
 bp = Blueprint('store_manager', __name__)
 liu = LoadStoreInfoUseCase(setup.store_provider, setup.aisle_provider)
 
@@ -28,7 +28,6 @@ def data_init():
     csm = CreateStoreManagerUseCase(setup.store_manager_provider)
     id = csm.execute('secret_key')
     rsm = StoreManagerRegisterUseCase(setup.store_manager_provider)
-    rsm.execute('secret_key', 'boss', 'prova')
     asu = AddStoreUseCase(setup.store_provider)
     tigros = asu.execute('Tigros', 'Solbiate Arno', id)
     asu.execute('Carrefour', 'Jerago', id)
