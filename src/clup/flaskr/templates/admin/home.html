@@ -9,6 +9,7 @@
 
 {% block content%}
 {% include 'admin/navigation.html' %}
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <div class="mask d-flex align-items-center h-100" style="background-color: rgba(255, 141, 10, 0.527);">
     <div class="container mt-4">
         <p class="h2 mb-4 text">{{ store.name }}</p>
@@ -81,8 +82,7 @@
                                 <button id="consume_btn" type="submit">
                                     Consume Reservation
                                 </button>
-                                <button type="button" id="make_reservation_btn" data-bs-toggle="modal"
-                                        data-bs-target="#makeReservationModal">
+                                <button type="button" id="make_reservation_btn">
                                     Make reservation
                                 </button>
                                 <button id="free_btn" type="submit">
@@ -97,7 +97,8 @@
     </div>
 </div>
 <!--Modal make reservation-->
-<div class="modal fade" id="makeReservationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="makeReservationModal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,15 +108,18 @@
             <div class="modal-body">
                 <div id="aisle_checkboxes">
                     {% for aisle in aisles %}
+                    {% for cat in aisle.categories %}
                     <li>
-                        <input id="{{ aisle.name }}" type="checkbox" checked>
-                        <label for="{{ aisle.name }}">{{ aisle.name }}</label>
+                        <input id="{{ cat.value }}" type="checkbox" checked>
+                        <label for="{{ cat.value }}">{{cat.name}}</label>
                     </li>
+                    {% endfor %}
                     {% endfor %}
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" id="make_reservation_modal" >Make Reservation
+                    <button type="button" id="make_reservation_modal">Make Reservation
+
                     </button>
                 </div>
             </div>
@@ -123,30 +127,40 @@
     </div>
 
     <!-- Modal QR -->
-    <div class="modal fade" id="showQR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="showQRLabel">QR</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+    <div class="modal fade" id="showQR" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-12 modal-title text-center">
+                        <h5 class="modal-title" id="showQRLabel">QR</h5>
+                    </div>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <div id="qr" class="m-2">
 
-
-
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 modal-title text-center">
+                        Right click to download QR
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
                         Scan the Reservation QRCode
                     </h5>
-                    <button id="stop_scan_btn" type="button" class="btn-close" data-bs-dismiss="modal"
+                    <button id="stop_scan_btn" type="button" class="btn-close"
+                            data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -164,8 +178,20 @@
             </div>
         </div>
     </div>
- <!--#TODO
     <script>
+        $("#make_reservation_btn").click(function () {
+            $("#makeReservationModal").modal('show');
+        });
+    </script>
+
+
+    <script>
+        var qrcode;
+        qrcode = new QRCode(document.getElementById("qr"), {
+            text: "",
+            width: 228,
+            height: 228,
+        });
         $("#make_reservation_modal").click(function () {
             $cat_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
                 return $(this).attr("id");
@@ -177,14 +203,17 @@
                     csrf_token: "{{ csrf_token() }}",
                     categories: JSON.stringify($cat_ids_list),
                 },
-                success:function (result){
-                    $("#showQR").modal('show')
+                success: function (result) {
+                    console.log(result);
+                    qrcode.makeCode(result);
+                    $("#showQR").modal('show');
                 },
             });
         });
-    </script>-->
 
-    {<script>
+    </script>
+
+    <script>
         html5Qrcode = null;
         reservation_id = '';
         $('#success_alert').hide();
