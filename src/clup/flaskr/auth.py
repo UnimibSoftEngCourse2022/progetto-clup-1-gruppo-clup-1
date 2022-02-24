@@ -8,7 +8,6 @@ from .forms.admin_register_form import AdminRegisterForm
 from .forms.user_register_form import UserRegisterForm
 from src.clup.usecases.admin_register_usecase import AdminRegisterUseCase
 
-
 import src.clup.flaskr.global_setup as setup
 from src.clup.usecases.generic_login_usecase import GenericLoginUsecase
 from src.clup.usecases.load_user_usecase import LoadUserUseCase
@@ -18,7 +17,6 @@ from .flask_user import FlaskUser
 from .forms.change_password import ChangePasswordForm
 from .forms.user_login_form import UserLoginForm
 from src.clup.usecases.user_register_usecase import UserRegisterUsecase
-
 
 bp = Blueprint('auth', __name__)
 
@@ -67,7 +65,8 @@ def admin_register():
     return render_template('admin_register.html', form=form)
 
 
-@bp.route('/register/store_manager', methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
+@bp.route('/register/store_manager',
+          methods=['GET', 'POST'])  # conterrà solo i tre link alle tre diverse register per tipo
 def store_manager_register():
     form = StoreManagerRegisterForm()
     if form.validate_on_submit():

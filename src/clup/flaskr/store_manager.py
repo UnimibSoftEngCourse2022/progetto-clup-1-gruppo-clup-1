@@ -1,13 +1,10 @@
 import json
 from flask import Blueprint, abort, flash, redirect, url_for, render_template, request
 from flask_login import login_required, current_user
-from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
 from src.clup.flaskr.forms.add_store_form import AddStoreForm
 
-from src.clup.entities.category import Category
 from src.clup.flaskr import global_setup as setup
 from src.clup.usecases.add_aisle_usecase import AddAisleUseCase
-from src.clup.usecases.add_store_usecase import AddStoreUseCase
 from src.clup.usecases.create_store_manager import CreateStoreManagerUseCase
 from src.clup.usecases.load_store_info_usecase import LoadStoreInfoUseCase
 from src.clup.usecases.load_store_manager_usecase import LoadStoreManagerUseCase
@@ -53,7 +50,7 @@ def data_init():
 @login_required
 def home():
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
@@ -68,16 +65,16 @@ def store_info(store_id):
     store_manager = lsm.execute(current_user.id)
     store_info = liu.execute(store_id)
     print(store_info)
-    return render_template('store_manager/store_view_manager.html', sm=store_manager ,store_info=store_info)
+    return render_template('store_manager/store_view_manager.html', sm=store_manager, store_info=store_info)
 
 
-@bp.route('/storemanager/add_store', methods=['GET','POST'])
+@bp.route('/storemanager/add_store', methods=['GET', 'POST'])
 @login_required
 def add_store():
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
     form = AddStoreForm()
     if form.validate_on_submit():
@@ -87,7 +84,7 @@ def add_store():
         id = current_user.id
         try:
             store = asu.execute(store_name, store_address, id)
-            return redirect(url_for('store_manager.set_aisles', store_id=store.id)) 
+            return redirect(url_for('store_manager.set_aisles', store_id=store.id))
         except ValueError:
             flash('Unable to add store')
             return redirect(url_for('store_manager.home'))
@@ -97,13 +94,13 @@ def add_store():
     return render_template('store_manager/add_store.html', sm=store_manager, form=form)
 
 
-@bp.route('/storemanager/<store_id>/set_aisles', methods=['GET','POST'])
+@bp.route('/storemanager/<store_id>/set_aisles', methods=['GET', 'POST'])
 @login_required
 def set_aisles(store_id):
     lsm = LoadStoreManagerUseCase(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
     if not check_correct_account_type('store_manager'):
-        flash(f"unauthorized to visit this page, login as a store manager", category='danger')
+        flash("unauthorized to visit this page, login as a store manager", category='danger')
         return redirect(url_for('auth.login'))
 
     if request.method == 'POST':
@@ -120,6 +117,8 @@ def set_aisles(store_id):
             return redirect(url_for('store_manager.set_aisles', store_id=store_id))
         except json.JSONDecodeError:
             abort(400)
-    
-    base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH, Category.BEVERAGE, Category.FRUIT, Category.OTHER]
-    return render_template('store_manager/set_aisle.html', store_id=store_id, categories=base_categories, sm=store_manager,)
+
+    base_categories = [Category.MEAT, Category.BAKERY, Category.BEAUTY, Category.VEGETABLE, Category.FISH,
+                       Category.BEVERAGE, Category.FRUIT, Category.OTHER]
+    return render_template('store_manager/set_aisle.html', store_id=store_id, categories=base_categories,
+                           sm=store_manager, )
