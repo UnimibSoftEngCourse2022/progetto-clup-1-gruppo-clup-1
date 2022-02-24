@@ -3,8 +3,6 @@
 {% block title %}Store{% endblock %}
 
 {% block content%}
-
-
 {% include 'user/navigation.html' %}
 {% include 'banner.html' %}
 
@@ -13,12 +11,16 @@
         <p class="h2 mb-4 text">{{ store.name }}</p>
         <div class="card mb-4">
             <div class="card-body p-4">
-                <div class="row">
-                    <div class="well">
-                        <div id="datetimepicker1" class="input-append date">
-                            <input id="datePicker" data-format="dd/MM/yyyy hh:mm:ss" type="datetime-local"></input>
-
-                        </div>
+                <div class="d-flex flex-row my-2">
+                        <label for="appointment_date" class="col-2 form-col-label">Date:</label>
+                    <div class="col-10">
+                        <input id="appointment_date" type="date" class="form-control"></input>
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-2">
+                        <label for="appointment_hour" class="col-2 form-col-label">Hour (24h):</label>
+                    <div class="col-10">
+                        <input id="appointment_hour" placeholder=15 type="number" min=0 max=23 class="form-control"></input>
                     </div>
                 </div>
 
@@ -34,7 +36,6 @@
                 </div>
                 <div class="d-flex flex-row justify-content-around">
                     <input id="make_appointment_btn" type="button" value="Make Appointment">
-                    <!--<button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>-->
                 </div>
             </div>
         </div>
@@ -58,6 +59,25 @@
 </div>
 
 <script>
+    $( document ).ready(function() {
+        var today = new Date();
+        var dd = today.getDate()
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear()
+        var hour = today.getHours()
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = yyyy + '-' + mm + '-' + dd;
+
+        $('#appointment_date').attr({min: today});
+        $('#appointment_time').attr({min: hour});
+    });
+
     $("#make_appointment_btn").click(function () {
         $cat_ids_list = $("#aisle_checkboxes input:checkbox:checked").map(function () {
             return $(this).attr("id");
@@ -68,11 +88,12 @@
             data: {
                 csrf_token: "{{ csrf_token() }}",
                 categories: JSON.stringify($cat_ids_list),
-                datetime:document.getElementById('datePicker').value,
+                date: $("#appointment_date").val(),
+                hour: $("#appointment_hour").val(),
             },
             statusCode:{
                 200: function () {
-                    //$("#appointment").modal('show')
+                    $("#appointment").modal('show');
 
                 },
                 402: function (){
@@ -83,7 +104,7 @@
                         for (id of $cat_ids_list) {
                             cats += id + ",";
                         }
-                        window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?datetime=" + document.getElementById('datePicker').value + "&categories=" + cats
+                        window.location.href = "{{ url_for('user.alternative_appointment') }}" + "?date=" + $("#appointment_date").val() + "&hour=" + $("#appointment_hour").val() + "&categories=" + cats;
 
                 },
             }

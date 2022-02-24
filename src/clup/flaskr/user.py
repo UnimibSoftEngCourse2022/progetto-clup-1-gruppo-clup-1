@@ -117,14 +117,17 @@ def make_appointment(store_id):
             categories_enum = [Category(int(c)) for c in categories_json]
             fabc = FilterAisleByCategoriesUseCase(setup.aisle_provider)
             aisle_ids_json = fabc.execute(store_id, categories_enum)
-            datetime_from_req = request.values['datetime']
-            date, time = datetime_from_req.split('T')
-            year, month, day = date.split('-')
-            hour = time.split(':')[0]
+            date_str = request.values['date']
+            hour = request.values['hour']
+            year, month, day = date_str.split('-')
             mauc = MakeAppointmentUseCase(reservation_provider=setup.reservation_provider,
                                           appointment_provider=setup.appointment_provider,
                                           aisle_provider=setup.aisle_provider)
+            now = datetime.datetime.now()
             selected_date = datetime.datetime(int(year), int(month), int(day), int(hour), 0, 0)
+            if selected_date < now:
+                flash('selected date is past current datetime', category='danger')
+                return '', 402
         except json.JSONDecodeError:
             abort(400)
 
@@ -152,13 +155,12 @@ def make_appointment(store_id):
 def alternative_appointment():
     args = request.args
     try:
-        datetime_str = args['datetime']
         categories_str = args['categories']
         categories_list = categories_str.split(',')
         categories_enum = [Category(int(c)) for c in categories_list[:-1]]
-        date, time = datetime_str.split('T')
-        year, month, day = date.split('-')
-        hour = time.split(':')[0]
+        date_str = request.values['date']
+        hour = request.values['hour']
+        year, month, day = date_str.split('-')
         date_time = datetime.datetime(int(year), int(month), int(day), int(hour))
         gasu = GetAlternativeStoresUseCase(setup.store_provider, setup.aisle_provider, setup.reservation_provider,
                                            setup.appointment_provider)
@@ -167,6 +169,6 @@ def alternative_appointment():
             return render_template("no_alternative_stores.html")
         else:
             return render_template("valid_stores.html", stores=alt_stores)
-    except ValueError:
-        flash("something went wrong", category='danger')
+    except ValueError as e:
+        flash(f"something went wrong: {e}", category='danger')
         return redirect(url_for('user.home'))
