@@ -28,9 +28,9 @@ def init_stores():
     rsm.execute('secret_key2', 'store_manager2@example.clup.com', 'password')
     asu = AddStore(setup.store_provider)
 
-    esselunga1 = asu.execute('Esselunga', 'Campofiorenzo',  sm1_id)
-    esselunga2 = asu.execute('Esselunga', 'Albizzate', sm1_id )
-    conad = asu.execute('Conad', 'Catania', sm2_id )
+    esselunga1 = asu.execute('Esselunga', 'Campofiorenzo', sm1_id)
+    esselunga2 = asu.execute('Esselunga', 'Albizzate', sm1_id)
+    conad = asu.execute('Conad', 'Catania', sm2_id)
     aau = AddAisle(setup.aisle_provider, setup.lane_provider)
 
     aau.execute(esselunga1.id, 'macelleria', [Category.MEAT])

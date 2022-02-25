@@ -21,7 +21,7 @@ class NotifyEnabledReservationOwner(Observer):
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.subject
         msg['To'] = user.username
-        
+
         text = MIMEText('<h3>Go shopping!</h3><br><img src="cid:qrimage">', 'html')
         msg.attach(text)
 
