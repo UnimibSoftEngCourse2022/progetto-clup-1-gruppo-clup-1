@@ -189,67 +189,45 @@ Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documenta
 
 ## Diagrammi
   
-#### Modello di Dominio:  
-  
 ![Modello di Dominio](images/diagrammi_uml/diagramma_classi_dominio.jpg)  
   
 ---
-  
-#### Diagramma dei Casi d'Uso:  
   
 ![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_casi_uso.jpg)  
   
 ---
   
-#### Sequence Diagram del MakeReservation:  
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/sd_diagram_make_reservation.jpg)  
+![Sequence Diagram del MakeReservation](images/diagrammi_uml/sd_diagram_make_reservation.jpg)  
   
 ---
   
-#### Diagramma Stati del MakeReservation:  
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_stati_make_reservation.jpg)  
+![Diagramma Stati del MakeReservation:](images/diagrammi_uml/diagramma_stati_make_reservation.jpg)  
   
 ---
   
-#### Sequence State Diagram del MakeAppointment:  
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/ssd_diagram_make_appointment.jpg)  
+![Sequence State Diagram del MakeAppointment](images/diagrammi_uml/ssd_diagram_make_appointment.jpg)  
   
 ---
   
-#### Diagramma delle Attivita dello Store Manager:  
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_attivita_new_store_manager.jpg)  
+![Diagramma delle Attivita dello Store Manager](images/diagrammi_uml/diagramma_attivita_new_store_manager.jpg)  
   
 ---
   
-#### Diagramma Architettura Software:  
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_architettura_software.jpg)  
+![Diagramma Architettura Software](images/diagrammi_uml/diagramma_architettura_software.jpg)  
   
 ---
   
-#### Diagramma delle Classi di Progettazione:  
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_classi_progettazione.jpg)  
+![Diagramma delle Classi di Progettazione](images/diagrammi_uml/diagramma_classi_progettazione.jpg)  
   
   
 ## Understand
-  
-#### Grafo delle Dipendenze:  
   
 ![Grafo delle Dipendenze](images/understand/Dependencies-DirectoryStructureDopo.jpg)  
   
 ---
   
-#### Metrics Tree Map - Max Cyclomatic:  
-  
-![](images/understand/MetricsTreemap-CountLine-MaxCyclomatic-dopo.jpg)  
+![Metrics Tree Map - Max Cyclomatic](images/understand/MetricsTreemap-CountLine-MaxCyclomatic-dopo.jpg)  
   
 ---
   
-#### Statistiche:  
-  
-![](images/understand/graficiUnderstandDopo.png)  
+![Statistiche](images/understand/graficiUnderstandDopo.png)  
