@@ -234,6 +234,7 @@ Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documenta
 
 ![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_architettura_software.jpg)
   
+---
 
 #### Diagramma delle Classi di Progettazione
 
@@ -242,4 +243,12 @@ Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documenta
 
 ## Understand
 
-[..]
+#### Grafo delle Dipendenze
+
+![Grafo delle Dipendenze](images/understand/Dependencies-DirectoryStructureDopo.jpg)
+  
+---
+
+#### Metrics Tree Map - Max Cyclomatic
+
+![](images/understand/MetricsTreemap-CountLine-MaxCyclomatic-dopo.jpg)
