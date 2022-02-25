@@ -5,7 +5,7 @@ on end.
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=UnimibSoftEngCourse2022_progetto-clup-1-gruppo-clup-1)
 
-##Inizializzazione 
+## Inizializzazione 
 
 1. Installazione env: 
      - Entrare nella cartella del progetto da linea di comando.
@@ -20,7 +20,7 @@ on end.
 5. Inizializazione dati dal database:
      - aprire nel browser l'indirizzo `http://127.0.0.1:5000/init`
      
-##Esempio di uso tipico: effettuare una reservation
+## Esempio di uso tipico: effettuare una reservation
 1. Dalla home page schiacciare il pulsante **get Started** per accedere alla pagina di login.
 2. Aperta la pagina login si potrà registrare un nuovo utente facendo click sul link **singup**.
 3. Selezionare campo **user**;
