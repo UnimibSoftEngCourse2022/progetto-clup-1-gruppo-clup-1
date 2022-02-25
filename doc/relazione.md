@@ -187,8 +187,6 @@ Come strategia di branching abbiamo tendenzialmente seguito il modello [GitHub F
 
 Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documentazione/storico” del lavoro, anche se una volta fatta la merge del branch col main potrebbero benissimo essere cancellati per lasciare la struttura del repository più pulita possibile.
 
-## Diagrammi
-  
 ![Modello di Dominio](images/diagrammi_uml/diagramma_classi_dominio.jpg)  
   
 ![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_casi_uso.jpg)  
@@ -204,9 +202,6 @@ Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documenta
 ![Diagramma Architettura Software](images/diagrammi_uml/diagramma_architettura_software.jpg)  
   
 ![Diagramma delle Classi di Progettazione](images/diagrammi_uml/diagramma_classi_progettazione.jpg)  
-  
-  
-## Understand
   
 ![Grafo delle Dipendenze](images/understand/Dependencies-DirectoryStructureDopo.jpg)  
   
