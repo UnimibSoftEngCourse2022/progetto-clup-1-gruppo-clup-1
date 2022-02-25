@@ -37,7 +37,7 @@ Abbiamo deciso di far riferimento ai 5 principi **SOLID**, alla base della Clean
   
 Il **Single Responsibility Principle** afferma *'a module should have one, and only one, reason to change'*. A livello architetturale le ragioni di cambiamento sono gli interessi dei vari attori del sistema: utenti, amministratori e proprietari di store hanno interessi ed esigenze differenti rispetto all'applicazione, percio' si e' cercato di organizzare il codice rispecchiando questa divisione. Infatti, mentre certi casi d'uso o operazioni possono inizialmente sembrare comuni e condivise, e' probabile che con l'evolvere del sistema esse si diversifichino e, in mancanza di appropriate precauzione, risultera' sempre piu' difficile cambiare il codice per adattarlo a nuove esigenze.  
   
-L'**Open-Closed Principle** afferma *'A software artifact should be open for extension but closed for modification'*. Una buona architettura garantisce che, idealmente, i cambiamenti sul codice esistente per l'introduzione di nuove features siano nulli. Nella realta' cio' e' quasi impossibile, ma una buona approssimazione la si puo' ottenere organizzando le componenti in modo tale che la logica non dipenda dai dettagli implementativi. Nel progetto i casi d'uso rappresentano operazioni 'quasi atomiche', l'introduzione di nuove features tendenzialmente implica nuovi algoritmi e processi per elaborare le entita', percio' sara' sufficiente aggiungere nuovi casi d'uso ed entita' per implementare queste funzionalita' senza andare a modificare quelle preesistenti. Un esempio lo si puo' trovare nella gestione degli `aisle_pool` e `store_pool`: queste entita' sono dei semplici contenitori di dati con logice di acesso molto semplici, sono i casi d'uso che implementano la logica con cui le `reservations` vengono spostate da un container all'altro. Se un domani sorgesse la necessita' di far saltare la coda ad un cliente con disabilita' o differenziare l'accesso in base al tipo di utente sara' sufficiente implementare nuovi casi d'suo con queste logiche.  
+L'**Open-Closed Principle** afferma *'a software artifact should be open for extension but closed for modification'*. Una buona architettura garantisce che, idealmente, i cambiamenti sul codice esistente per l'introduzione di nuove features siano nulli. Nella realta' cio' e' quasi impossibile, ma una buona approssimazione la si puo' ottenere organizzando le componenti in modo tale che la logica non dipenda dai dettagli implementativi. Nel progetto i casi d'uso rappresentano operazioni 'quasi atomiche', l'introduzione di nuove features tendenzialmente implica nuovi algoritmi e processi per elaborare le entita', percio' sara' sufficiente aggiungere nuovi casi d'uso ed entita' per implementare queste funzionalita' senza andare a modificare quelle preesistenti. Un esempio lo si puo' trovare nella gestione degli `aisle_pool` e `store_pool`: queste entita' sono dei semplici contenitori di dati con logice di acesso molto semplici, sono i casi d'uso che implementano la logica con cui le `reservations` vengono spostate da un container all'altro. Se un domani sorgesse la necessita' di far saltare la coda ad un cliente con disabilita' o differenziare l'accesso in base al tipo di utente sara' sufficiente implementare nuovi casi d'suo con queste logiche.  
   
 Il **Liskov Substitution Principle** e' una guida per definire le interfacce del nostro sistema, di fatti supponiamo di avere del codice P che fa uso di un oggetto S, se esistesse un altro oggetto T con la stessa interfaccia di S, allora sostituire S con T non dovrebbe modificare il comportamento di P. Quest e' molto importante nella costruzione dei casi d'uso, essi dipendono da un'interfaccia per precisa dei provider ma fintanto che questa viene mantenuta il caso d'uso non modifica la propria logica. Di fatti inizialmente i provider erano costruiti con semplici liste di oggetti a runtime, successivamente si sono evoluti in sqlite provider ma siccome le signature delle classi erano le stesse i casi d'uso hanno continuato a comportarsi allo stesso modo.  
   
@@ -49,9 +49,9 @@ Infine il **Dependency Inversion Principle** e' quello che di fondo garantisce l
 ## TDD
 
 Per lo sviluppo del codice si e' tentato per quanto possibile di applicare l'approccio del Test-Driven Development. Questo consiste in 3 regole principale:  
-* Creare uno unit test che fallisce
-* Scrivere codice appena sufficiente per passare il test
-* Refactoring del codice
+* Creare uno unit test che fallisce  
+* Scrivere codice appena sufficiente per passare il test  
+* Refactoring del codice  
 
 Questo porta molteplici benefici. Si viene a creare una rete di test che garantisce il comportamento del codice, ma soprattutto ne favorisce il cambiamento. Se ho dei test che validano il comportamento di un oggetto non si ha piu' 'paura' di mettere mano al codice per migliorarlo. Viene inoltre favorita la creazione di classi testabili e quindi una miglior separazione delle responsabilita'. In ultimo permette di limitare l'overengineering della logica, situazione comune, anche quando in realta' implementazioni molto piu' semplici sarebbero sufficienti.
 
@@ -181,75 +181,75 @@ Questo esempio dimostra la possibilita', attraverso i template, di rendere modul
 ## Git Strategy
 
 Come strategia di branching abbiamo tendenzialmente seguito il modello [GitHub Flow]():  
-* nel `main` era quasi sempre presente una versione del codice funzionante e deployabile (cosa garantita anche dalle gitactions)
-* per introdurre le nuove feature venivano creati dei branch ad hoc con nomi descrittivi nei quali avveniva lo sviluppo, una volta pronti si procedeva al merge con il `main`. Questo ha permesso di lavorare in maniera indipendente e di avere una ripartizione del lavoro semplice ed efficace
-* push costanti al repository remoto venivano fatte con la duplice motivazione di avere una copia in cloud e per rendere disponibile il proprio lavoro agli altri membri del gruppo, qualora fosse necessario lavorare in contemporanea sulla stessa feature
+* nel `main` era quasi sempre presente una versione del codice funzionante e deployabile (cosa garantita anche dalle gitactions)  
+* per introdurre le nuove feature venivano creati dei branch ad hoc con nomi descrittivi nei quali avveniva lo sviluppo, una volta pronti si procedeva al merge con il `main`. Questo ha permesso di lavorare in maniera indipendente e di avere una ripartizione del lavoro semplice ed efficace  
+* push costanti al repository remoto venivano fatte con la duplice motivazione di avere una copia in cloud e per rendere disponibile il proprio lavoro agli altri membri del gruppo, qualora fosse necessario lavorare in contemporanea sulla stessa feature  
 
 Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documentazione/storico” del lavoro, anche se una volta fatta la merge del branch col main potrebbero benissimo essere cancellati per lasciare la struttura del repository più pulita possibile.
 
 ## Diagrammi
   
-#### Modello di Dominio:
+#### Modello di Dominio:  
   
-![Modello di Dominio](images/diagrammi_uml/diagramma_classi_dominio.jpg)
-  
----
-  
-#### Diagramma dei Casi dUso:
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_casi_uso.jpg)
+![Modello di Dominio](images/diagrammi_uml/diagramma_classi_dominio.jpg)  
   
 ---
   
-#### Sequence Diagram del MakeReservation:
+#### Diagramma dei Casi d'Uso:  
   
-![Diagramma dei Casi dUso](images/diagrammi_uml/sd_diagram_make_reservation.jpg)
-  
----
-  
-#### Diagramma Stati del MakeReservation:
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_stati_make_reservation.jpg)
+![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_casi_uso.jpg)  
   
 ---
   
-#### Sequence State Diagram del MakeAppointment:
+#### Sequence Diagram del MakeReservation:  
   
-![Diagramma dei Casi dUso](images/diagrammi_uml/ssd_diagram_make_appointment.jpg)
-  
----
-  
-#### Diagramma delle Attivita dello Store Manager:
-  
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_attivita_new_store_manager.jpg)
+![Diagramma dei Casi dUso](images/diagrammi_uml/sd_diagram_make_reservation.jpg)  
   
 ---
   
-#### Diagramma Architettura Software
+#### Diagramma Stati del MakeReservation:  
   
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_architettura_software.jpg)
+![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_stati_make_reservation.jpg)  
   
 ---
   
-#### Diagramma delle Classi di Progettazione
+#### Sequence State Diagram del MakeAppointment:  
   
-![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_classi_progettazione.jpg)
+![Diagramma dei Casi dUso](images/diagrammi_uml/ssd_diagram_make_appointment.jpg)  
+  
+---
+  
+#### Diagramma delle Attivita dello Store Manager:  
+  
+![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_attivita_new_store_manager.jpg)  
+  
+---
+  
+#### Diagramma Architettura Software:  
+  
+![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_architettura_software.jpg)  
+  
+---
+  
+#### Diagramma delle Classi di Progettazione:  
+  
+![Diagramma dei Casi dUso](images/diagrammi_uml/diagramma_classi_progettazione.jpg)  
   
   
 ## Understand
   
-#### Grafo delle Dipendenze
+#### Grafo delle Dipendenze:  
   
-![Grafo delle Dipendenze](images/understand/Dependencies-DirectoryStructureDopo.jpg)
-  
----
-  
-#### Metrics Tree Map - Max Cyclomatic
-  
-![](images/understand/MetricsTreemap-CountLine-MaxCyclomatic-dopo.jpg)
+![Grafo delle Dipendenze](images/understand/Dependencies-DirectoryStructureDopo.jpg)  
   
 ---
   
-#### Statistiche
+#### Metrics Tree Map - Max Cyclomatic:  
   
-![](images/understand/graficiUnderstandDopo.png)
+![](images/understand/MetricsTreemap-CountLine-MaxCyclomatic-dopo.jpg)  
+  
+---
+  
+#### Statistiche:  
+  
+![](images/understand/graficiUnderstandDopo.png)  
