@@ -180,7 +180,7 @@ Questo esempio dimostra la possibilita' attraverso i templates di rendere modula
 * **SQLite**: libreria compatta e veloce che implementa un DBMS SQL
 * **GitHub**: di github abbiamo sfruttato le git action come meccanismo di controllo della qualità e della correttezza del nostro codice, non essendo python un linguaggio compilato ma interpretato non era possibile far eseguire le build, percio' erano responsabili dell'esecuzione dopo ogni push dei test e di un tool di linting, `flake8`, garantendo quindi di non rompere nulla alla push del nuovo codice, e garantendo ordine e leggibilita' ottimali del codice dal momento che il linting fa riferimento al PEP8 di python (le linee guida di stile del codice)
 * **SonarCloud**: usato per analizzare il software e garantire un rating di A in tutte le categorie
-* **Understand**: abbiamo utilizzato il software Understand per l’individuazione di possibili anti-pattern architetturali, grazie ad esso abbiamo verificato per esempio che non ci fossero dipendenze cicliche
+* **Understand**: abbiamo utilizzato il software Understand per l’individuazione di possibili anti-pattern architetturali, grazie ad esso abbiamo verificato per esempio che non ci fossero dipendenze cicliche ed estratto le statistiche sul progetto
 
 ## Git Strategy
 
@@ -252,3 +252,9 @@ Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documenta
 #### Metrics Tree Map - Max Cyclomatic
 
 ![](images/understand/MetricsTreemap-CountLine-MaxCyclomatic-dopo.jpg)
+  
+---
+
+#### Statistiche
+
+![](images/understand/graficiUnderstandDopo.png)

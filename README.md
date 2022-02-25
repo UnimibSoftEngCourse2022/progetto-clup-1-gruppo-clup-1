@@ -1,26 +1,27 @@
 # CLup Project
 
-Python project to regulate people influx into buildings and save them from having to line up outside of stores for hours
-on end.
+Progetto realizzato in `python` che si pone come obiettivo la creazione di un sistema di prenotazioni online presso i negozi per potersi mettere in coda comodamente da casa senza creare affollamenti davanti ai negozi.  
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=UnimibSoftEngCourse2022_progetto-clup-1-gruppo-clup-1)
 
-## Inizializzazione 
+## Setup e First Run 
 
-1. Installazione env: 
+0. Clonare il repository di questo progetto: `git clone https://github.com/UnimibSoftEngCourse2022/progetto-clup-1-gruppo-clup-1.git`
+1. Installazione `env` (l'ambiente virtuale di python): 
      - Entrare nella cartella del progetto da linea di comando.
      - lanciare il comando: `python -m venv env`(oppure usare `py` al posto di `python` a seconda dell'installazione effetuata)
 2. Attivazione env: 
-     - su piattaforma Windows lanciare il comando `activate.bat` dalla cartella scripts dentro env altrimenti lanciare il comando `source/env/bin/activate`
-3. Installazione requirements:
-     - lanciare il comando `pip install -r requiremets.txt`
+     - su Windows lanciare il comando `env/Scripts/activate.bat` altrimenti su Linux lanciare il comando `source env/bin/activate`
+3. Installazione del requirements file:
+     - lanciare il comando `pip install -r requirements.txt`
 4. Lanciare il server:
-     - su piattaforma Windows lanciare il comando`run_flask.bat` altrimenti lanciare il comando `./run_flask.sh`
+     - su Windows lanciare il comando`run_flask.bat` altrimenti su Linux lanciare il comando `./run_flask.sh`
      - aprire nel browser l'indirizzo `http://127.0.0.1:5000/`
 5. Inizializazione dati dal database:
      - aprire nel browser l'indirizzo `http://127.0.0.1:5000/init`
      
 ## Esempio di uso tipico: effettuare una reservation
+
 1. Dalla home page schiacciare il pulsante **get Started** per accedere alla pagina di login.
 2. Aperta la pagina login si potrà registrare un nuovo utente facendo click sul link **singup**.
 3. Selezionare campo **user**;
