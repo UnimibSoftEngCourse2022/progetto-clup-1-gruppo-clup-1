@@ -31,13 +31,15 @@ appena registrate.
 6. Effettuare poi una prenotazione attraverso il pulsante **make reservation**.
 7. Al momento della make reservation verrà inviata automaticamente un e-mail contente il qrcode relativo alla prenotazione appena effettuata.
 8. A questo punto bisognerà effettuare il logout cliccando sul campo **Account** e successivamente **logout** direttamente dalla navbar.
+![](doc/images/screen_user.png)
 9. Dalla pagina di login effettuare  nuovamente l'accesso ma con le seguenti credenziali:
-   - admin1
+   - admin2@example.clup.com
    - password
 10. Effettuato il login come admin si potrà così scansionare il qr code delle reservation attraverso il pulsante **scan qr**.
 11. Una volta dato accesso alla camera del dispositivo si potrà così scansionare il qrcode appena ricevuto via posta elettronica.
 12. Premendo il tasto **consume reservation** si potrà notare così che lo user percedentemete in fila sarà inserito nel negozio.
 13. In conslusione premere il tasto **free reervation** per registrare l'uscita del cliente dal negozio così liberando un posto.
+![](doc/images/screen_admin.png)
 
 ## Contributo
 Il contributo per la realizzazione di questo progetto è stato dato da:
