@@ -6,3 +6,4 @@ env/
 .flake8
 *.sqlite
 *active_reservations.txt
+*.log
