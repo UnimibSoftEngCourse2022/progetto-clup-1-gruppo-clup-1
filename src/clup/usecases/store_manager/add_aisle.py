@@ -5,9 +5,9 @@ from src.clup.entities.category import Category
 
 
 class AddAisle:
-    def __init__(self, aisle_provider, queue_provider):
+    def __init__(self, aisle_provider, lane_provider):
         self.aisle_provider = aisle_provider
-        self.queue_provider = queue_provider
+        self.lane_provider = lane_provider
 
     def execute(self, store_id, aisle_name, categories, capacity=5):
         a_id = str(uuid.uuid1())
@@ -25,7 +25,7 @@ class AddAisle:
         aisle = Aisle(a_id, aisle_name, categories, capacity)
         try:
             self.aisle_provider.add_aisle(store_id, aisle)
-            active_pool = self.queue_provider.get_aisle_pool(a_id)
+            active_pool = self.lane_provider.get_aisle_pool(a_id)
             active_pool.capacity = capacity
             return a_id
         except ValueError:

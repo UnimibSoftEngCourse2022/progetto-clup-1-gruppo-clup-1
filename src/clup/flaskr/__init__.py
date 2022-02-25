@@ -78,15 +78,11 @@ def create_app(test_config=None):
     login_manager.init_app(app)
 
     # Register your blueprint here
-    from . import stores
-    from . import users
     from . import main
     from . import auth
     from . import store_manager
     from . import admin
     from . import user
-    app.register_blueprint(stores.bp)
-    app.register_blueprint(users.bp)
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(store_manager.bp)

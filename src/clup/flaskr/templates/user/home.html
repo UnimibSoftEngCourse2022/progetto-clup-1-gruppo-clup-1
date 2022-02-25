@@ -41,7 +41,7 @@ function query_stores(name) {
         $("#store_list a").remove();
         $.each(data, function(index, store) {
             $("#store_list_begin").after(
-                '<a class="list-group-item list-group-item-action" href="/user/stores/' + store.id + '">' + store.name + '</a>');
+                '<a class="list-group-item list-group-item-action" href="/user/stores/' + store.id + '">' + store.name +' '+ store.address +'</a>');
         });
     });
 }

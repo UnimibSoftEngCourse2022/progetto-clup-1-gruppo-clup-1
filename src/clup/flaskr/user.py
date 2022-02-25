@@ -181,9 +181,9 @@ def alternative_appointment():
                                     setup.appointment_provider)
         alt_stores = gasu.execute(categories_enum, date_time)
         if len(alt_stores) == 0:
-            return render_template("no_alternative_stores.html")
+            return render_template("user/no_alternative_stores.html")
         else:
-            return render_template("valid_stores.html", stores=alt_stores, date=date_str,
+            return render_template("user/valid_stores.html", stores=alt_stores, date=date_str,
                                    hour=hour, categories_enum=categories_enum, date_time=date_str,
                                    categories=categories_str[:-1])
     except ValueError:

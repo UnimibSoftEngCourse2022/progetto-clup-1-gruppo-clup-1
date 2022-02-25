@@ -45,7 +45,7 @@ def user_register():
         flash("check all fields", category='danger')
         return redirect(url_for('auth.user_register'))
     elif request.method == 'GET':
-        return render_template('user_register.html', form=form)
+        return render_template('auth/user_register.html', form=form)
 
 
 @bp.route('/register/admin', methods=['GET', 'POST'])
@@ -71,7 +71,7 @@ def admin_register():
     elif form.is_submitted():
         flash("check all fields", category='danger')
     elif request.method == 'GET':
-        return render_template('admin_register.html', form=form)
+        return render_template('auth/admin_register.html', form=form)
 
 
 @bp.route('/register/store_manager',
@@ -96,7 +96,7 @@ def store_manager_register():
     elif form.is_submitted():
         flash("check all fields", category='danger')
     elif request.method == 'GET':
-        return render_template('store_manager_register.html', form=form)
+        return render_template('auth/store_manager_register.html', form=form)
 
 
 @bp.route('/login', methods=['GET', 'POST'])

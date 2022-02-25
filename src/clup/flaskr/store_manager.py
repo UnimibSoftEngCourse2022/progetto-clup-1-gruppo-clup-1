@@ -30,7 +30,7 @@ def home():
     lsm = LoadStoreManager(setup.store_manager_provider)
     store_manager = lsm.execute(current_user.id)
     stores = setup.store_provider.get_stores_from_manager_id(store_manager.id)
-    return render_template('store_manager/store_manager_home.html', sm=store_manager, stores=stores)
+    return render_template('store_manager/home.html', sm=store_manager, stores=stores)
 
 
 @bp.route('/storemanager/stores/<store_id>')

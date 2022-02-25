@@ -4,11 +4,6 @@
 
 {% block content%}
 <script>
-    function performScanReservation() {
-        window.location.href = "{{ url_for('stores.qrcode') }}";
-    }
-</script>
-<script>
     function performMakeAppointment() {
         window.location.href = "{{ url_for('user.make_appointment', store_id=store.id) }}";
     }
@@ -46,8 +41,7 @@
                     <input id="make_reservation_btn" type="button" value="Make Reservation">
                     <input id="make_appointment_btn" type="button" value="Make Appointment"
                            onclick="performMakeAppointment()">
-                    <button id="cancel_reservation_btn" type="submit">Cancel Reservation</button>
-                    <!--<button id="scan_btn" onclick="performScanReservation()">Scan Reservation</button>-->
+
                 </div>
             </div>
         </div>
