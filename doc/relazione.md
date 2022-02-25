@@ -182,7 +182,7 @@ Questo esempio dimostra la possibilita', attraverso i template, di rendere modul
 
 Come strategia di branching abbiamo tendenzialmente seguito il modello [GitHub Flow]():  
 * nel `main` era quasi sempre presente una versione del codice funzionante e deployabile (cosa garantita anche dalle gitactions)
-* per introdurre le nuove feature venivano creati dei branch ad hoc con nomi descrittivi nei quali avveniva lo sviluppo, una volta pronti si procedeva al merge con il `main`. Questo ha permesso di lavorare in maniera indipendente e di avere una ripartizione del lavoro semplice ed efficacie
+* per introdurre le nuove feature venivano creati dei branch ad hoc con nomi descrittivi nei quali avveniva lo sviluppo, una volta pronti si procedeva al merge con il `main`. Questo ha permesso di lavorare in maniera indipendente e di avere una ripartizione del lavoro semplice ed efficace
 * push costanti al repository remoto venivano fatte con la duplice motivazione di avere una copia in cloud e per rendere disponibile il proprio lavoro agli altri membri del gruppo, qualora fosse necessario lavorare in contemporanea sulla stessa feature
 
 Abbiamo deciso di non rimuovere i branch delle feature vecchie come “documentazione/storico” del lavoro, anche se una volta fatta la merge del branch col main potrebbero benissimo essere cancellati per lasciare la struttura del repository più pulita possibile.

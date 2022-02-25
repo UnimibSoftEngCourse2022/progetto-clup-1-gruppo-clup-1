@@ -41,6 +41,10 @@ appena registrate.
 13. In conslusione premere il tasto **free reervation** per registrare l'uscita del cliente dal negozio così liberando un posto.
 ![](doc/images/screen_admin.png)
 
+## Documentazione
+
+La documentazione del progetto si trova nella cartella `doc` sotto la root del progetto.  
+
 ## Contributo
 Il contributo per la realizzazione di questo progetto è stato dato da:
 - Davide Monti;
