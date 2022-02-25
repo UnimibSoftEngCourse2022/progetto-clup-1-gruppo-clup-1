@@ -11,11 +11,12 @@ class GmailServiceProvider(EmailServiceProvider):
         self.sender = mail
         self.password = password
 
-    def send(self, to, subject, content):
+    def send(self, to, msg):
+        msg['From'] = self.sender
         ssl_context = ssl.create_default_context()
         service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context=ssl_context)
         service.login(self.sender, self.password)
 
-        service.sendmail(self.sender, to, f'Subject: {subject}\n{content}')
+        service.sendmail(self.sender, to, msg.as_string())
 
         service.quit()

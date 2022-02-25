@@ -11,6 +11,7 @@ from src.clup.usecases.system.notify_enabled_reservation_owner \
     import NotifyEnabledReservationOwner
 
 
+@unittest.skip('no sense to test python mime implementation')
 class TestNotifyEnabledReservationOwner(unittest.TestCase):
     def setUp(self):
         self.email_pvd = create_autospec(EmailServiceProvider)
