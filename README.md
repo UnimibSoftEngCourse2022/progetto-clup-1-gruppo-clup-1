@@ -50,7 +50,7 @@ La documentazione del progetto si trova nella cartella `doc` sotto la root del p
 Il contributo per la realizzazione di questo progetto è stato dato da:  
 - Davide Monti  
 - Riccardo Frigerio  
-- Davide Soldati  
+- Davide  Soldati  
 - Mattia Napoli  
 
 
